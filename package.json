@@ -1,0 +1,39 @@
+{
+    "name": "@link-loom/ui-sdk",
+    "version": "1.0.0",
+    "description": "UI SDK components for Link Loom",
+    "main": "src/index.js",
+    "type": "module",
+    "peerDependencies": {
+        "react": "^17.0.0 || ^18.0.0"
+    },
+    "dependencies": {
+        "@cyntler/react-doc-viewer": "^1.14.1",
+        "@emotion/react": "^11.11.3",
+        "@emotion/styled": "^11.11.0",
+        "@mui/material": "^5.15.6",
+        "@tinymce/tinymce-react": "^4.3.2",
+        "@yaireo/tagify": "^4.19.1",
+        "clipboard": "^2.0.11",
+        "react-select": "^5.8.0",
+        "sweetalert2": "^11.10.4",
+        "sweetalert2-react-content": "^5.0.7"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/link-loom/loom-sdk/issues"
+    },
+    "homepage": "https://github.com/link-loom/loom-sdk",
+    "keywords": [
+        "loom",
+        "sdk",
+        "core",
+        "javascript",
+        "link-loom",
+        "react"
+    ]
+}
