@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
 
 function TextEditor({ id, modelraw, onModelChange, index }) {
   const [contentEditor, setContentEditor] = useState(null);
-  const modelrawRef = useRef(modelraw); // Reference to handle modelraw updates
+  const modelrawRef = useRef(modelraw);
 
   useEffect(() => {
-    modelrawRef.current = modelraw; // Update the reference
+    modelrawRef.current = modelraw;
     if (contentEditor) {
       const decodedModelRaw = window.decodeURI(modelrawRef.current);
       if (contentEditor.getContent() !== decodedModelRaw) {
@@ -42,7 +41,7 @@ function TextEditor({ id, modelraw, onModelChange, index }) {
       content_css: ['fabric', '@assets/libs/tinymce/skins/fabric/fabric.css'],
       toolbar_mode: 'floating',
       plugins:
-        'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media table charmap hr nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+        'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media table charmap hr nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons code media',
       menubar: 'file edit view insert format tools table help',
       toolbar:
         'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen preview print | insertfile image media link anchor | ltr rtl',
