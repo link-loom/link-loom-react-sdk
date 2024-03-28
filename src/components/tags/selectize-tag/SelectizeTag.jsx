@@ -92,4 +92,4 @@ function SelectizeTags({ data, editMode, name, response }) {
   );
 }
 
-export default React.memo(SelectizeTags);
+export default SelectizeTags;

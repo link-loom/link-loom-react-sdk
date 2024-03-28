@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import React from 'react';
 
-export const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
+const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
   const handleClose = () => setIsOpen(false);
   return (
     <Modal
@@ -33,3 +33,5 @@ export const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
     </Modal>
   );
 };
+
+export default PopUp;
