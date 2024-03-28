@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import DocViewer from '@cyntler/react-doc-viewer';
-import WebPDocumentRenderer from './WebPDocumentRenderer';
 import { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import WebPDocumentRenderer from './WebPDocumentRenderer';
 
 const ThumbnailContainer = styled.div`
   #react-doc-viewer {

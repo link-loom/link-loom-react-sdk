@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardActions, Button, CardHeader, CardContent } from '@mui/material';
-import styled from 'styled-components';
-import DocumentViewerComponent from '@components/shared/documentviewer/DocumentViewerComponent';
-import DocumentActionMenu from '@components/shared/uploader/documents/DocumentActionMenu';
-import { useSnackbar } from '@components/utilities/SnackbarProvider';
+import DocumentViewerComponent from '@components/document-viewer/DocumentViewer';
+import DocumentActionMenu from '@components/uploader/documents/DocumentActionMenu';
+import { useSnackbar } from '@components/snackbar/Snackbar';
 
 const defaultActions = [
   {

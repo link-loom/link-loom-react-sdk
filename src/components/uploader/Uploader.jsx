@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import UploadButton from './uploadButton/UploadButton';
 import DropZone from './uploadButton/DropZone';
-import Loader from '@components/shared/loaders/spinner/SpinnerLoader';
-import FileViewer from '@components/shared/uploader/fileViewer/FileViewer';
-import { UploadService } from '@services';
+import Spinner from '@components/spinner/Spinner';
+import FileViewer from '@components/uploader/fileViewer/FileViewer';
 
 const Uploader = (props) => {
   const {
@@ -16,6 +15,7 @@ const Uploader = (props) => {
     componentTexts,
     height,
     folder,
+    UploadService
   } = props;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +44,7 @@ const Uploader = (props) => {
   };
 
   return isLoading ? (
-    <Loader />
+    <Spinner />
   ) : (
     <div className="my-1">
       {file?.uri?.length || file?.url?.length ? (

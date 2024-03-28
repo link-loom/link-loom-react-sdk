@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
-import { PopUp } from '@components/shared/popup/PopUp';
-import DropZone from '@components/shared/uploader/uploadButton/DropZone';
+import PopUp from '@components/popup/PopUp';
+import DropZone from '@components/uploader/uploadButton/DropZone';
 
 const UploadButton = (props) => {
   const { onSubmitFile, onEvent, accept, id, componentTexts } = props;
