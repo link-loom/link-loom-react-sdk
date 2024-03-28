@@ -1,5 +1,5 @@
 import {
-  DataGrid,
+  DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
   esES,
   GridToolbar,
@@ -57,7 +57,7 @@ const DataGrid = (props) => {
 
   return (
     <Box sx={boxStyles}>
-      <DataGrid
+      <MuiDataGrid
         {...dataGridProps}
         disableRowSelectionOnClick
         slots={{
