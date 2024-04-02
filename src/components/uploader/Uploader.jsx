@@ -28,8 +28,8 @@ const Uploader = (props) => {
 
       event.formData.append('folder', folder);
       
-      const uploadService = new UploadService();
-      const fileUploadedResponse = await uploadService.post(event.formData);
+      const service = new uploadService();
+      const fileUploadedResponse = await service.post(event.formData);
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
         return null;
