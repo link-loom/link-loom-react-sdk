@@ -13,3 +13,4 @@ export { default as SelectizeTags } from './components/tags/selectize-tag/Select
 export { default as SelectorTag } from './components/tags/selector-tag/SelectorTag.jsx';
 export { default as TextEditor } from './components/text-editor/TextEditor.jsx';
 export { default as Uploader } from './components/uploader/Uploader.jsx';
+export { Snackbar as Snackbar, useSnackbar } from './components/snackbar/Snackbar.jsx';
