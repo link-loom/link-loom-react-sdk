@@ -1,53 +1,59 @@
 {
-    "name": "@link-loom/ui-sdk",
-    "version": "1.0.2",
-    "description": "UI SDK components for Link Loom",
-    "main": "src/index.js",
-    "type": "module",
-    "peerDependencies": {
-        "react": "^17.0.0 || ^18.0.0"
-    },
-    "dependencies": {
-        "@cyntler/react-doc-viewer": "^1.14.1",
-        "@emotion/react": "^11.11.3",
-        "@emotion/styled": "^11.11.0",
-        "@mui/material": "^5.15.6",
-        "@tinymce/tinymce-react": "^4.3.2",
-        "@yaireo/tagify": "^4.19.1",
-        "clipboard": "^2.0.11",
-        "react-select": "^5.8.0",
-        "sweetalert2": "^11.10.4",
-        "sweetalert2-react-content": "^5.0.7"
-    },
-    "scripts": {
-        "build": "rollup -c",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/link-loom/loom-sdk/issues"
-    },
-    "homepage": "https://github.com/link-loom/loom-sdk",
-    "keywords": [
-        "loom",
-        "sdk",
-        "core",
-        "javascript",
-        "link-loom",
-        "react"
-    ],
-    "devDependencies": {
-        "@babel/core": "^7.24.3",
-        "@babel/preset-env": "^7.24.3",
-        "@babel/preset-react": "^7.24.1",
-        "@rollup/plugin-alias": "^5.1.0",
-        "@rollup/plugin-babel": "^6.0.4",
-        "@rollup/plugin-commonjs": "^25.0.7",
-        "@rollup/plugin-json": "^6.1.0",
-        "@rollup/plugin-node-resolve": "^15.2.3",
-        "postcss": "^8.4.38",
-        "rollup": "^4.13.2",
-        "rollup-plugin-postcss": "^4.0.2"
-    }
+  "name": "@link-loom/ui-sdk",
+  "version": "1.0.2",
+  "description": "UI SDK components for Link Loom",
+  "main": "dist/ui-sdk.cjs.js",
+  "module": "dist/ui-sdk.esm.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],  
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0"
+  },
+  "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.14",
+    "@tinymce/tinymce-react": "^5.0.0",
+    "@yaireo/tagify": "^4.22.2",
+    "clipboard": "^2.0.11",
+    "react-select": "^5.8.0",
+    "sweetalert2": "^11.10.7",
+    "sweetalert2-react-content": "^5.0.7"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/link-loom/loom-sdk/issues"
+  },
+  "homepage": "https://github.com/link-loom/loom-sdk",
+  "keywords": [
+    "loom",
+    "sdk",
+    "core",
+    "javascript",
+    "link-loom",
+    "react"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "postcss": "^8.4.38",
+    "rollup": "^4.13.2",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
 }

@@ -11,14 +11,21 @@ module.exports = {
   input: 'src/index.js',
   output: [
     {
-      file: pkg.main,
+      file: 'dist/ui-sdk.cjs.js',
       format: 'cjs',
     },
     {
-      file: pkg.module,
+      file: 'dist/ui-sdk.esm.js',
       format: 'esm',
     },
   ],
+  onwarn: function(warning, warn) {
+    if (warning.message && warning.message.includes('use client')) {
+      return;
+    }
+
+    warn(warning);
+  },
   plugins: [
     alias({
       entries: [
