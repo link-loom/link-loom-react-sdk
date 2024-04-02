@@ -15,7 +15,7 @@ const Uploader = (props) => {
     componentTexts,
     height,
     folder,
-    UploadService
+    uploadService
   } = props;
   const [isLoading, setIsLoading] = useState(false);
 
