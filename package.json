@@ -1,6 +1,6 @@
 {
   "name": "@link-loom/ui-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "UI SDK components for Link Loom",
   "main": "dist/ui-sdk.cjs.js",
   "module": "dist/ui-sdk.esm.js",
@@ -9,7 +9,7 @@
     "dist",
     "README.md",
     "LICENSE"
-  ],  
+  ],
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0"
   },
