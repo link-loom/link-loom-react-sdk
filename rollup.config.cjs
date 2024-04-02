@@ -1,4 +1,4 @@
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const babel = require('@rollup/plugin-babel');
 const alias = require('@rollup/plugin-alias');
@@ -33,9 +33,7 @@ module.exports = {
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       ],
     }),
-    nodeResolve({
-      extensions: ['.js', '.jsx'],
-    }),
+    resolve(),
     commonjs(),
     babel({ babelHelpers: 'bundled' }),
     postcss({
@@ -44,5 +42,5 @@ module.exports = {
     json(),
     builtins()
   ],
-  external: Object.keys(pkg.peerDependencies || {}),
+  external: ["react", "react-dom"],
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardActions, Button, CardHeader, CardContent } from '@mui/material';
-import DocumentViewerComponent from '@components/document-viewer/DocumentViewer';
-import DocumentActionMenu from '@components/uploader/documents/DocumentActionMenu';
-import { useSnackbar } from '@components/snackbar/Snackbar';
+import DocumentViewerComponent from '@components/document-viewer/DocumentViewer.jsx';
+import DocumentActionMenu from '@components/uploader/documents/DocumentActionMenu.jsx';
+import { useSnackbar } from '@components/snackbar/Snackbar.jsx';
 
 const defaultActions = [
   {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import UploadButton from './uploadButton/UploadButton';
-import DropZone from './uploadButton/DropZone';
-import Spinner from '@components/spinner/Spinner';
-import FileViewer from '@components/uploader/fileViewer/FileViewer';
+import UploadButton from './uploadButton/UploadButton.jsx';
+import DropZone from './uploadButton/DropZone.jsx';
+import Spinner from '@components/spinner/Spinner.jsx';
+import FileViewer from '@components/uploader/fileViewer/FileViewer.jsx';
 
 const Uploader = (props) => {
   const {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DocViewer from '@cyntler/react-doc-viewer';
 import { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import WebPDocumentRenderer from './WebPDocumentRenderer';
+import WebPDocumentRenderer from './WebPDocumentRenderer.jsx';
 
 const ThumbnailContainer = styled.div`
   #react-doc-viewer {
