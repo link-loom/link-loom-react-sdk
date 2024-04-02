@@ -1,7 +1,8 @@
-const resolve = require('@rollup/plugin-node-resolve').default;
-const commonjs = require('@rollup/plugin-commonjs').default;
-const babel = require('@rollup/plugin-babel').babel;
-const alias = require('@rollup/plugin-alias').default;
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const babel = require('@rollup/plugin-babel');
+const alias = require('@rollup/plugin-alias');
+const builtins = require('rollup-plugin-node-builtins');
 const path = require('path');
 const postcss = require('rollup-plugin-postcss');
 const json = require('@rollup/plugin-json');
@@ -32,7 +33,7 @@ module.exports = {
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       ],
     }),
-    resolve({
+    nodeResolve({
       extensions: ['.js', '.jsx'],
     }),
     commonjs(),
@@ -41,6 +42,7 @@ module.exports = {
       extract: true,
     }),
     json(),
+    builtins()
   ],
   external: Object.keys(pkg.peerDependencies || {}),
 };

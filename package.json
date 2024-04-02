@@ -54,6 +54,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "postcss": "^8.4.38",
     "rollup": "^4.13.2",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-postcss": "^4.0.2"
   }
 }
