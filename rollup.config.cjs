@@ -58,5 +58,4 @@ module.exports = {
       preventAssignment: true,
     })
   ],
-  external: ['react', 'react-dom'], 
 };
