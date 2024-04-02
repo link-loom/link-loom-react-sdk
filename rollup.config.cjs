@@ -7,6 +7,7 @@ const path = require('path');
 const postcss = require('rollup-plugin-postcss');
 const json = require('@rollup/plugin-json');
 const pkg = require('./package.json');
+const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 
 module.exports = {
   input: 'src/index.js',
@@ -28,12 +29,16 @@ module.exports = {
     warn(warning);
   },
   plugins: [
+    peerDepsExternal(),
     alias({
       entries: [
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       ],
     }),
-    resolve(),
+    resolve({
+      browser: true,
+      preferBuiltins: false,
+    }),    
     commonjs(),
     babel({ babelHelpers: 'bundled' }),
     postcss({
