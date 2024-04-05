@@ -13,4 +13,5 @@ export { default as SelectorTag } from './components/tags/selector-tag/SelectorT
 export { default as TextEditor } from './components/text-editor/TextEditor.jsx';
 export { default as Uploader } from './components/uploader/Uploader.jsx';
 export { Snackbar as Snackbar, useSnackbar } from './components/snackbar/Snackbar.jsx';
-export { default as OnPageLoaded } from './components/on-page-loaded/OnPageLoaded.jsx'
+export { default as OnPageLoaded } from './components/on-page-loaded/OnPageLoaded.jsx';
+export { default as PhoneCountrySelector } from './components/phone-country-selector/PhoneCountrySelector.jsx';
