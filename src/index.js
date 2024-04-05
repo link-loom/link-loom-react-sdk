@@ -15,3 +15,4 @@ export { default as Uploader } from './components/uploader/Uploader.jsx';
 export { Snackbar as Snackbar, useSnackbar } from './components/snackbar/Snackbar.jsx';
 export { default as OnPageLoaded } from './components/on-page-loaded/OnPageLoaded.jsx';
 export { default as PhoneCountrySelector } from './components/phone-country-selector/PhoneCountrySelector.jsx';
+export { default as FileViewer } from './components/file-viewer/FileViewer.jsx'
