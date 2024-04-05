@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function Placeholder({ type, children, count, columns = 7 }) {
   const renderDescriptionLines = () => {
@@ -21,6 +21,27 @@ function Placeholder({ type, children, count, columns = 7 }) {
     ));
   };
 
+  const renderTable = () => {
+    return (
+      <section className="container-fluid">
+        <div className="row">
+          <div className="col-12">
+            <article className="card shadow">
+              <section className="card-body">
+                <header className="placeholder-wave">{children}</header>
+                <section className="table-responsive">
+                  <table className="table mb-0">
+                    <tbody>{renderTableLines()}</tbody>
+                  </table>
+                </section>
+              </section>
+            </article>
+          </div>
+        </div>
+      </section>
+    );
+  };
+
   const renderTitleLines = () => {
     return (
       <>
@@ -36,28 +57,11 @@ function Placeholder({ type, children, count, columns = 7 }) {
 
   const renderContent = () => {
     switch (type) {
-      case 'description':
+      case "description":
         return renderDescriptionLines();
-      case 'table':
-        return (
-          <section className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                <article className="card shadow">
-                  <section className="card-body">
-                    <header className="placeholder-wave">{children}</header>
-                    <section className="table-responsive">
-                      <table className="table mb-0">
-                        <tbody>{renderTableLines()}</tbody>
-                      </table>
-                    </section>
-                  </section>
-                </article>
-              </div>
-            </div>
-          </section>
-        );
-      case 'title':
+      case "table":
+        return renderTable();
+      case "title":
         return renderTitleLines();
       default:
         return null;

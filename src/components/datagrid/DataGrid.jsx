@@ -1,23 +1,24 @@
+import React from "react";
 import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
   esES,
   GridToolbar,
   GridToolbarContainer,
-} from '@mui/x-data-grid';
-import { Box } from '@mui/material';
+} from "@mui/x-data-grid";
+import { Box } from "@mui/material";
 
 const boxStyles = {
-  '.MuiTablePagination-displayedRows': {
+  ".MuiTablePagination-displayedRows": {
     marginBottom: 0,
   },
-  '.MuiTablePagination-selectLabel': {
+  ".MuiTablePagination-selectLabel": {
     marginBottom: 0,
   },
-  '.MuiTableSelect-select': {
+  ".MuiTableSelect-select": {
     padding: 0,
   },
-  width: '100%',
+  width: "100%",
 };
 
 const DataGrid = (props) => {
@@ -51,7 +52,7 @@ const DataGrid = (props) => {
         paginationModel,
         onPaginationModelChange: setPaginationModel,
         rowCount: totalRows,
-        paginationMode: 'server',
+        paginationMode: "server",
       }),
   };
 
