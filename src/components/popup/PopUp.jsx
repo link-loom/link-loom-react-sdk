@@ -14,6 +14,8 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      disableAutoFocus
+      disableRestoreFocus
     >
       <Box className="position-absolute top-50 start-50 translate-middle bg-white p-3" style={styles}>
         <IconButton
