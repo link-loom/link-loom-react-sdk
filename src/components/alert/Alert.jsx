@@ -12,13 +12,14 @@ function Alert({ config, setConfirm }) {
     confirmButtonText,
     cancelButtonText,
     cancelButtonClass,
+    confirmButtonClass,
     showCancelButton,
   } = config;
 
   const handleAlert = useCallback(() => {
     const swalWithBootstrapButtons = MySwal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
+        confirmButton: confirmButtonClass || 'btn btn-success',
         cancelButton: cancelButtonClass || 'btn btn-danger',
       },
       buttonsStyling: false,
