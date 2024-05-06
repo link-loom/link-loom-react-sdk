@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { InputAdornment } from '@mui/material';
 import styled from 'styled-components';
 
 const StyledListItem = styled.li`
@@ -11,37 +10,33 @@ const StyledListItem = styled.li`
   }
 `;
 
-// Function to check if a value is empty or contains only whitespaces
 const isEmpty = (value) => {
   return value.trim() === '';
 };
 
-export default function PhoneCountrySelector({ onPhoneChange }) {
-  // Component States
-  const [selectedCountry, setSelectedCountry] = useState(null); // Selected country
-  const [countrySelected, setCountrySelected] = useState(false); // Flag to indicate if a country is selected
-  const [phoneFieldClicked, setPhoneFieldClicked] = useState(false); // Flag to indicate if the phone field is clicked
-  const [phoneInputValue, setPhoneInputValue] = useState(''); // Value entered in the phone field
+export default function PhoneCountrySelector({ label, onPhoneChange }) {
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [countrySelected, setCountrySelected] = useState(false);
+  const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
+  const [phoneInputValue, setPhoneInputValue] = useState('');
 
-  // Effect that runs when the phone field value changes
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
-      // Add the country code to the entered phone number
-      const addCountryCode = `${selectedCountry?.phone}${
-        phoneInputValue || ''
-      }`;
-      // Call the callback function with the complete phone number
-      onPhoneChange(addCountryCode);
+      const whatsappPhone = `${selectedCountry?.phone}${phoneInputValue || ''}`;
+
+      onPhoneChange({
+        country: selectedCountry,
+        whatsappPhone,
+        phoneNumber: phoneInputValue,
+      });
     }
   }, [phoneInputValue]);
 
-  // Handle the change of the selected country in the Autocomplete
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
     setCountrySelected(true);
   };
 
-  // Handle click on the phone field
   const handlePhoneClick = () => {
     if (!countrySelected) {
       setSelectedCountry(null);
@@ -56,13 +51,10 @@ export default function PhoneCountrySelector({ onPhoneChange }) {
    * @param {Event} event - The input change event.
    */
   const handlePhoneInputChange = (event) => {
-    // Get the value entered in the phone field
     const inputValue = event?.target?.value;
 
-    // Sanitize the input value to prevent XSS attacks
     const sanitizedInputValue = sanitizeInput(inputValue);
 
-    // Check if the value contains only numbers
     if (/^[0-9]*$/.test(sanitizedInputValue)) {
       setPhoneInputValue(sanitizedInputValue);
     }
@@ -76,28 +68,30 @@ export default function PhoneCountrySelector({ onPhoneChange }) {
    * @returns {string} The sanitized string, containing only numeric characters.
    */
   function sanitizeInput(input) {
-    // Replace any non-numeric characters with an empty string
     return input.replace(/[^0-9]/g, '');
   }
 
   return (
     <section className="d-md-flex">
       {/* Country Section */}
-      <article className="col-md-4 col-12">
-        <label htmlFor="select-country" className="form-label">
-          Country
-        </label>
+      <article className="col-md-6 col-12">
         <Autocomplete
           id="select-country"
-          size="small"
           options={countries}
           autoHighlight
-          getOptionLabel={(option) => option.label}
           value={selectedCountry}
           onChange={handleCountryChange}
+          disableClearable
+          getOptionLabel={(option) => '+' + option.phone}
+          filterOptions={(options, { inputValue }) =>
+            options.filter(
+              (option) =>
+                option.code.toLowerCase().includes(inputValue.toLowerCase()) ||
+                option.label.toLowerCase().includes(inputValue.toLowerCase()),
+            )
+          }
           renderOption={(props, option) => (
-            <StyledListItem {...props}>
-              {/* Display the country flag and phone code */}
+            <StyledListItem {...props} key={option.code}>
               <img
                 loading="lazy"
                 width="20"
@@ -105,17 +99,21 @@ export default function PhoneCountrySelector({ onPhoneChange }) {
                 src={`https://flagcdn.com/w20/${option.code.toLocaleLowerCase()}.png`}
                 alt=""
               />
-              ({option.code}) +{option.phone}
+              {option.label}
             </StyledListItem>
           )}
           renderInput={(params) => (
             <TextField
               {...params}
+              label="Country"
+              autoComplete="link-loom-select"
+              name="link-loom-select"
+              id="link-loom-select"
               InputProps={{
                 ...params.InputProps,
+                autoComplete: 'link-loom-select',
                 startAdornment: selectedCountry && (
                   <>
-                    {/* Display the flag of the selected country */}
                     <img
                       loading="lazy"
                       width="20"
@@ -125,49 +123,24 @@ export default function PhoneCountrySelector({ onPhoneChange }) {
                   </>
                 ),
               }}
-              // Show a helper message if a country is not selected
-              helperText={
-                !countrySelected && phoneFieldClicked
-                  ? 'please select a country'
-                  : '* Select a country'
-              }
-              // Show an error if a country is not selected
-              error={!countrySelected}
             />
           )}
         />
       </article>
 
       {/* Phone Number Section */}
-      <article className="col-md-8 col-12 ms-0 ms-md-1">
-        <label htmlFor="input-phone" className="form-label">
-          Phone
-        </label>
+      <article className="col-md-6 col-12 ms-0 ms-md-1">
         <TextField
-          size="small"
-          // Disable the phone field if a country is not selected
           disabled={!countrySelected}
           type="tel"
+          id="primary_phone_number"
           name="primary_phone_number"
-          className="form-control"
-          id="input-phone"
+          autoComplete="new-password"
           value={phoneInputValue}
           placeholder="3002355432"
+          label={label || 'Phone number'}
           onFocus={handlePhoneClick}
-          InputProps={{
-            startAdornment: selectedCountry && (
-              <InputAdornment position="start">
-                +{selectedCountry.phone}
-              </InputAdornment>
-            ),
-          }}
           onChange={handlePhoneInputChange}
-          // Show an error if the phone field is empty
-          error={isEmpty(phoneInputValue)}
-          // Show a helper message if the phone field is empty
-          helperText={
-            isEmpty(phoneInputValue) ? 'Phone is a required field' : ''
-          }
         />
       </article>
     </section>
