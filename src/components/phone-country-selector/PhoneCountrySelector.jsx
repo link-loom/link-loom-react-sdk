@@ -27,7 +27,7 @@ export default function PhoneCountrySelector({
 
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
-      const whatsappPhone = `${selectedCountry?.phone}${phoneInputValue || ""}`;
+      const whatsappPhone = `${selectedCountry?.dialCode}${phoneInputValue || ""}`;
 
       onPhoneChange({
         country: selectedCountry,
