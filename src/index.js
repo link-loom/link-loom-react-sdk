@@ -17,3 +17,5 @@ export { default as OnPageLoaded } from './components/on-page-loaded/OnPageLoade
 export { default as PhoneCountrySelector } from './components/phone-country-selector/PhoneCountrySelector.jsx';
 export { default as FileViewer } from './components/file-viewer/FileViewer.jsx'
 export { default as StatusChip } from './components/status-chip/StatusChip.jsx';
+
+export { default as useDebounce } from './hooks/useDebounce.js'
