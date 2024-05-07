@@ -87,7 +87,7 @@ export default function PhoneCountrySelector({
           value={selectedCountry}
           onChange={handleCountryChange}
           disableClearable
-          getOptionLabel={(option) => "+" + option.phone}
+          getOptionLabel={(option) => "+" + option.dialCode}
           filterOptions={(options, { inputValue }) =>
             options.filter(
               (option) =>
