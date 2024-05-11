@@ -51,8 +51,7 @@ function TextEditor({ id, modelraw, onModelChange, index }) {
       },
       height: 600,
       image_caption: true,
-      quickbars_selection_toolbar:
-        'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
       spellchecker_dialog: true,
       spellchecker_whitelist: ['Ephox', 'Moxiecode'],
       tinycomments_mode: 'embedded',

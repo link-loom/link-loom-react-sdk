@@ -15,7 +15,7 @@ const Uploader = (props) => {
     componentTexts,
     height,
     folder,
-    uploadService
+    uploadService,
   } = props;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +27,7 @@ const Uploader = (props) => {
       }
 
       event.formData.append('folder', folder);
-      
+
       const service = new uploadService();
       const fileUploadedResponse = await service.post(event.formData);
 

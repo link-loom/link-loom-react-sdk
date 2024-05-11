@@ -80,10 +80,7 @@ function SelectizeTags({ data, editMode, name, response }) {
               {email}
             </div>
             <button type="button" className="btn btn-clear" disabled={editMode}>
-              <span
-                className="mdi mdi-close"
-                onClick={() => deleteData(index)}
-              ></span>
+              <span className="mdi mdi-close" onClick={() => deleteData(index)}></span>
             </button>
           </div>
         ))}

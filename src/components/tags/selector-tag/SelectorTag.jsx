@@ -19,12 +19,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const SelectorTag = React.memo(
-  ({
-    tagOptions = ['No data'],
-    isEditable = false,
-    presetTags = [],
-    onTagsChange,
-  }) => {
+  ({ tagOptions = ['No data'], isEditable = false, presetTags = [], onTagsChange }) => {
     const [selectedItems, setSelectedItems] = useState([]);
 
     useEffect(() => {
@@ -82,9 +77,7 @@ const SelectorTag = React.memo(
                 role="button"
                 key={item}
                 className={`badge m-1 fs-6 ${
-                  selectedItems.includes(item)
-                    ? 'bg-light text-dark'
-                    : 'bg-secondary'
+                  selectedItems.includes(item) ? 'bg-light text-dark' : 'bg-secondary'
                 }`}
                 onClick={() => handleTagClick(item)}
               >

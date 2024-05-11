@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function Placeholder({ type, children, count, columns = 7 }) {
   const renderDescriptionLines = () => {
@@ -57,11 +57,11 @@ function Placeholder({ type, children, count, columns = 7 }) {
 
   const renderContent = () => {
     switch (type) {
-      case "description":
+      case 'description':
         return renderDescriptionLines();
-      case "table":
+      case 'table':
         return renderTable();
-      case "title":
+      case 'title':
         return renderTitleLines();
       default:
         return null;

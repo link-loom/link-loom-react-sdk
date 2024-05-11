@@ -1,29 +1,28 @@
-import React from "react";
+import React from 'react';
 import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
   esES,
   GridToolbar,
   GridToolbarContainer,
-} from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+} from '@mui/x-data-grid';
+import { Box } from '@mui/material';
 
 const boxStyles = {
-  ".MuiTablePagination-displayedRows": {
+  '.MuiTablePagination-displayedRows': {
     marginBottom: 0,
   },
-  ".MuiTablePagination-selectLabel": {
+  '.MuiTablePagination-selectLabel': {
     marginBottom: 0,
   },
-  ".MuiTableSelect-select": {
+  '.MuiTableSelect-select': {
     padding: 0,
   },
-  width: "100%",
+  width: '100%',
 };
 
 const DataGrid = (props) => {
-  const { rows, columns, paginationModel, setPaginationModel, totalRows } =
-    props;
+  const { rows, columns, paginationModel, setPaginationModel, totalRows } = props;
 
   function CustomSearchToolbar() {
     return (
@@ -33,10 +32,7 @@ const DataGrid = (props) => {
             <GridToolbar />
           </GridToolbarContainer>
 
-          <GridToolbarQuickFilter
-            className="me-3 border-1"
-            placeholder="Buscar..."
-          />
+          <GridToolbarQuickFilter className="me-3 border-1" placeholder="Buscar..." />
         </div>
       </div>
     );
@@ -52,7 +48,7 @@ const DataGrid = (props) => {
         paginationModel,
         onPaginationModelChange: setPaginationModel,
         rowCount: totalRows,
-        paginationMode: "server",
+        paginationMode: 'server',
       }),
   };
 

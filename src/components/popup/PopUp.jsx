@@ -17,11 +17,11 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
       disableAutoFocus
       disableRestoreFocus
     >
-      <Box className="position-absolute top-50 start-50 translate-middle bg-white p-3" style={styles}>
-        <IconButton
-          className="position-absolute top-0 end-0"
-          onClick={handleClose}
-        >
+      <Box
+        className="position-absolute top-50 start-50 translate-middle bg-white p-3"
+        style={styles}
+      >
+        <IconButton className="position-absolute top-0 end-0" onClick={handleClose}>
           <i className="mdi mdi-close"></i>
         </IconButton>
 

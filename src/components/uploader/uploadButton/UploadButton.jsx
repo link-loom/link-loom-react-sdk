@@ -23,19 +23,13 @@ const UploadButton = (props) => {
         <section className="d-flex align-items-center w-50">
           <i className="mdi mdi-cloud-upload display-3" />
           <span className="ms-3 text-muted">
-            {`(${
-              componentTexts?.fileAccepted || 'File accepted'
-            }: ${accept} - ${componentTexts?.maxFileSize || 'Max file size'}: ${
-              componentTexts?.fileSize
-            })`}
+            {`(${componentTexts?.fileAccepted || 'File accepted'}: ${accept} - ${
+              componentTexts?.maxFileSize || 'Max file size'
+            }: ${componentTexts?.fileSize})`}
           </span>
         </section>
         <section>
-          <Button
-            variant="contained"
-            component="label"
-            onClick={() => itemOnAction('view')}
-          >
+          <Button variant="contained" component="label" onClick={() => itemOnAction('view')}>
             {`${componentTexts?.uploadFile || 'Upload file'}`}
           </Button>
         </section>

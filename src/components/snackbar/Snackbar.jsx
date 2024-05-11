@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import { Snackbar as MaterialSnackbar, Alert } from "@mui/material";
+import React, { createContext, useContext, useState } from 'react';
+import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
 
 const SnackbarContext = createContext();
 
@@ -16,22 +16,22 @@ export const useSnackbar = () => {
 export const Snackbar = ({ children }) => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState({
-    message: "",
-    action: "",
+    message: '',
+    action: '',
   });
 
   const openSnackbar = (message, action) => {
     switch (action) {
-      case "success":
+      case 'success':
         handleOpenSnackbar(message, action);
         break;
-      case "error":
+      case 'error':
         handleOpenSnackbar(message, action);
         break;
-      case "info":
+      case 'info':
         handleOpenSnackbar(message, action);
         break;
-      case "warning":
+      case 'warning':
         handleOpenSnackbar(message, action);
         break;
       default:
@@ -62,7 +62,7 @@ export const Snackbar = ({ children }) => {
             onClose={handleCloseSnackbar}
             severity={snackbar.action}
             variant="filled"
-            sx={{ width: "100%" }}
+            sx={{ width: '100%' }}
           >
             {snackbar.message}
           </Alert>

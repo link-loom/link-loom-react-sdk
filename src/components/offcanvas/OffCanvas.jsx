@@ -52,12 +52,7 @@ function OffCanvas(props) {
           {entities.map((entity) => (
             <div className="mb-3" key={entity.key}>
               <label className="form-label">{entity.key}</label>
-              <input
-                type="text"
-                className="form-control"
-                value={entity.value}
-                disabled
-              />
+              <input type="text" className="form-control" value={entity.value} disabled />
             </div>
           ))}
         </div>

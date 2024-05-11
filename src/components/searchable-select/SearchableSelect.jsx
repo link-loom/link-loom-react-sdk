@@ -3,14 +3,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 
 const SearchableSelect = (props) => {
-  const {
-    onChange,
-    placeholder,
-    isDisabled,
-    defaultValue,
-    name,
-    ...rest
-  } = props;
+  const { onChange, placeholder, isDisabled, defaultValue, name, ...rest } = props;
 
   const options = Array.isArray(props.options) ? props.options : [];
 
@@ -54,7 +47,7 @@ SearchableSelect.propTypes = {
   placeholder: PropTypes.string,
   isDisabled: PropTypes.bool,
   defaultValue: PropTypes.any,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
 };
 
 export default SearchableSelect;

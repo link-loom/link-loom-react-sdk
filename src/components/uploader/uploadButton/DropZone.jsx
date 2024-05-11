@@ -78,39 +78,23 @@ const DropZone = (props) => {
         </p>
       ) : (
         <p className="fs-4 mb-1">
-          {`${
-            componentTexts?.description ||
-            'Drag and drop a file here or select a file'
-          } `}
+          {`${componentTexts?.description || 'Drag and drop a file here or select a file'} `}
         </p>
       )}
       {file ? (
-        <Button
-          variant="contained"
-          id="uploader"
-          component="label"
-          onClick={submitFile}
-        >
+        <Button variant="contained" id="uploader" component="label" onClick={submitFile}>
           {`${componentTexts?.buttonUpload || 'Upload'}`}
         </Button>
       ) : (
         <div className="d-flex flex-column align-items-center gap-1">
           <span className="ms-3 text-muted mb-2">
-            {`(${
-              componentTexts?.fileAccepted || 'File accepted'
-            }: ${accept} - ${
+            {`(${componentTexts?.fileAccepted || 'File accepted'}: ${accept} - ${
               componentTexts?.maxFileSize || 'Max file size'
             }:  ${componentTexts?.fileSize || '5Mb'})`}
           </span>
           <Button variant="contained" component="label">
             {`${componentTexts?.buttonSelectFile || 'Select file'}`}
-            <input
-              id={id}
-              type="file"
-              hidden
-              onChange={handleFileSelect}
-              accept={accept}
-            />
+            <input id={id} type="file" hidden onChange={handleFileSelect} accept={accept} />
           </Button>
         </div>
       )}

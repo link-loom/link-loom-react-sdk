@@ -10,14 +10,15 @@ const ThumbnailContainer = styled.div`
     #pdf-controls {
       display: none;
     }
-    #image-renderer img, #proxy-renderer {
+    #image-renderer img,
+    #proxy-renderer {
       width: 100%;
       height: auto;
       object-fit: cover;
     }
   }
 
-  height: ${props => props.height || 'auto'};
+  height: ${(props) => props.height || 'auto'};
 `;
 
 const DocumentViewer = ({ files, height }) => {
