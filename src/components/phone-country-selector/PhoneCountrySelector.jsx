@@ -23,12 +23,16 @@ export default function PhoneCountrySelector(props) {
 
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
-      const whatsappPhone = `${selectedCountry?.dialCode}${phoneInputValue || ''}`;
+      const internationalPhoneNumber = `${selectedCountry?.dialCode}${phoneInputValue || ''}`;
 
       onPhoneChange({
-        country: selectedCountry,
-        whatsappPhone,
-        phoneNumber: phoneInputValue,
+        country: {
+          iso_code: selectedCountry?.countryCode,
+          dial_code: selectedCountry?.dialCode,
+          name: selectedCountry?.label,
+        },
+        international_phone_number: internationalPhoneNumber,
+        phone_number: phoneInputValue,
       });
     }
   }, [phoneInputValue]);
