@@ -14,11 +14,12 @@ const isEmpty = (value) => {
   return value.trim() === '';
 };
 
-export default function PhoneCountrySelector({ label, onPhoneChange, disabled, variant }) {
-  const [selectedCountry, setSelectedCountry] = useState(null);
+export default function PhoneCountrySelector(props) {
+  const { value, label, onPhoneChange, disabled, variant } = props;
+  const [selectedCountry, setSelectedCountry] = useState(value?.country ?? null);
   const [countrySelected, setCountrySelected] = useState(false);
   const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
-  const [phoneInputValue, setPhoneInputValue] = useState('');
+  const [phoneInputValue, setPhoneInputValue] = useState(value?.phoneNumber ?? '');
 
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
@@ -70,6 +71,13 @@ export default function PhoneCountrySelector({ label, onPhoneChange, disabled, v
   function sanitizeInput(input) {
     return input.replace(/[^0-9]/g, '');
   }
+
+  useEffect(() => {
+    if (value) {
+      setSelectedCountry(value?.country ?? null);
+      setPhoneInputValue(value?.phoneNumber ?? '');
+    }
+  }, [value]);
 
   return (
     <section className="d-md-flex">
