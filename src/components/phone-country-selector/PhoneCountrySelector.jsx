@@ -17,7 +17,7 @@ const isEmpty = (value) => {
 export default function PhoneCountrySelector(props) {
   const { value, label, onPhoneChange, disabled, variant } = props;
   const [selectedCountry, setSelectedCountry] = useState(value?.country ?? null);
-  const [countrySelected, setCountrySelected] = useState(false);
+  const [isCountrySelected, setIsCountrySelected] = useState(false);
   const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
   const [phoneInputValue, setPhoneInputValue] = useState(value?.phoneNumber ?? '');
 
@@ -35,11 +35,11 @@ export default function PhoneCountrySelector(props) {
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
-    setCountrySelected(true);
+    setIsCountrySelected(true);
   };
 
   const handlePhoneClick = () => {
-    if (!countrySelected) {
+    if (!isCountrySelected) {
       setSelectedCountry(null);
       setPhoneFieldClicked(true);
     }
@@ -76,6 +76,7 @@ export default function PhoneCountrySelector(props) {
     if (value) {
       setSelectedCountry(value?.country ?? null);
       setPhoneInputValue(value?.phoneNumber ?? '');
+      setIsCountrySelected(value?.country ? true : false);
     }
   }, [value]);
 
@@ -150,8 +151,8 @@ export default function PhoneCountrySelector(props) {
           label={label || 'Phone number'}
           onFocus={handlePhoneClick}
           onChange={handlePhoneInputChange}
-          disabled={!countrySelected || disabled}
-          variant={!countrySelected || disabled ? 'filled' : variant ? variant : 'outlined'}
+          disabled={!isCountrySelected || disabled}
+          variant={!isCountrySelected || disabled ? 'filled' : variant ? variant : 'outlined'}
         />
       </article>
     </section>
