@@ -14,6 +14,18 @@ const isEmpty = (value) => {
   return value.trim() === '';
 };
 
+const transformNormalizedData = (data) => {
+  if (!data) {
+    return null;
+  }
+
+  return {
+    countryCode: data?.iso_code,
+    dialCode: data?.dial_code,
+    label: data?.name,
+  };
+};
+
 export default function PhoneCountrySelector(props) {
   const { value, label, onPhoneChange, disabled, variant } = props;
   const [selectedCountry, setSelectedCountry] = useState(
@@ -77,18 +89,6 @@ export default function PhoneCountrySelector(props) {
   function sanitizeInput(input) {
     return input.replace(/[^0-9]/g, '');
   }
-
-  const transformNormalizedData = (data) => {
-    if (!data) {
-      return null;
-    }
-
-    return {
-      countryCode: data?.iso_code,
-      dialCode: data?.dial_code,
-      label: data?.name,
-    };
-  };
 
   useEffect(() => {
     if (value) {
