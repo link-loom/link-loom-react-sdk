@@ -28,12 +28,10 @@ const transformNormalizedData = (data) => {
 
 export default function PhoneCountrySelector(props) {
   const { value, label, onPhoneChange, disabled, variant } = props;
-  const [selectedCountry, setSelectedCountry] = useState(
-    transformNormalizedData(value?.country ?? null),
-  );
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
   const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
-  const [phoneInputValue, setPhoneInputValue] = useState(value?.phone_number ?? '');
+  const [phoneInputValue, setPhoneInputValue] = useState('');
 
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
@@ -91,7 +89,7 @@ export default function PhoneCountrySelector(props) {
   }
 
   useEffect(() => {
-    if (value) {
+    if (value && phoneInputValue !== value?.phoneNumber) {
       setSelectedCountry(transformNormalizedData(value?.country ?? null));
       setPhoneInputValue(value?.phoneNumber ?? '');
       setIsCountrySelected(value?.country ? true : false);
