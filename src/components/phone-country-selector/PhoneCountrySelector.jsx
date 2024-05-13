@@ -16,10 +16,12 @@ const isEmpty = (value) => {
 
 export default function PhoneCountrySelector(props) {
   const { value, label, onPhoneChange, disabled, variant } = props;
-  const [selectedCountry, setSelectedCountry] = useState(value?.country ?? null);
+  const [selectedCountry, setSelectedCountry] = useState(
+    transformNormalizedData(value?.country ?? null),
+  );
   const [isCountrySelected, setIsCountrySelected] = useState(false);
   const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
-  const [phoneInputValue, setPhoneInputValue] = useState(value?.phoneNumber ?? '');
+  const [phoneInputValue, setPhoneInputValue] = useState(value?.phone_number ?? '');
 
   useEffect(() => {
     if (!isEmpty(phoneInputValue)) {
@@ -76,9 +78,21 @@ export default function PhoneCountrySelector(props) {
     return input.replace(/[^0-9]/g, '');
   }
 
+  const transformNormalizedData = (data) => {
+    if (!data) {
+      return null;
+    }
+
+    return {
+      countryCode: data?.iso_code,
+      dialCode: data?.dial_code,
+      label: data?.name,
+    };
+  };
+
   useEffect(() => {
     if (value) {
-      setSelectedCountry(value?.country ?? null);
+      setSelectedCountry(transformNormalizedData(value?.country ?? null));
       setPhoneInputValue(value?.phoneNumber ?? '');
       setIsCountrySelected(value?.country ? true : false);
     }
