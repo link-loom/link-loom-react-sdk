@@ -27,7 +27,7 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
     >
       <Box className="position-absolute top-50 start-50 translate-middle bg-white" style={styles}>
         <CloseButton onClick={handleClose}>
-          <i className="mdi mdi-close"></i>
+          <i className={'mdi mdi-close ' + styles?.closeButtonColor}></i>
         </CloseButton>
 
         <Typography id="modal-modal-title" variant="h6" component="h2">
