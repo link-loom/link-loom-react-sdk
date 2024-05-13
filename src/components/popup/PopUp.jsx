@@ -1,6 +1,6 @@
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Typography, IconButton } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -25,10 +25,7 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
       disableAutoFocus
       disableRestoreFocus
     >
-      <Box
-        className="position-absolute top-50 start-50 translate-middle bg-white"
-        style={styles}
-      >
+      <Box className="position-absolute top-50 start-50 translate-middle bg-white" style={styles}>
         <CloseButton onClick={handleClose}>
           <i className="mdi mdi-close"></i>
         </CloseButton>
