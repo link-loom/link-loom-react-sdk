@@ -1,7 +1,7 @@
+import React, { useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Typography, IconButton } from '@mui/material';
-import React from 'react';
 import styled from 'styled-components';
 
 const CloseButton = styled(IconButton)`
@@ -13,19 +13,40 @@ const CloseButton = styled(IconButton)`
 `;
 
 const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <Modal
       id={id}
       data-testid={id}
       open={isOpen}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        document.body.style.overflow = '';
+      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       disableAutoFocus
       disableRestoreFocus
     >
-      <Box className="position-absolute top-50 start-50 translate-middle bg-white" style={styles}>
+      <Box
+        className="position-absolute top-50 start-50 translate-middle bg-white"
+        style={styles}
+      >
         <CloseButton onClick={handleClose}>
           <i className={'mdi mdi-close ' + styles?.closeButtonColor}></i>
         </CloseButton>
