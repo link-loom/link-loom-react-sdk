@@ -33,7 +33,7 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {title}
         </Typography>
-        <Box className="overflow-auto" style={{ maxHeight: '80vh' }}>
+        <Box className="overflow-auto" style={{ maxHeight: '95vh' }}>
           {children}
         </Box>
       </Box>
