@@ -1,3 +1,5 @@
+import React from 'react';
+
 function RetryMessage(props) {
   const { message, buttonMessage, onRetryClick } = props;
   const defaultMessage = 'Information is not available right now.';
