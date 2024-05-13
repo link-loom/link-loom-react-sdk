@@ -12,6 +12,10 @@ const CloseButton = styled(IconButton)`
   height: 40px;
 `;
 
+function setBodyOverflowHidden(isHidden) {
+  document.body.style.overflow = isHidden ? 'hidden' : '';
+}
+
 const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
   const handleClose = () => {
     setIsOpen(false);
@@ -19,13 +23,13 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      setBodyOverflowHidden(true);
     } else {
-      document.body.style.overflow = '';
+      setBodyOverflowHidden(false);
     }
 
     return () => {
-      document.body.style.overflow = '';
+      setBodyOverflowHidden(false);
     };
   }, [isOpen]);
 
@@ -36,17 +40,14 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
       open={isOpen}
       onClose={() => {
         handleClose();
-        document.body.style.overflow = '';
+        setBodyOverflowHidden(false);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       disableAutoFocus
       disableRestoreFocus
     >
-      <Box
-        className="position-absolute top-50 start-50 translate-middle bg-white"
-        style={styles}
-      >
+      <Box className="position-absolute top-50 start-50 translate-middle bg-white" style={styles}>
         <CloseButton onClick={handleClose}>
           <i className={'mdi mdi-close ' + styles?.closeButtonColor}></i>
         </CloseButton>
