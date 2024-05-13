@@ -122,8 +122,8 @@ export default function PhoneCountrySelector(props) {
               <img
                 loading="lazy"
                 width="20"
-                srcSet={`https://flagcdn.com/w40/${option.countryCode.toLocaleLowerCase()}.png 2x`}
-                src={`https://flagcdn.com/w20/${option.countryCode.toLocaleLowerCase()}.png`}
+                srcSet={`https://flagcdn.com/w40/${option?.countryCode?.toLocaleLowerCase()}.png 2x`}
+                src={`https://flagcdn.com/w20/${option?.countryCode?.toLocaleLowerCase()}.png`}
                 alt=""
               />
               {option.label}
@@ -146,7 +146,7 @@ export default function PhoneCountrySelector(props) {
                     <img
                       loading="lazy"
                       width="20"
-                      src={`https://flagcdn.com/w20/${selectedCountry.countryCode.toLocaleLowerCase()}.png`}
+                      src={`https://flagcdn.com/w20/${selectedCountry?.countryCode?.toLocaleLowerCase()}.png`}
                       alt=""
                     />
                   </>
