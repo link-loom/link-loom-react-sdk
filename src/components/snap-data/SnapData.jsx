@@ -26,7 +26,7 @@ function SnapData(props) {
   const alignmentClass = justifyClasses[alignment];
 
   return (
-    <section className="w-100">
+    <>
       {data ? (
         !copied ? (
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
@@ -57,7 +57,7 @@ function SnapData(props) {
           </div>
         </section>
       )}
-    </section>
+    </>
   );
 }
 
