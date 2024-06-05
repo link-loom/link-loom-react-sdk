@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function SnapData (props) {
+function SnapData(props) {
   const { id, data, onEdit, emptyText, alignment } = props;
   const [copied, setCopied] = useState(false);
 
@@ -17,18 +17,18 @@ function SnapData (props) {
   };
 
   const justifyClasses = {
-    left: 'w-100 justify-content-start',
-    center: 'w-100 justify-content-center',
-    right: 'w-100 justify-content-end',
+    left: 'justify-content-start',
+    center: 'justify-content-center',
+    right: 'justify-content-end',
   };
 
   const alignmentClass = justifyClasses[alignment];
 
   return (
-    <div className={`d-flex align-items-center ${alignmentClass}`}>
+    <div className="w-100">
       {data ? (
         !copied ? (
-          <div>
+          <div className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>{data}</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
@@ -37,7 +37,7 @@ function SnapData (props) {
             </div>
           </div>
         ) : (
-          <div>
+          <div className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>Copied!</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1">
@@ -58,6 +58,6 @@ function SnapData (props) {
       )}
     </div>
   );
-};
+}
 
 export default SnapData;
