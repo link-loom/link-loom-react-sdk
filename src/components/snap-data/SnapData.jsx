@@ -32,7 +32,7 @@ function SnapData(props) {
       {data ? (
         !copied ? (
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
-            <span>{data}</span>
+            <span className="text-truncate">{data}</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
                 <i className="fe-copy"></i>
