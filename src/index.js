@@ -18,5 +18,6 @@ export { default as PhoneCountrySelector } from './components/phone-country-sele
 export { default as FileViewer } from './components/file-viewer/FileViewer.jsx';
 export { default as StatusChip } from './components/status-chip/StatusChip.jsx';
 export { default as RetryMessage } from './components/retry-message/RetryMessage.jsx';
+export { default as SnapData } from './components/snap-data/SnapData.jsx';
 
 export { default as useDebounce } from './hooks/useDebounce.js';
