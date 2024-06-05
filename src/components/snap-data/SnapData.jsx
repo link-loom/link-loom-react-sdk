@@ -20,6 +20,7 @@ function SnapData(props) {
     left: 'justify-content-start',
     center: 'justify-content-center',
     right: 'justify-content-end',
+    between: 'justify-content-between'
   };
 
   const alignmentClass = justifyClasses[alignment];
