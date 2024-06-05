@@ -27,7 +27,7 @@ function SnapData (props) {
   return (
     <div className={`d-flex align-items-center ${alignmentClass}`}>
       {data ? (
-        copied ? (
+        !copied ? (
           <div>
             <span>{data}</span>
             <div className="ms-1">
