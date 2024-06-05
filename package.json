@@ -1,6 +1,6 @@
 {
   "name": "@link-loom/ui-sdk",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "UI SDK components for Link Loom",
   "main": "dist/ui-sdk.cjs.js",
   "module": "dist/ui-sdk.esm.js",
