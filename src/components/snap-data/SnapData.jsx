@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SnapData = (props) => {
-  const { id, data, onEdit, emptyText } = props;
+const SnapData = ({ id, data, onEdit, emptyText, alignment = 'left' }) => {
+  const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
+  const copyOnClick = () => {
     if (data) {
       navigator.clipboard.writeText(data);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1000);
     }
   };
 
@@ -13,20 +15,39 @@ const SnapData = (props) => {
     onEdit(id);
   };
 
+  const justifyClasses = {
+    left: 'justify-content-start',
+    center: 'justify-content-center',
+    right: 'justify-content-end',
+  };
+
+  const alignmentClass = justifyClasses[alignment];
+
   return (
-    <div className="d-flex">
+    <div className={`d-flex align-items-center ${alignmentClass}`}>
       {data ? (
-        <>
-          <span>{data}</span>
-          <div className="ms-1">
-            <button className="btn btn-link py-0 px-1" onClick={handleCopy}>
-              <i className="fe-copy"></i>
-            </button>
+        copied ? (
+          <div>
+            <span>{data}</span>
+            <div className="ms-1">
+              <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
+                <i className="fe-copy"></i>
+              </button>
+            </div>
           </div>
-        </>
+        ) : (
+          <div>
+            <span>Copied!</span>
+            <div className="ms-1">
+              <button className="btn btn-link py-0 px-1">
+                <i className="fe-check"></i>
+              </button>
+            </div>
+          </div>
+        )
       ) : (
         <>
-          <span>{emptyText ? emptyText : 'N/A'}</span>
+          <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
             <button className="btn btn-link py-0 px-1" onClick={editOnClick}>
               <i className="fe-edit"></i>
