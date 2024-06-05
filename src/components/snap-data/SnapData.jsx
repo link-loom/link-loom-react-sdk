@@ -13,14 +13,16 @@ function SnapData(props) {
   };
 
   const editOnClick = () => {
-    onEdit(id);
+    if (onEdit) {
+      onEdit(id);
+    }
   };
 
   const justifyClasses = {
     left: 'justify-content-start',
     center: 'justify-content-center',
     right: 'justify-content-end',
-    between: 'justify-content-between'
+    between: 'justify-content-between',
   };
 
   const alignmentClass = justifyClasses[alignment];
