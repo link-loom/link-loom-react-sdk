@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SnapData = ({ id, data, onEdit, emptyText, alignment = 'left' }) => {
+const SnapData = ({ id, data, onEdit, emptyText, alignment }) => {
   const [copied, setCopied] = useState(false);
 
   const copyOnClick = () => {
@@ -16,9 +16,9 @@ const SnapData = ({ id, data, onEdit, emptyText, alignment = 'left' }) => {
   };
 
   const justifyClasses = {
-    left: 'justify-content-start',
-    center: 'justify-content-center',
-    right: 'justify-content-end',
+    left: 'w-100 justify-content-start',
+    center: 'w-100 justify-content-center',
+    right: 'w-100 justify-content-end',
   };
 
   const alignmentClass = justifyClasses[alignment];
