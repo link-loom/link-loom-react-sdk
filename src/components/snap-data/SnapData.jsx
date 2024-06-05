@@ -25,38 +25,38 @@ function SnapData(props) {
   const alignmentClass = justifyClasses[alignment];
 
   return (
-    <div className="w-100">
+    <section className="w-100">
       {data ? (
         !copied ? (
-          <div className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
+          <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>{data}</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
                 <i className="fe-copy"></i>
               </button>
             </div>
-          </div>
+          </section>
         ) : (
-          <div className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
+          <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>Copied!</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1">
                 <i className="fe-check"></i>
               </button>
             </div>
-          </div>
+          </section>
         )
       ) : (
-        <>
+        <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
           <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
             <button className="btn btn-link py-0 px-1" onClick={editOnClick}>
               <i className="fe-edit"></i>
             </button>
           </div>
-        </>
+        </section>
       )}
-    </div>
+    </section>
   );
 }
 
