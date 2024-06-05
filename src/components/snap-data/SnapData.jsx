@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const SnapData = ({ id, data, onEdit, emptyText, alignment }) => {
+function SnapData (props) {
+  const { id, data, onEdit, emptyText, alignment } = props;
   const [copied, setCopied] = useState(false);
 
   const copyOnClick = () => {
