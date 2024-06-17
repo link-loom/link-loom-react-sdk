@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const CloseButton = styled(IconButton)`
   z-index: 99;
-  position: absolute;
+  position: absolute !important;
   top: 10px;
   right: 10px;
   height: 40px;
