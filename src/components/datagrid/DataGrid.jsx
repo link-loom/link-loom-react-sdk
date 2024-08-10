@@ -30,36 +30,42 @@ const DataGrid = (props) => {
     totalRows,
     localeText = enUS.components.MuiDataGrid.defaultProps.localeText,
     disableRowSelectionOnClick = true,
-    slots,
-    slotProps,
+    slots = {},
+    slotProps = {},
     initialState = { pagination: { paginationModel: { pageSize: 7 } } },
-    pageSizeOptions = [7, 10, 20, 50],
+    pageSizeOptions = [5, 10, 20, 50],
     ...rest
   } = props;
 
-  function CustomSearchToolbar() {
+  const CustomSearchToolbar = () => {
     return (
-      <div className="col-12 d-flex flex-column mt-3">
-        <div className="d-flex justify-content-between mb-3">
-          <GridToolbar />
-          <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
+      <GridToolbarContainer>
+        <div className="col-12 d-flex flex-column mt-3">
+          <div className="d-flex justify-content-between mb-3">
+            <GridToolbar />
+            <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
+          </div>
         </div>
-      </div>
+      </GridToolbarContainer>
     );
-  }
+  };
+
+  const defaultSlots = {
+    toolbar: CustomSearchToolbar,
+    ...slots,
+  };
+
+  const defaultSlotProps = {
+    toolbar: {
+      showQuickFilter: true,
+    },
+    ...slotProps,
+  };
 
   const defaultDataGridProps = {
     disableRowSelectionOnClick,
-    slots: {
-      toolbar: CustomSearchToolbar,
-      ...slots,
-    },
-    slotProps: {
-      toolbar: {
-        showQuickFilter: true,
-      },
-      ...slotProps,
-    },
+    slots: defaultSlots,
+    slotProps: defaultSlotProps,
     initialState,
     pageSizeOptions,
   };
@@ -74,6 +80,7 @@ const DataGrid = (props) => {
         paginationModel,
         onPaginationModelChange: setPaginationModel,
         rowCount: totalRows,
+        paginationMode: 'server',
       }),
     ...defaultDataGridProps,
     ...rest,
