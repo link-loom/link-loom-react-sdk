@@ -22,7 +22,20 @@ const boxStyles = {
 };
 
 const DataGrid = (props) => {
-  const { rows, columns, paginationModel, setPaginationModel, totalRows } = props;
+  const {
+    rows,
+    columns,
+    paginationModel,
+    setPaginationModel,
+    totalRows,
+    localeText = enUS.components.MuiDataGrid.defaultProps.localeText,
+    disableRowSelectionOnClick = true,
+    slots,
+    slotProps,
+    initialState = { pagination: { paginationModel: { pageSize: 7 } } },
+    pageSizeOptions = [7, 10, 20, 50],
+    ...rest
+  } = props;
 
   function CustomSearchToolbar() {
     return (
@@ -32,42 +45,46 @@ const DataGrid = (props) => {
             <GridToolbar />
           </GridToolbarContainer>
 
-          <GridToolbarQuickFilter className="me-3 border-1" placeholder="Buscar..." />
+          <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
         </div>
       </div>
     );
   }
 
+  const defaultDataGridProps = {
+    disableRowSelectionOnClick,
+    slots: {
+      toolbar: CustomSearchToolbar,
+      ...slots,
+    },
+    slotProps: {
+      toolbar: {
+        showQuickFilter: true,
+      },
+      ...slotProps,
+    },
+    initialState,
+    pageSizeOptions,
+  };
+
   const dataGridProps = {
     rows,
     columns,
-    localeText: esES.components.MuiDataGrid.defaultProps.localeText,
+    localeText,
     ...(paginationModel &&
       setPaginationModel &&
       totalRows && {
         paginationModel,
         onPaginationModelChange: setPaginationModel,
         rowCount: totalRows,
-        paginationMode: 'server',
       }),
+    ...defaultDataGridProps,
+    ...rest,
   };
 
   return (
     <Box sx={boxStyles}>
-      <MuiDataGrid
-        {...dataGridProps}
-        disableRowSelectionOnClick
-        slots={{
-          toolbar: CustomSearchToolbar,
-        }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{ pagination: { paginationModel: { pageSize: 7 } } }}
-        pageSizeOptions={[7, 10, 20, 50]}
-      />
+      <MuiDataGrid {...dataGridProps} />
     </Box>
   );
 };
