@@ -41,10 +41,7 @@ const DataGrid = (props) => {
     return (
       <div className="col-12 d-flex flex-column mt-3">
         <div className="d-flex justify-content-between mb-3">
-          <GridToolbarContainer>
-            <GridToolbar />
-          </GridToolbarContainer>
-
+          <GridToolbar />
           <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
         </div>
       </div>
