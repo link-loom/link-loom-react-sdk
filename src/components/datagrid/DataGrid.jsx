@@ -28,14 +28,11 @@ const DataGrid = (props) => {
   const {
     rows,
     columns,
-    paginationModel,
-    setPaginationModel,
-    totalRows,
     localeText = enUS.components.MuiDataGrid.defaultProps.localeText,
     disableRowSelectionOnClick = true,
     slots = {},
     slotProps = {},
-    initialState = { pagination: { paginationModel: { pageSize: 7 } } },
+    initialState = { pagination: { paginationModel: { pageSize: 5 } } },
     pageSizeOptions = [5, 10, 20, 50],
     showExport = false,
     ...rest
@@ -85,14 +82,6 @@ const DataGrid = (props) => {
     rows,
     columns,
     localeText,
-    ...(paginationModel &&
-      setPaginationModel &&
-      totalRows && {
-        paginationModel,
-        onPaginationModelChange: setPaginationModel,
-        rowCount: totalRows,
-        paginationMode: 'server',
-      }),
     ...defaultDataGridProps,
     ...rest,
   };
