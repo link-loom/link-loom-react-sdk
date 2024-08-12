@@ -34,18 +34,26 @@ const DataGrid = (props) => {
     slotProps = {},
     initialState = { pagination: { paginationModel: { pageSize: 7 } } },
     pageSizeOptions = [5, 10, 20, 50],
+    showExport = false,
     ...rest
   } = props;
 
   const CustomSearchToolbar = () => {
     return (
       <GridToolbarContainer>
-        <div className="col-12 d-flex flex-column mt-3">
+        <section className="col-12 d-flex flex-column mt-3">
           <div className="d-flex justify-content-between mb-3">
-            <GridToolbar />
+            <section>
+              <GridToolbarColumnsButton />
+              <GridToolbarFilterButton />
+              <GridToolbarDensitySelector />
+
+              {showExport && <GridToolbarExport />}
+            </section>
+
             <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
           </div>
-        </div>
+        </section>
       </GridToolbarContainer>
     );
   };
