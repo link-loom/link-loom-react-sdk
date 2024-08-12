@@ -3,8 +3,11 @@ import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
   enUS,
-  GridToolbar,
   GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarExport
 } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
