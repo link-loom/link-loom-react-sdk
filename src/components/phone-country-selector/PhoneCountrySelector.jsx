@@ -154,6 +154,7 @@ export default function PhoneCountrySelector(props) {
           type="tel"
           id="primary_phone_number"
           name="primary_phone_number"
+          className="w-100"
           autoComplete="new-password"
           value={phoneInputValue}
           placeholder="3002355432"
