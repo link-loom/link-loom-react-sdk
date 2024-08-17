@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function SnapData(props) {
-  const { id, data, onEdit, emptyText, alignment, variant, customTextClass } = props;
+  const { id, data, onEdit, emptyText, alignment, variant, className } = props;
   const [copied, setCopied] = useState(false);
 
   const copyOnClick = () => {
@@ -28,7 +28,7 @@ function SnapData(props) {
   const alignmentClass = justifyClasses[alignment];
 
   const renderData = () => {
-    const combinedClassName = `text-truncate ${customTextClass || ''}`.trim();
+    const combinedClassName = `text-truncate ${className || ''}`.trim();
 
     switch (variant) {
       case 'small':
