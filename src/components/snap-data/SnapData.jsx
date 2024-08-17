@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function SnapData(props) {
-  const { id, data, onEdit, emptyText, alignment } = props;
+  const { id, data, onEdit, emptyText, alignment, variant, customTextClass } = props;
   const [copied, setCopied] = useState(false);
 
   const copyOnClick = () => {
@@ -27,12 +27,25 @@ function SnapData(props) {
 
   const alignmentClass = justifyClasses[alignment];
 
+  const renderData = () => {
+    const combinedClassName = `text-truncate ${customTextClass || ''}`.trim();
+
+    switch (variant) {
+      case 'small':
+        return <small className={combinedClassName}>{data}</small>;
+      case 'strong':
+        return <strong className={combinedClassName}>{data}</strong>;
+      default:
+        return <span className={combinedClassName}>{data}</span>;
+    }
+  };
+
   return (
     <>
       {data ? (
         !copied ? (
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
-            <span className="text-truncate">{data}</span>
+            {renderData()}
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
                 <i className="fe-copy"></i>
