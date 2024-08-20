@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
@@ -81,7 +81,7 @@ const DataGrid = (props) => {
     );
   };
 
-  const enhancedColumns = columns.map(column => {
+  const enhancedColumns = columns.map((column) => {
     if (column.field === 'actions') {
       return {
         ...column,
@@ -112,7 +112,9 @@ const DataGrid = (props) => {
               {actions.map((action, index) => (
                 <MenuItem
                   key={index}
-                  onClick={(event) => handleMenuItemClick(event, action.label.toLowerCase(), params)}
+                  onClick={(event) =>
+                    handleMenuItemClick(event, action.label.toLowerCase(), params)
+                  }
                   data-testid={`user-${action.label.toLowerCase()}-action-btn`}
                 >
                   {action.icon}
@@ -121,7 +123,7 @@ const DataGrid = (props) => {
               ))}
             </Menu>
           </>
-        )
+        ),
       };
     }
     return column;
