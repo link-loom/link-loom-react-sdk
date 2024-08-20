@@ -7,7 +7,7 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
-  GridToolbarExport
+  GridToolbarExport,
 } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
@@ -35,8 +35,31 @@ const DataGrid = (props) => {
     initialState = { pagination: { paginationModel: { pageSize: 5 } } },
     pageSizeOptions = [5, 10, 20, 50],
     showExport = false,
+    onMenuItemClick,
+    actions = [],
     ...rest
   } = props;
+
+  const [menuActionsAnchorElement, setMenuActionsAnchorElement] = useState(null);
+  const [menuActionsSelected, setActionsSelected] = useState(null);
+
+  const actionsMenuOnClick = (selector, anchorElement) => {
+    setActionsSelected(selector || null);
+    setMenuActionsAnchorElement(anchorElement || null);
+  };
+
+  const closeMenuActions = () => {
+    setActionsSelected(null);
+    setMenuActionsAnchorElement(null);
+  };
+
+  const handleMenuItemClick = (event, action, params) => {
+    event.stopPropagation();
+    closeMenuActions();
+    if (onMenuItemClick) {
+      onMenuItemClick(action, params);
+    }
+  };
 
   const CustomSearchToolbar = () => {
     return (
@@ -57,6 +80,52 @@ const DataGrid = (props) => {
       </GridToolbarContainer>
     );
   };
+
+  const enhancedColumns = columns.map(column => {
+    if (column.field === 'actions') {
+      return {
+        ...column,
+        renderCell: (params) => (
+          <>
+            <IconButton
+              disableRipple
+              data-testid="user-action-menu-btn"
+              aria-label="actions button"
+              id={`list-item-menu-${params.row?.id}`}
+              aria-haspopup="true"
+              onClick={(event) =>
+                actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget)
+              }
+            >
+              <i className="mdi mdi-dots-vertical fs-4"></i>
+            </IconButton>
+            <Menu
+              elevation={1}
+              id={'list-item-menu-' + params.row?.id}
+              anchorEl={menuActionsAnchorElement}
+              open={menuActionsSelected === `list-item-menu-${params.row?.id}`}
+              onClose={closeMenuActions}
+              MenuListProps={{
+                'aria-labelledby': 'user-action-menu-btn',
+              }}
+            >
+              {actions.map((action, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={(event) => handleMenuItemClick(event, action.label.toLowerCase(), params)}
+                  data-testid={`user-${action.label.toLowerCase()}-action-btn`}
+                >
+                  {action.icon}
+                  <ListItemText>{action.label}</ListItemText>
+                </MenuItem>
+              ))}
+            </Menu>
+          </>
+        )
+      };
+    }
+    return column;
+  });
 
   const defaultSlots = {
     toolbar: CustomSearchToolbar,
@@ -80,7 +149,7 @@ const DataGrid = (props) => {
 
   const dataGridProps = {
     rows,
-    columns,
+    columns: enhancedColumns,
     localeText,
     ...defaultDataGridProps,
     ...rest,
