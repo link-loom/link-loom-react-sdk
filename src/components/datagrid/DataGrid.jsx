@@ -114,9 +114,9 @@ const DataGrid = (props) => {
                 <MenuItem
                   key={index}
                   onClick={(event) =>
-                    handleMenuItemClick(event, action.label.toLowerCase(), params)
+                    handleMenuItemClick(event, action.id, params)
                   }
-                  data-testid={`user-${action.label.toLowerCase()}-action-btn`}
+                  data-testid={`user-${action.id}-action-btn`}
                 >
                   {action.icon}
                   <ListItemText>{action.label}</ListItemText>
