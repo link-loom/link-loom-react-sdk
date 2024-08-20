@@ -37,6 +37,7 @@ const DataGrid = (props) => {
     showExport = false,
     onMenuItemClick,
     actions = [],
+    enableActions = false,
     ...rest
   } = props;
 
@@ -82,7 +83,7 @@ const DataGrid = (props) => {
   };
 
   const enhancedColumns = columns.map((column) => {
-    if (column.field === 'actions') {
+    if (column.field === 'actions' && enableActions) {
       return {
         ...column,
         renderCell: (params) => (
