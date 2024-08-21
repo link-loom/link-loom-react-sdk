@@ -58,7 +58,7 @@ const DataGrid = (props) => {
     event.stopPropagation();
     closeMenuActions();
     if (onMenuItemClick) {
-      onMenuItemClick(action, params);
+      onMenuItemClick(action, params?.row ?? {});
     }
   };
 
@@ -113,9 +113,7 @@ const DataGrid = (props) => {
               {actions.map((action, index) => (
                 <MenuItem
                   key={index}
-                  onClick={(event) =>
-                    handleMenuItemClick(event, action.id, params)
-                  }
+                  onClick={(event) => handleMenuItemClick(event, action.id, params)}
                   data-testid={`user-${action.id}-action-btn`}
                 >
                   {action.icon}
