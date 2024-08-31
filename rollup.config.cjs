@@ -50,7 +50,8 @@ module.exports = {
       extensions: ['.js', '.jsx'], 
     }),
     postcss({
-      extract: true, 
+      extract: true,
+      minimize: true,
     }),
     json(), 
     replace({

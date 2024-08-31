@@ -23,7 +23,6 @@
     "@tinymce/tinymce-react": "^5.0.0",
     "@yaireo/tagify": "^4.22.2",
     "clipboard": "^2.0.11",
-    "feather-icons": "^4.29.2",
     "react-select": "^5.8.0",
     "sweetalert2": "^11.10.7",
     "sweetalert2-react-content": "^5.0.7"

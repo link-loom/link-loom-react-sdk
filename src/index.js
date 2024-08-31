@@ -21,3 +21,5 @@ export { default as RetryMessage } from './components/retry-message/RetryMessage
 export { default as SnapData } from './components/snap-data/SnapData.jsx';
 
 export { default as useDebounce } from './hooks/useDebounce.js';
+
+import './styles/icons.css';
