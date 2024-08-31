@@ -7,6 +7,8 @@ const postcss = require('rollup-plugin-postcss');
 const json = require('@rollup/plugin-json');
 const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 const replace = require('@rollup/plugin-replace');
+const url = require('@rollup/plugin-url');
+const copy = require('rollup-plugin-copy');
 
 module.exports = {
   input: 'src/index.js',
@@ -41,8 +43,8 @@ module.exports = {
     resolve({
       browser: true,
       preferBuiltins: false,
-      extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
-    }),
+      extensions: ['.mjs', '.js', '.jsx', '.json', '.woff', '.woff2', '.eot', '.ttf', '.svg'],
+    }),    
     commonjs(),
     babel({
       babelHelpers: 'bundled',
@@ -56,10 +58,21 @@ module.exports = {
       minimize: true,
       sourceMap: true,
     }),
+    url({
+      include: ['**/*.woff', '**/*.woff2', '**/*.eot', '**/*.ttf', '**/*.svg'],
+      limit: 0,
+      emitFiles: true,
+      fileName: 'fonts/[name][extname]',
+    }),
     json(),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       preventAssignment: true,
+    }),
+    copy({
+      targets: [
+        { src: 'src/fonts/*', dest: 'dist/fonts' }
+      ]
     })
   ],
 };

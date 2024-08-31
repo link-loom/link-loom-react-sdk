@@ -29,6 +29,10 @@ Install the library in your project with the following command:
 
 For more details on each component, including usage and configuration options, please refer to the full documentation.
 
+## Development
+
+npm run build;npm version patch;npm publish
+
 ## Documentation
 
 For detailed information on each component, including the props they accept and the events they emit, refer to the comprehensive documentation provided with the library.
