@@ -14,16 +14,16 @@ module.exports = {
     {
       file: 'dist/ui-sdk.cjs.js',
       format: 'cjs',
-      sourcemap: true, 
+      sourcemap: true,
     },
     {
       file: 'dist/ui-sdk.esm.js',
       format: 'esm',
-      sourcemap: true, 
+      sourcemap: true,
     },
   ],
-  onwarn: function(warning, warn) {
-    if (warning.message && warning.message.includes('use client')){
+  onwarn: function (warning, warn) {
+    if (warning.message && warning.message.includes('use client')) {
       return;
     }
     if (warning.code === 'CIRCULAR_DEPENDENCY' || warning.code === 'UNUSED_EXTERNAL_IMPORT') {
@@ -32,28 +32,31 @@ module.exports = {
     warn(warning);
   },
   plugins: [
-    peerDepsExternal(), 
+    peerDepsExternal(),
     alias({
       entries: [
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       ],
     }),
     resolve({
-      browser: true, 
-      preferBuiltins: false, 
-      extensions: ['.mjs', '.js', '.jsx', '.json', '.node'], 
+      browser: true,
+      preferBuiltins: false,
+      extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
     }),
-    commonjs(), 
+    commonjs(),
     babel({
       babelHelpers: 'bundled',
-      exclude: 'node_modules/**', 
-      extensions: ['.js', '.jsx'], 
+      exclude: 'node_modules/**',
+      extensions: ['.js', '.jsx'],
     }),
     postcss({
-      extract: true,
+      extract: 'styles.css',
+      modules: false,
+      use: ['sass'],
       minimize: true,
+      sourceMap: true,
     }),
-    json(), 
+    json(),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       preventAssignment: true,
