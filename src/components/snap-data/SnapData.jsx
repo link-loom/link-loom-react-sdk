@@ -48,7 +48,7 @@ function SnapData(props) {
             {renderData()}
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
-                <i className="fe-copy"></i>
+                <i data-feather="copy"></i>
               </button>
             </div>
           </section>
@@ -57,7 +57,7 @@ function SnapData(props) {
             <span>Copied!</span>
             <div className="ms-1">
               <button className="btn btn-link py-0 px-1">
-                <i className="fe-check"></i>
+                <i data-feather="check"></i>
               </button>
             </div>
           </section>
@@ -67,7 +67,7 @@ function SnapData(props) {
           <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
             <button className="btn btn-link py-0 px-1" onClick={editOnClick}>
-              <i className="fe-edit"></i>
+              <i data-feather="edit"></i>
             </button>
           </div>
         </section>
