@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function SnapData(props) {
-  const { id, data, onEdit, emptyText, alignment, variant, className } = props;
+  const { id, data, onEdit, emptyText, alignment, variant, className, icon } = props;
   const [copied, setCopied] = useState(false);
 
   const copyOnClick = () => {
@@ -47,7 +47,7 @@ function SnapData(props) {
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             {renderData()}
             <div className="ms-1">
-              <button className="btn btn-link py-0 px-1" onClick={copyOnClick}>
+              <button className={`btn btn-link py-0 px-1 ${icon.className}`} onClick={copyOnClick}>
                 <i className="fe-copy"></i>
               </button>
             </div>
@@ -56,7 +56,7 @@ function SnapData(props) {
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>Copied!</span>
             <div className="ms-1">
-              <button className="btn btn-link py-0 px-1">
+              <button className={`btn btn-link py-0 px-1 ${icon.className}`}>
                 <i className="fe-check"></i>
               </button>
             </div>
@@ -66,7 +66,7 @@ function SnapData(props) {
         <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
           <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
-            <button className="btn btn-link py-0 px-1" onClick={editOnClick}>
+            <button className={`btn btn-link py-0 px-1 ${icon.className}`} onClick={editOnClick}>
               <i className="fe-edit"></i>
             </button>
           </div>
