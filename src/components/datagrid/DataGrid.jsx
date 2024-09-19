@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
-  enUS,
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
@@ -28,7 +27,6 @@ const DataGrid = (props) => {
   const {
     rows,
     columns,
-    localeText = enUS.components.MuiDataGrid.defaultProps.localeText,
     disableRowSelectionOnClick = true,
     slots = {},
     slotProps = {},
@@ -151,7 +149,6 @@ const DataGrid = (props) => {
   const dataGridProps = {
     rows,
     columns: enhancedColumns,
-    localeText,
     ...defaultDataGridProps,
     ...rest,
   };
