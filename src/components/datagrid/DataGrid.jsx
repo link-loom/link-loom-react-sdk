@@ -7,9 +7,9 @@ import {
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
   GridToolbarExport,
+  
 } from '@mui/x-data-grid';
-import { enUS } from '@mui/x-data-grid/locales';
-import { Box, IconButton, Menu, MenuItem, ListItemText } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, ListItemText} from '@mui/material';
 
 const boxStyles = {
   '.MuiTablePagination-displayedRows': {
@@ -28,7 +28,6 @@ const DataGrid = (props) => {
   const {
     rows,
     columns,
-    localeText = enUS,
     disableRowSelectionOnClick = true,
     slots = {},
     slotProps = {},
@@ -151,7 +150,6 @@ const DataGrid = (props) => {
   const dataGridProps = {
     rows,
     columns: enhancedColumns,
-    localeText,
     ...defaultDataGridProps,
     ...rest,
   };
