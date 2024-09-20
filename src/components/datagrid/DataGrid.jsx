@@ -7,9 +7,8 @@ import {
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
   GridToolbarExport,
-  
 } from '@mui/x-data-grid';
-import { Box, IconButton, Menu, MenuItem, ListItemText} from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, ListItemText } from '@mui/material';
 
 const boxStyles = {
   '.MuiTablePagination-displayedRows': {
@@ -93,6 +92,7 @@ const DataGrid = (props) => {
               aria-label="actions button"
               id={`list-item-menu-${params.row?.id}`}
               aria-haspopup="true"
+              sx={{ paddingBottom: 0, paddingTop: 0 }}
               onClick={(event) =>
                 actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget)
               }
