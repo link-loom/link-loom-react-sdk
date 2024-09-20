@@ -8,7 +8,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from '@mui/x-data-grid';
-import { enUS } from '@mui/material/locale';
+import { enUS } from '@mui/x-data-grid/locales';
 import { Box, IconButton, Menu, MenuItem, ListItemText } from '@mui/material';
 
 const boxStyles = {
@@ -28,7 +28,7 @@ const DataGrid = (props) => {
   const {
     rows,
     columns,
-    localeText = enUS.components.MuiDataGrid.defaultProps.localeText,
+    localeText = enUS,
     disableRowSelectionOnClick = true,
     slots = {},
     slotProps = {},
