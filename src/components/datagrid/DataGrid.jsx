@@ -88,7 +88,7 @@ const DataGrid = (props) => {
           <>
             <IconButton
               disableRipple
-              data-testid="user-action-menu-btn"
+              data-testid="datagrid-action-menu-btn"
               aria-label="actions button"
               id={`list-item-menu-${params.row?.id}`}
               aria-haspopup="true"
@@ -106,19 +106,45 @@ const DataGrid = (props) => {
               open={menuActionsSelected === `list-item-menu-${params.row?.id}`}
               onClose={closeMenuActions}
               MenuListProps={{
-                'aria-labelledby': 'user-action-menu-btn',
+                'aria-labelledby': 'datagrid-action-menu-btn',
               }}
             >
-              {actions.map((action, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={(event) => handleMenuItemClick(event, action.id, params)}
-                  data-testid={`user-${action.id}-action-btn`}
-                >
-                  {action.icon}
-                  <ListItemText>{action.label}</ListItemText>
-                </MenuItem>
-              ))}
+              {actions.map((action, index) =>
+                action.type === 'group' ? (
+                  <MenuItem
+                    key={index}
+                    disableRipple
+                    disableTouchRipple
+                    sx={{
+                      cursor: 'default',
+                      '&:hover': {
+                        backgroundColor: 'inherit',
+                      },
+                    }}
+                  >
+                    <ButtonGroup variant="outlined" aria-label="grouped actions" size="small">
+                      {action.items.map((item, idx) => (
+                        <Button
+                          key={idx}
+                          onClick={(event) => handleMenuItemClick(event, item.id, params)}
+                          data-testid={`datagrid-${action.id}-action-btn`}
+                        >
+                          {item.label}
+                        </Button>
+                      ))}
+                    </ButtonGroup>
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    key={index}
+                    onClick={(event) => handleMenuItemClick(event, action.id, params)}
+                    data-testid={`datagrid-${action.id}-action-btn`}
+                  >
+                    {action.icon}
+                    <ListItemText>{action.label}</ListItemText>
+                  </MenuItem>
+                ),
+              )}
             </Menu>
           </>
         ),
