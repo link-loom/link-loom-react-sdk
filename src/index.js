@@ -16,7 +16,8 @@ export { Snackbar as Snackbar, useSnackbar } from './components/snackbar/Snackba
 export { default as OnPageLoaded } from './components/on-page-loaded/OnPageLoaded.jsx';
 export { default as PhoneCountrySelector } from './components/phone-country-selector/PhoneCountrySelector.jsx';
 export { default as FileViewer } from './components/file-viewer/FileViewer.jsx';
-export { default as StatusChip } from './components/status-chip/StatusChip.jsx';
+export { default as StatusChip } from './components/status/status-chip/StatusChip.jsx';
+export { default as StatusSelector } from './components/status/status-selector/StatusSelector.jsx';
 export { default as RetryMessage } from './components/retry-message/RetryMessage.jsx';
 export { default as SnapData } from './components/snap-data/SnapData.jsx';
 
