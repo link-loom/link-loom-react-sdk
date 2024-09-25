@@ -34,11 +34,19 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
               }
             }}
           >
-            <ListItemIcon>
-              <RadioButtonCheckedIcon sx={{ color: item.color }} />
-            </ListItemIcon>
-            <ListItemText primary={item.title} />
-            {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+            <section className="d-flex w-100 align-items-center">
+              <div className="me-2">
+                <RadioButtonCheckedIcon sx={{ color: item.color }} />
+              </div>
+
+              <div className="flex-grow-1">
+                <ListItemText primary={item.title} />
+              </div>
+
+              <div className="ms-auto">
+                {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+              </div>
+            </section>
           </MenuItem>
         ))}
       </Menu>
