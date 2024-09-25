@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { IconButton, MenuList, MenuItem, ListItemIcon, ListItemIcon, ListItemText } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -22,7 +22,7 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
         <RadioButtonCheckedIcon fontSize={size} />
       </IconButton>
 
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <MenuList dense anchorEl={anchorEl} open={open} onClose={handleClose}>
         {Object.values(statuses).map((item) => (
           <MenuItem
             key={item.id}
@@ -35,11 +35,11 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
             }}
           >
             <section className="d-flex w-100 align-items-center">
-              <div className="me-2">
+              <ListItemIcon className="me-2">
                 <RadioButtonCheckedIcon sx={{ color: item.color }} />
-              </div>
+              </ListItemIcon>
 
-              <div className="flex-grow-1">
+              <div className="flex-grow-1 me-4">
                 <ListItemText primary={item.title} />
               </div>
 
@@ -49,7 +49,7 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
             </section>
           </MenuItem>
         ))}
-      </Menu>
+      </MenuList>
     </>
   );
 }
