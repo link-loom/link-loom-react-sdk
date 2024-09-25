@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
   IconButton,
-  MenuList,
+  Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
   Paper,
-  Typography
+  Typography,
 } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckIcon from '@mui/icons-material/Check';
@@ -31,7 +31,15 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
       </IconButton>
 
       <Paper sx={{ width: 320, maxWidth: '100%' }}>
-        <MenuList dense anchorEl={anchorEl} open={open} onClose={handleClose}>
+        <Menu
+          dense
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            dense: true,
+          }}
+        >
           {Object.values(statuses).map((item) => (
             <MenuItem
               key={item.id}
@@ -52,7 +60,7 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
               </Typography>
             </MenuItem>
           ))}
-        </MenuList>
+        </Menu>
       </Paper>
     </>
   );
