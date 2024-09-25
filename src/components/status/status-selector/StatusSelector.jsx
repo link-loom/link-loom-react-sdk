@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   ListItemIcon,
   ListItemText,
+  Paper
 } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckIcon from '@mui/icons-material/Check';
@@ -29,28 +30,30 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
         <RadioButtonCheckedIcon fontSize={size} />
       </IconButton>
 
-      <MenuList dense anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {Object.values(statuses).map((item) => (
-          <MenuItem
-            key={item.id}
-            onClick={() => {
-              handleClose();
+      <Paper sx={{ width: 320, maxWidth: '100%' }}>
+        <MenuList dense anchorEl={anchorEl} open={open} onClose={handleClose}>
+          {Object.values(statuses).map((item) => (
+            <MenuItem
+              key={item.id}
+              onClick={() => {
+                handleClose();
 
-              if (statusSelected) {
-                statusSelected(item);
-              }
-            }}
-          >
-            <ListItemIcon>
-              <RadioButtonCheckedIcon sx={{ color: item.color }} />
-            </ListItemIcon>
-            <ListItemText>{item.title}</ListItemText>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
-            </Typography>
-          </MenuItem>
-        ))}
-      </MenuList>
+                if (statusSelected) {
+                  statusSelected(item);
+                }
+              }}
+            >
+              <ListItemIcon>
+                <RadioButtonCheckedIcon sx={{ color: item.color }} />
+              </ListItemIcon>
+              <ListItemText>{item.title}</ListItemText>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+              </Typography>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Paper>
     </>
   );
 }
