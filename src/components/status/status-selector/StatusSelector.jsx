@@ -4,7 +4,6 @@ import {
   MenuList,
   MenuItem,
   ListItemIcon,
-  ListItemIcon,
   ListItemText,
   Paper
 } from '@mui/material';
