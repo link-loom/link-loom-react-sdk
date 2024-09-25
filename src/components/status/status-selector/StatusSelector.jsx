@@ -59,7 +59,7 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
             </ListItemIcon>
             <ListItemText>{item.title}</ListItemText>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+              {item.name === status.name && <CheckIcon sx={{ color: 'grey.900' }} />}
             </Typography>
           </MenuItem>
         ))}
