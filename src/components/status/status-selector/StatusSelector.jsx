@@ -5,7 +5,6 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Paper,
   Typography,
 } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
@@ -30,38 +29,41 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
         <RadioButtonCheckedIcon fontSize={size} />
       </IconButton>
 
-      <Paper sx={{ width: 320, maxWidth: '100%' }}>
-        <Menu
-          dense
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            dense: true,
-          }}
-        >
-          {Object.values(statuses).map((item) => (
-            <MenuItem
-              key={item.id}
-              onClick={() => {
-                handleClose();
+      <Menu
+        dense
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          dense: true,
+        }}
+        slotProps={{
+          paper: {
+            sx: { width: 160 },
+          },
+        }}
+      >
+        {Object.values(statuses).map((item) => (
+          <MenuItem
+            key={item.id}
+            onClick={() => {
+              handleClose();
 
-                if (statusSelected) {
-                  statusSelected(item);
-                }
-              }}
-            >
-              <ListItemIcon>
-                <RadioButtonCheckedIcon sx={{ color: item.color }} />
-              </ListItemIcon>
-              <ListItemText>{item.title}</ListItemText>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
-              </Typography>
-            </MenuItem>
-          ))}
-        </Menu>
-      </Paper>
+              if (statusSelected) {
+                statusSelected(item);
+              }
+            }}
+          >
+            <ListItemIcon>
+              <RadioButtonCheckedIcon sx={{ color: item.color }} />
+            </ListItemIcon>
+            <ListItemText>{item.title}</ListItemText>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+            </Typography>
+          </MenuItem>
+        ))}
+      </Menu>
     </>
   );
 }
