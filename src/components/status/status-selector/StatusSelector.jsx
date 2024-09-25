@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -30,7 +23,6 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
       </IconButton>
 
       <Menu
-        dense
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
