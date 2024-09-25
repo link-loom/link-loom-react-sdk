@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { IconButton, MenuList, MenuItem, ListItemIcon, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  IconButton,
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -34,19 +41,13 @@ function StatusSelector({ status, statuses, size, statusSelected }) {
               }
             }}
           >
-            <section className="d-flex w-100 align-items-center">
-              <ListItemIcon className="me-2">
-                <RadioButtonCheckedIcon sx={{ color: item.color }} />
-              </ListItemIcon>
-
-              <div className="flex-grow-1 me-4">
-                <ListItemText primary={item.title} />
-              </div>
-
-              <div className="ms-auto">
-                {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
-              </div>
-            </section>
+            <ListItemIcon>
+              <RadioButtonCheckedIcon sx={{ color: item.color }} />
+            </ListItemIcon>
+            <ListItemText>{item.title}</ListItemText>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {item.name === status.name && <CheckIcon sx={{ color: item.color }} />}
+            </Typography>
           </MenuItem>
         ))}
       </MenuList>
