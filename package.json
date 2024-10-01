@@ -1,5 +1,5 @@
 {
-  "name": "@link-loom/ui-sdk",
+  "name": "@link-loom/react-sdk",
   "version": "1.0.99",
   "description": "UI SDK components for Link Loom",
   "main": "dist/ui-sdk.cjs.js",
