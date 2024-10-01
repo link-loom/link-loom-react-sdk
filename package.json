@@ -35,9 +35,13 @@
   "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/link-loom/loom-sdk/issues"
+    "url": "https://github.com/link-loom/link-loom-react-sdk/issues"
   },
-  "homepage": "https://github.com/link-loom/loom-sdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/link-loom/link-loom-react-sdk.git"
+  },
+  "homepage": "https://github.com/link-loom/link-loom-react-sdk",
   "keywords": [
     "loom",
     "sdk",
