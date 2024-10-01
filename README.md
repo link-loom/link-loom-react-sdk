@@ -1,14 +1,14 @@
-# @link-loom/ui-sdk
+# @link-loom/react-sdk
 
 ## Description
 
-The @link-loom/ui-sdk is a collection of React-based UI components designed to aid in the development of web applications. This library includes a variety of user interface elements ranging from simple alerts and spinners to more complex components like document viewers and data grids, providing developers with essential tools to create intuitive and engaging user interfaces.
+The @link-loom/react-sdk is a collection of React-based UI components designed to aid in the development of web applications. This library includes a variety of user interface elements ranging from simple alerts and spinners to more complex components like document viewers and data grids, providing developers with essential tools to create intuitive and engaging user interfaces.
 
 ## Installation
 
 Install the library in your project with the following command:
 
-> npm install @link-loom/ui-sdk
+> npm install @link-loom/react-sdk
 
 ## Components
 

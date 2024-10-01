@@ -14,12 +14,12 @@ module.exports = {
   input: 'src/index.js',
   output: [
     {
-      file: 'dist/ui-sdk.cjs.js',
+      file: 'dist/react-sdk.cjs.js',
       format: 'cjs',
       sourcemap: true,
     },
     {
-      file: 'dist/ui-sdk.esm.js',
+      file: 'dist/react-sdk.esm.js',
       format: 'esm',
       sourcemap: true,
     },
@@ -44,7 +44,7 @@ module.exports = {
       browser: true,
       preferBuiltins: false,
       extensions: ['.mjs', '.js', '.jsx', '.json', '.woff', '.woff2', '.eot', '.ttf', '.svg'],
-    }),    
+    }),
     commonjs(),
     babel({
       babelHelpers: 'bundled',
