@@ -38,6 +38,7 @@ module.exports = {
     alias({
       entries: [
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
+        { find: '@resources', replacement: path.resolve(__dirname, 'src/resources') },
       ],
     }),
     resolve({

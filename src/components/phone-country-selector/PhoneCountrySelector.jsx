@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import styled from 'styled-components';
 
-import { countries } from './countries';
+import { countries } from '@resources/countries';
 
 const StyledListItem = styled.li`
   & > img {
