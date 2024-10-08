@@ -100,7 +100,7 @@ export default function NationalIdentificationSelector({
   };
 
   function sanitizeInput(input) {
-    return input.replace(/[^a-zA-Z0-9]/g, ''); // Permitir solo letras y números
+    return input.replace(/[^a-zA-Z0-9]/g, '');
   }
 
   useEffect(() => {
@@ -153,14 +153,14 @@ export default function NationalIdentificationSelector({
             <TextField
               {...params}
               label="Country"
-              autoComplete="country-select"
+              autoComplete="off"
               name="country-select"
               id="country-select"
               disabled={disabled}
               variant={disabled ? 'filled' : variant ? variant : 'outlined'}
               InputProps={{
                 ...params.InputProps,
-                autoComplete: 'country-select',
+                autoComplete: 'off',
                 startAdornment: selectedCountry && (
                   <>
                     <img
