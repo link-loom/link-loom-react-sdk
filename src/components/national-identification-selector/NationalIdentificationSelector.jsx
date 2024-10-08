@@ -61,11 +61,12 @@ export default function NationalIdentificationSelector({
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState(null);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
-  const [idFieldClicked, setIDFieldClicked] = useState(false);
+  const [isDocumentTypeSelected, setIsDocumentTypeSelected] = useState(false);
   const [idInputValue, setIDInputValue] = useState('');
 
   // Refs
   const idInputRef = useRef(null);
+  const documentTypeInputRef = useRef(null);
 
   useEffect(() => {
     if (!isEmpty(idInputValue)) {
@@ -84,6 +85,7 @@ export default function NationalIdentificationSelector({
 
   const handleDocumentTypeChange = (event, newValue) => {
     setSelectedDocumentType(newValue);
+    setIsDocumentTypeSelected(true);
   };
 
   const handleIDClick = () => {
@@ -104,8 +106,14 @@ export default function NationalIdentificationSelector({
   }
 
   useEffect(() => {
-    if (isCountrySelected && idInputRef.current) {
+    if (isDocumentTypeSelected && idInputRef.current) {
       idInputRef.current.focus();
+    }
+  }, [isDocumentTypeSelected]);
+
+  useEffect(() => {
+    if (isCountrySelected && documentTypeInputRef.current) {
+      documentTypeInputRef.current.focus();
     }
   }, [isCountrySelected]);
 
@@ -186,6 +194,7 @@ export default function NationalIdentificationSelector({
           onChange={handleDocumentTypeChange}
           disableClearable
           getOptionLabel={(option) => option.label}
+          inputRef={documentTypeInputRef}
           renderInput={(params) => (
             <TextField
               {...params}
