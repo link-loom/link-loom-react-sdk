@@ -91,7 +91,6 @@ export default function NationalIdentificationSelector({
   const handleIDClick = () => {
     if (!isCountrySelected) {
       setSelectedCountry(null);
-      setIDFieldClicked(true);
     }
   };
 
@@ -128,7 +127,7 @@ export default function NationalIdentificationSelector({
 
   return (
     <section className="d-md-flex">
-      <article className="col-md-4 col-12">
+      <article className="col-md-3 col-12">
         <Autocomplete
           id="select-country"
           options={countries.map(transformNormalizedData)}
@@ -185,7 +184,7 @@ export default function NationalIdentificationSelector({
         />
       </article>
 
-      <article className="col-md-4 col-12 ms-0 ms-md-1">
+      <article className="col-md-3 col-12 ms-0 ms-md-1">
         <Autocomplete
           id="select-document-type"
           options={documentTypes}
@@ -194,7 +193,6 @@ export default function NationalIdentificationSelector({
           onChange={handleDocumentTypeChange}
           disableClearable
           getOptionLabel={(option) => option.label}
-          inputRef={documentTypeInputRef}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -204,12 +202,13 @@ export default function NationalIdentificationSelector({
               id="document-type-select"
               disabled={disabled}
               variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+              inputRef={documentTypeInputRef}
             />
           )}
         />
       </article>
 
-      <article className="col-md-4 col-12 ms-0 ms-md-1">
+      <article className="col-md-6 col-12 ms-0 ms-md-1">
         <TextField
           type="text"
           id="identification_number"
