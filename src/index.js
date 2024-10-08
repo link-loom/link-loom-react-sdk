@@ -20,6 +20,7 @@ export { default as StatusChip } from './components/status/status-chip/StatusChi
 export { default as StatusSelector } from './components/status/status-selector/StatusSelector.jsx';
 export { default as RetryMessage } from './components/retry-message/RetryMessage.jsx';
 export { default as SnapData } from './components/snap-data/SnapData.jsx';
+export { default as NationalIdentificationSelector } from './components/national-identification-selector/NationalIdentificationSelector.jsx'
 
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
