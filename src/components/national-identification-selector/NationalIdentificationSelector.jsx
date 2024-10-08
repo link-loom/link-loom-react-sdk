@@ -53,7 +53,7 @@ const documentTypes = [
 export default function NationalIdentificationSelector({
   value,
   label,
-  onIDChange,
+  onChange,
   disabled,
   variant,
 }) {
@@ -69,13 +69,13 @@ export default function NationalIdentificationSelector({
 
   useEffect(() => {
     if (!isEmpty(idInputValue)) {
-      onIDChange({
+      onChange({
         country: transformToDatabaseFormat(selectedCountry),
         document_type: selectedDocumentType?.label,
         identification: idInputValue,
       });
     }
-  }, [idInputValue, selectedCountry, selectedDocumentType, onIDChange]);
+  }, [idInputValue, selectedCountry, selectedDocumentType, onChange]);
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
