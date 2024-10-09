@@ -128,7 +128,7 @@ export default function NationalIdentificationSelector({
 
   return (
     <section className="d-md-flex">
-      <article className="col-md-6 col-12 ms-0 ms-md-1">
+      <article className="col-md-6 col-12 ms-0">
         <TextField
           type="text"
           id="identification_number"
@@ -146,7 +146,7 @@ export default function NationalIdentificationSelector({
         />
       </article>
 
-      <article className="col-md-3 col-12">
+      <article className="col-md-3 col-12 ms-0 ms-md-1">
         <Autocomplete
           id="select-document-type"
           options={documentTypes}
