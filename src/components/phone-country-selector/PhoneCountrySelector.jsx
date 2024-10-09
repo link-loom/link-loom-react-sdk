@@ -102,7 +102,7 @@ export default function PhoneCountrySelector({ value, label, onPhoneChange, disa
   }, [value]);
 
   return (
-    <section className="d-md-flex">
+    <section className="row">
       <article className="col-md-6 col-12">
         <Autocomplete
           id="select-country"
@@ -160,7 +160,7 @@ export default function PhoneCountrySelector({ value, label, onPhoneChange, disa
         />
       </article>
 
-      <article className="col-md-6 col-12 ms-0 ms-md-1">
+      <article className="col-md-6 col-12">
         <TextField
           type="tel"
           id="primary_phone_number"
