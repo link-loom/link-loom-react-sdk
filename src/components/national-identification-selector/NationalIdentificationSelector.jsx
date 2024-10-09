@@ -112,14 +112,8 @@ export default function NationalIdentificationSelector({
   }
 
   useEffect(() => {
-    if (isDocumentTypeSelected && idInputRef.current) {
-      idInputRef.current.focus();
-    }
-  }, [isDocumentTypeSelected]);
-
-  useEffect(() => {
-    if (isCountrySelected && idInputRef.current) {
-      idInputRef.current.focus();
+    if (isCountrySelected && documentTypeInputRef.current) {
+      documentTypeInputRef.current.focus();
     }
   }, [isCountrySelected]);
 
@@ -134,6 +128,24 @@ export default function NationalIdentificationSelector({
 
   return (
     <section className="d-md-flex">
+      <article className="col-md-6 col-12 ms-0 ms-md-1">
+        <TextField
+          type="text"
+          id="identification_number"
+          name="identification_number"
+          className="w-100"
+          autoComplete="new-password"
+          value={idInputValue}
+          placeholder="Enter identification"
+          label={label || 'Identification'}
+          onFocus={handleIDClick}
+          onChange={handleIDInputChange}
+          disabled={disabled}
+          variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+          inputRef={idInputRef}
+        />
+      </article>
+
       <article className="col-md-3 col-12">
         <Autocomplete
           id="select-country"
@@ -212,24 +224,6 @@ export default function NationalIdentificationSelector({
               inputRef={documentTypeInputRef}
             />
           )}
-        />
-      </article>
-
-      <article className="col-md-6 col-12 ms-0 ms-md-1">
-        <TextField
-          type="text"
-          id="identification_number"
-          name="identification_number"
-          className="w-100"
-          autoComplete="new-password"
-          value={idInputValue}
-          placeholder="Enter identification"
-          label={label || 'Identification'}
-          onFocus={handleIDClick}
-          onChange={handleIDInputChange}
-          disabled={!isCountrySelected || disabled}
-          variant={!isCountrySelected || disabled ? 'filled' : variant ? variant : 'outlined'}
-          inputRef={idInputRef}
         />
       </article>
     </section>
