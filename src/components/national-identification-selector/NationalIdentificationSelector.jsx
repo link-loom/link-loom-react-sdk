@@ -112,8 +112,8 @@ export default function NationalIdentificationSelector({
   }, [isDocumentTypeSelected]);
 
   useEffect(() => {
-    if (isCountrySelected && documentTypeInputRef.current) {
-      documentTypeInputRef.current.focus();
+    if (isCountrySelected && idInputRef.current) {
+      idInputRef.current.focus();
     }
   }, [isCountrySelected]);
 
