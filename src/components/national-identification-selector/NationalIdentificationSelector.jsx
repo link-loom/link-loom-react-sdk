@@ -81,6 +81,7 @@ export default function NationalIdentificationSelector({
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
     setIsCountrySelected(true);
+    setSelectedDocumentType(documentTypes[0]);
   };
 
   const handleDocumentTypeChange = (event, newValue) => {
