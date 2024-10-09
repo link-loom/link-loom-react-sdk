@@ -83,8 +83,10 @@ export default function NationalIdentificationSelector({
     setSelectedCountry(newValue);
     setIsCountrySelected(true);
     setSelectedDocumentType(
-      documentTypes.find((documentType) => documentType === defaultDocumentType) ||
-        documentTypes[0],
+      documentTypes.find(
+        (documentType) =>
+          documentType.label.toLocaleLowerCase() === defaultDocumentType.toLocaleLowerCase(),
+      ) || documentTypes[0],
     );
   };
 
