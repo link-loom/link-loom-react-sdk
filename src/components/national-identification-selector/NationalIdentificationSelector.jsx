@@ -82,12 +82,17 @@ export default function NationalIdentificationSelector({
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
     setIsCountrySelected(true);
-    setSelectedDocumentType(
-      documentTypes.find(
-        (documentType) =>
-          documentType.label.toLocaleLowerCase() === defaultDocumentType.toLocaleLowerCase(),
-      ) || documentTypes[0],
-    );
+  };
+
+  const handleDocumentTypeFocus = () => {
+    if (!selectedDocumentType) {
+      setSelectedDocumentType(
+        documentTypes.find(
+          (documentType) =>
+            documentType.label.toLocaleLowerCase() === defaultDocumentType.toLocaleLowerCase(),
+        ) || documentTypes[0],
+      );
+    }
   };
 
   const handleDocumentTypeChange = (event, newValue) => {
@@ -153,6 +158,7 @@ export default function NationalIdentificationSelector({
           autoHighlight
           value={selectedDocumentType}
           onChange={handleDocumentTypeChange}
+          onFocus={handleDocumentTypeFocus}
           disableClearable
           getOptionLabel={(option) => option.label}
           renderInput={(params) => (
