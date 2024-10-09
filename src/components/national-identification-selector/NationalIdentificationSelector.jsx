@@ -148,6 +148,30 @@ export default function NationalIdentificationSelector({
 
       <article className="col-md-3 col-12">
         <Autocomplete
+          id="select-document-type"
+          options={documentTypes}
+          autoHighlight
+          value={selectedDocumentType}
+          onChange={handleDocumentTypeChange}
+          disableClearable
+          getOptionLabel={(option) => option.label}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Document Type"
+              autoComplete="document-type-select"
+              name="document-type-select"
+              id="document-type-select"
+              disabled={disabled}
+              variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+              inputRef={documentTypeInputRef}
+            />
+          )}
+        />
+      </article>
+
+      <article className="col-md-3 col-12 ms-0 ms-md-1">
+        <Autocomplete
           id="select-country"
           options={countries.map(transformNormalizedData)}
           autoHighlight
@@ -198,30 +222,6 @@ export default function NationalIdentificationSelector({
                   </>
                 ),
               }}
-            />
-          )}
-        />
-      </article>
-
-      <article className="col-md-3 col-12 ms-0 ms-md-1">
-        <Autocomplete
-          id="select-document-type"
-          options={documentTypes}
-          autoHighlight
-          value={selectedDocumentType}
-          onChange={handleDocumentTypeChange}
-          disableClearable
-          getOptionLabel={(option) => option.label}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Document Type"
-              autoComplete="document-type-select"
-              name="document-type-select"
-              id="document-type-select"
-              disabled={disabled}
-              variant={disabled ? 'filled' : variant ? variant : 'outlined'}
-              inputRef={documentTypeInputRef}
             />
           )}
         />
