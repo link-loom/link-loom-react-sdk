@@ -56,6 +56,7 @@ export default function NationalIdentificationSelector({
   onChange,
   disabled,
   variant,
+  defaultDocumentType,
 }) {
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -81,7 +82,10 @@ export default function NationalIdentificationSelector({
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
     setIsCountrySelected(true);
-    setSelectedDocumentType(documentTypes[0]);
+    setSelectedDocumentType(
+      documentTypes.find((documentType) => documentType === defaultDocumentType) ||
+        documentTypes[0],
+    );
   };
 
   const handleDocumentTypeChange = (event, newValue) => {
