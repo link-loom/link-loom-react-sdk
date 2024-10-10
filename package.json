@@ -1,6 +1,6 @@
 {
   "name": "@link-loom/react-sdk",
-  "version": "1.0.122",
+  "version": "1.0.123",
   "description": "UI SDK components for Link Loom",
   "main": "dist/react-sdk.cjs.js",
   "module": "dist/react-sdk.esm.js",
