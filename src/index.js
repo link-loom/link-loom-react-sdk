@@ -21,6 +21,7 @@ export { default as StatusSelector } from './components/status/status-selector/S
 export { default as RetryMessage } from './components/retry-message/RetryMessage.jsx';
 export { default as SnapData } from './components/snap-data/SnapData.jsx';
 export { default as NationalIdentificationSelector } from './components/national-identification-selector/NationalIdentificationSelector.jsx'
+export { default as CountrySelector } from './components/country-selector/CountrySelector.jsx'
 
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
