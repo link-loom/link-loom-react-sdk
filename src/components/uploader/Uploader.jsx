@@ -30,14 +30,15 @@ const Uploader = (props) => {
       event.formData.append('folder', folder);
 
       let fileUploadedResponse;
-
+      debugger
       if (upload) {
         fileUploadedResponse = await upload({ payload: event.formData });
+        
       } else if (uploadService) {
         const service = new uploadService();
         fileUploadedResponse = await service.post(event.formData);
       }
-
+      debugger
       setIsLoading(false);
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
