@@ -53,7 +53,18 @@ module.exports = {
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
       extensions: ['.js', '.jsx'],
-    }),
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              esmodules: true,
+            },
+            bugfixes: true,
+          },
+        ],
+      ],
+    }),    
     postcss({
       extract: 'styles.css',
       modules: false,
