@@ -1,73 +1,49 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
-
-const SnackbarContext = createContext();
-
-export const useSnackbar = () => {
-  const context = useContext(SnackbarContext);
-
-  if (!context) {
-    throw new Error(`useSnackbar need to be used into SnackbarProvider`);
-  }
-
-  return context;
-};
 
 export const Snackbar = ({ children }) => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    message: '',
-    action: '',
+  const [snackbar, setSnackbar] = useState({ message: '', action: '' });
+
+  const openSnackbar = useCallback((message, action) => {
+    const event = new CustomEvent('snackbar', { detail: { message, action } });
+    window.dispatchEvent(event);
+  }, []);
+
+  const useSnackbar = () => ({
+    openSnackbar,
   });
 
-  const openSnackbar = (message, action) => {
-    switch (action) {
-      case 'success':
-        handleOpenSnackbar(message, action);
-        break;
-      case 'error':
-        handleOpenSnackbar(message, action);
-        break;
-      case 'info':
-        handleOpenSnackbar(message, action);
-        break;
-      case 'warning':
-        handleOpenSnackbar(message, action);
-        break;
-      default:
-        break;
-    }
-  };
+  useEffect(() => {
+    const handleSnackbarEvent = (event) => {
+      const { message, action } = event.detail;
+      setSnackbar({ message, action });
+      setIsOpenSnackbar(true);
+    };
 
-  const handleOpenSnackbar = (message, action) => {
-    setSnackbar({ message, action });
-    setIsOpenSnackbar(true);
-  };
+    window.addEventListener('snackbar', handleSnackbarEvent);
+    return () => window.removeEventListener('snackbar', handleSnackbarEvent);
+  }, []);
 
-  const handleCloseSnackbar = () => {
-    setIsOpenSnackbar(null);
-  };
+  const handleCloseSnackbar = () => setIsOpenSnackbar(false);
 
   return (
-    <SnackbarContext.Provider value={{ openSnackbar, handleCloseSnackbar }}>
-      {children}
-      {isOpenSnackbar && (
-        <MaterialSnackbar
-          open={isOpenSnackbar}
-          autoHideDuration={6000}
+    <>
+      {children(useSnackbar)}
+      <MaterialSnackbar
+        open={isOpenSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
           onClose={handleCloseSnackbar}
-          data-testid="success-snackbar"
+          severity={snackbar.action}
+          variant="filled"
+          sx={{ width: '100%' }}
         >
-          <Alert
-            onClose={handleCloseSnackbar}
-            severity={snackbar.action}
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
-            {snackbar.message}
-          </Alert>
-        </MaterialSnackbar>
-      )}
-    </SnackbarContext.Provider>
+          {snackbar.message}
+        </Alert>
+      </MaterialSnackbar>
+    </>
   );
 };
