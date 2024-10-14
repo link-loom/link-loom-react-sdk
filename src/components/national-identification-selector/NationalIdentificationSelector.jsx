@@ -70,14 +70,14 @@ export default function NationalIdentificationSelector({
   const documentTypeInputRef = useRef(null);
 
   useEffect(() => {
-    if (!isEmpty(idInputValue)) {
+    if (onChange) {
       onChange({
         country: transformToDatabaseFormat(selectedCountry),
-        document_type: selectedDocumentType?.label,
+        document_type: selectedDocumentType?.label || null,
         identification: idInputValue,
       });
     }
-  }, [idInputValue, selectedCountry, selectedDocumentType, onChange]);
+  }, [idInputValue, selectedCountry, selectedDocumentType]);
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
