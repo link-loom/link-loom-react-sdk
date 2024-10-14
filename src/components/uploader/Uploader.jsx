@@ -16,6 +16,7 @@ const Uploader = (props) => {
     height,
     folder,
     uploadService,
+    upload,
   } = props;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,6 +28,11 @@ const Uploader = (props) => {
       }
 
       event.formData.append('folder', folder);
+
+      if (upload) {
+        upload({ payload: event.formData });
+        return;
+      }
 
       const service = new uploadService();
       const fileUploadedResponse = await service.post(event.formData);
