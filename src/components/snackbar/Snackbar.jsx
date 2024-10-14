@@ -1,6 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
 
+let snackbarEmitter;
+
+export const useSnackbar = () => {
+  if (!snackbarEmitter) {
+    throw new Error('Snackbar must be initialized before using the useSnackbar hook');
+  }
+  return snackbarEmitter;
+};
+
 export const Snackbar = ({ children }) => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState({ message: '', action: '' });
@@ -10,11 +19,9 @@ export const Snackbar = ({ children }) => {
     window.dispatchEvent(event);
   }, []);
 
-  const useSnackbar = () => ({
-    openSnackbar,
-  });
-
   useEffect(() => {
+    snackbarEmitter = { openSnackbar };
+
     const handleSnackbarEvent = (event) => {
       const { message, action } = event.detail;
       setSnackbar({ message, action });
@@ -22,19 +29,18 @@ export const Snackbar = ({ children }) => {
     };
 
     window.addEventListener('snackbar', handleSnackbarEvent);
-    return () => window.removeEventListener('snackbar', handleSnackbarEvent);
-  }, []);
+    return () => {
+      window.removeEventListener('snackbar', handleSnackbarEvent);
+      snackbarEmitter = null;
+    };
+  }, [openSnackbar]);
 
   const handleCloseSnackbar = () => setIsOpenSnackbar(false);
 
   return (
     <>
-      {children(useSnackbar)}
-      <MaterialSnackbar
-        open={isOpenSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
+      {children}
+      <MaterialSnackbar open={isOpenSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.action}
