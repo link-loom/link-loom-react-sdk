@@ -22,8 +22,6 @@ module.exports = {
       file: 'dist/react-sdk.esm.js',
       format: 'esm',
       sourcemap: true,
-      generatedCode: 'es2015',
-      sourcemap: 'inline',
     },
   ],
   onwarn: function (warning, warn) {
@@ -53,18 +51,7 @@ module.exports = {
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
       extensions: ['.js', '.jsx'],
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: {
-              esmodules: true,
-            },
-            bugfixes: true,
-          },
-        ],
-      ],
-    }),    
+    }),
     postcss({
       extract: 'styles.css',
       modules: false,
