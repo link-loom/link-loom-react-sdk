@@ -42,7 +42,7 @@ export default function CountrySelector({ value, label, onChange, disabled, vari
     onChange({
       country: transformToDatabaseFormat(selectedCountry),
     });
-  }, [selectedCountry, onChange]);
+  }, [selectedCountry]);
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
