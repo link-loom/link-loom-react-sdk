@@ -29,13 +29,16 @@ const Uploader = (props) => {
 
       event.formData.append('folder', folder);
 
+      let fileUploadedResponse;
+
       if (upload) {
-        upload({ payload: event.formData });
-        return;
+        fileUploadedResponse = await upload({ payload: event.formData });
+      } else if (uploadService) {
+        const service = new uploadService();
+        fileUploadedResponse = await service.post(event.formData);
       }
 
-      const service = new uploadService();
-      const fileUploadedResponse = await service.post(event.formData);
+      setIsLoading(false);
 
       if (!fileUploadedResponse || !fileUploadedResponse.success) {
         return null;
