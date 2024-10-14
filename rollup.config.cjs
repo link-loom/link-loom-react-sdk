@@ -22,6 +22,8 @@ module.exports = {
       file: 'dist/react-sdk.esm.js',
       format: 'esm',
       sourcemap: true,
+      generatedCode: 'es2015',
+      sourcemap: 'inline',
     },
   ],
   onwarn: function (warning, warn) {
