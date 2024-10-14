@@ -117,12 +117,6 @@ export default function NationalIdentificationSelector({
   }
 
   useEffect(() => {
-    if (isCountrySelected && documentTypeInputRef.current) {
-      documentTypeInputRef.current.focus();
-    }
-  }, [isCountrySelected]);
-
-  useEffect(() => {
     if (value && idInputValue !== value?.identification) {
       setSelectedCountry(transformNormalizedData(value?.country ?? null));
       setIDInputValue(value?.identification ?? '');
