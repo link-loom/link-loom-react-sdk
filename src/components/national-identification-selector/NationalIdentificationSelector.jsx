@@ -57,6 +57,7 @@ export default function NationalIdentificationSelector({
   disabled,
   variant,
   defaultDocumentType,
+  ui = { documentType: true },
 }) {
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -127,7 +128,7 @@ export default function NationalIdentificationSelector({
 
   return (
     <section className="row">
-      <article className="col-md-6 col-12">
+      <article className="col-12 col-md-6">
         <TextField
           type="text"
           id="identification_number"
@@ -145,87 +146,91 @@ export default function NationalIdentificationSelector({
         />
       </article>
 
-      <article className="col-md-3 col-12">
-        <Autocomplete
-          id="select-document-type"
-          options={documentTypes}
-          autoHighlight
-          value={selectedDocumentType}
-          onChange={handleDocumentTypeChange}
-          onFocus={handleDocumentTypeFocus}
-          disableClearable
-          getOptionLabel={(option) => option.label}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Document Type"
-              autoComplete="document-type-select"
-              name="document-type-select"
-              id="document-type-select"
-              disabled={disabled}
-              variant={disabled ? 'filled' : variant ? variant : 'outlined'}
-              inputRef={documentTypeInputRef}
+      {ui?.documentType === true && (
+        <>
+          <article  className={`col-12 ${ui?.documentType === true ? 'col-md-3' : ''}`}>
+            <Autocomplete
+              id="select-document-type"
+              options={documentTypes}
+              autoHighlight
+              value={selectedDocumentType}
+              onChange={handleDocumentTypeChange}
+              onFocus={handleDocumentTypeFocus}
+              disableClearable
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Document Type"
+                  autoComplete="document-type-select"
+                  name="document-type-select"
+                  id="document-type-select"
+                  disabled={disabled}
+                  variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+                  inputRef={documentTypeInputRef}
+                />
+              )}
             />
-          )}
-        />
-      </article>
+          </article>
 
-      <article className="col-md-3 col-12">
-        <Autocomplete
-          id="select-country"
-          options={countries.map(transformNormalizedData)}
-          autoHighlight
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          disableClearable
-          isOptionEqualToValue={(option, value) => option.countryCode === value.countryCode}
-          getOptionLabel={(option) => option.label}
-          filterOptions={(options, { inputValue }) =>
-            options.filter(
-              (option) =>
-                option.countryCode.toLowerCase().includes(inputValue.toLowerCase()) ||
-                option.label.toLowerCase().includes(inputValue.toLowerCase()),
-            )
-          }
-          renderOption={(props, option) => (
-            <StyledListItem {...props} key={option.countryCode}>
-              <img
-                loading="lazy"
-                width="20"
-                srcSet={`https://flagcdn.com/w40/${option?.countryCode?.toLowerCase()}.png 2x`}
-                src={`https://flagcdn.com/w20/${option?.countryCode?.toLowerCase()}.png`}
-                alt=""
-              />
-              {option.label}
-            </StyledListItem>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Issuing country"
-              autoComplete="off"
-              name="country-select"
-              id="country-select"
-              disabled={disabled}
-              variant={disabled ? 'filled' : variant ? variant : 'outlined'}
-              InputProps={{
-                ...params.InputProps,
-                autoComplete: 'off',
-                startAdornment: selectedCountry && (
-                  <>
-                    <img
-                      loading="lazy"
-                      width="20"
-                      src={`https://flagcdn.com/w20/${selectedCountry?.countryCode?.toLowerCase()}.png`}
-                      alt=""
-                    />
-                  </>
-                ),
-              }}
+          <article className="col-12 col-md-3">
+            <Autocomplete
+              id="select-country"
+              options={countries.map(transformNormalizedData)}
+              autoHighlight
+              value={selectedCountry}
+              onChange={handleCountryChange}
+              disableClearable
+              isOptionEqualToValue={(option, value) => option.countryCode === value.countryCode}
+              getOptionLabel={(option) => option.label}
+              filterOptions={(options, { inputValue }) =>
+                options.filter(
+                  (option) =>
+                    option.countryCode.toLowerCase().includes(inputValue.toLowerCase()) ||
+                    option.label.toLowerCase().includes(inputValue.toLowerCase()),
+                )
+              }
+              renderOption={(props, option) => (
+                <StyledListItem {...props} key={option.countryCode}>
+                  <img
+                    loading="lazy"
+                    width="20"
+                    srcSet={`https://flagcdn.com/w40/${option?.countryCode?.toLowerCase()}.png 2x`}
+                    src={`https://flagcdn.com/w20/${option?.countryCode?.toLowerCase()}.png`}
+                    alt=""
+                  />
+                  {option.label}
+                </StyledListItem>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Issuing country"
+                  autoComplete="off"
+                  name="country-select"
+                  id="country-select"
+                  disabled={disabled}
+                  variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+                  InputProps={{
+                    ...params.InputProps,
+                    autoComplete: 'off',
+                    startAdornment: selectedCountry && (
+                      <>
+                        <img
+                          loading="lazy"
+                          width="20"
+                          src={`https://flagcdn.com/w20/${selectedCountry?.countryCode?.toLowerCase()}.png`}
+                          alt=""
+                        />
+                      </>
+                    ),
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </article>
+          </article>
+        </>
+      )}
     </section>
   );
 }
