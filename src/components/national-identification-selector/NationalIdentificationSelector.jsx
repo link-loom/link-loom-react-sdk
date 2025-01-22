@@ -128,7 +128,7 @@ export default function NationalIdentificationSelector({
 
   return (
     <section className="row">
-      <article className="col-12 col-md-6">
+      <article className={`col-12 ${ui?.documentType === true ? 'col-md-6' : ''}`}>
         <TextField
           type="text"
           id="identification_number"
@@ -148,7 +148,7 @@ export default function NationalIdentificationSelector({
 
       {ui?.documentType === true && (
         <>
-          <article  className={`col-12 ${ui?.documentType === true ? 'col-md-3' : ''}`}>
+          <article className="col-12 col-md-3">
             <Autocomplete
               id="select-document-type"
               options={documentTypes}
