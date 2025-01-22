@@ -83,11 +83,13 @@ function AsyncAutocomplete({
           }}
         />
       )}
-      renderOption={(props, option) => {
+      renderOption={(props, option, index) => {
+        const key = option.id || `option-${index}`;
+        
         if (option.title === loadingMessage) {
           return (
             <li
-              key={`loading-${Math.random()}`}
+              key={`loading-${index}`}
               {...props}
               style={{ textAlign: 'center', fontStyle: 'italic', ...ui.loadingMessage }}
             >
@@ -95,9 +97,9 @@ function AsyncAutocomplete({
             </li>
           );
         }
-
+      
         return (
-          <li key={option.id} {...props}>
+          <li key={key} {...props}>
             {getOptionLabel(option)}
           </li>
         );
