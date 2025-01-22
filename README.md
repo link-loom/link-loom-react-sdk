@@ -31,7 +31,7 @@ For more details on each component, including usage and configuration options, p
 
 ## Development
 
-npm run build;npm version patch;npm publish
+> npm run build;npm version patch;npm publish
 
 ## Documentation
 
