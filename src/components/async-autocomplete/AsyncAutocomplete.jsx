@@ -72,6 +72,7 @@ function AsyncAutocomplete({
       value={value}
       onChange={(_, newValue) => onChange(newValue)}
       onInputChange={handleInputChange}
+      getOptionLabel={(option) => option.label}
       isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       disabled={disabled}
@@ -94,6 +95,7 @@ function AsyncAutocomplete({
           }}
         />
       )}
+      getOptionKey={(option) => option.id}
       renderOption={(props, option, index) => {
         const key = option.id || `option-${index}`;
 
