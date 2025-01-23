@@ -31,9 +31,13 @@ function AsyncAutocomplete({
 
       const results = await fetchOptions(query, filters);
 
-      setOptions(results);
+      setOptions(results || []);
       setLoading(false);
+
+      return;
     }
+
+    setOptions([]);
   };
 
   useEffect(() => {
@@ -58,7 +62,7 @@ function AsyncAutocomplete({
       onOpen={handleOpen}
       onClose={() => setOpen(false)}
       value={value}
-      onChange={(event, newValue) => onChange(newValue)}
+      onChange={(_, newValue) => onChange(newValue)}
       onInputChange={handleInputChange}
       getOptionLabel={getOptionLabel}
       isOptionEqualToValue={isOptionEqualToValue}
@@ -83,10 +87,10 @@ function AsyncAutocomplete({
           }}
         />
       )}
-      renderOption={(props, option, index) => {console.log(option);
+      renderOption={(props, option, index) => {
         const key = option.id || `option-${index}`;
         
-        if (option.title === loadingMessage) {
+        /* if (option.title === loadingMessage) {
           return (
             <li
               key={`loading-${index}`}
@@ -96,10 +100,10 @@ function AsyncAutocomplete({
               {loadingMessage}
             </li>
           );
-        }
+        } */
       
         return (
-          <li key={key} {...props}>
+          <li key={key} {...props}>{key}
             {getOptionLabel(option)}
           </li>
         );
