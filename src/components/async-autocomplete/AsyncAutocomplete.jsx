@@ -13,7 +13,7 @@ function AsyncAutocomplete({
   loadingMessage = 'Loading...',
   noOptionsMessage = 'No options',
   isOptionEqualToValue,
-  getOptionLabel,
+  getOptionLabel = (option) => option?.label || option?.name || option?.id || 'Unknown',
   debounceTime = 300,
   ui = {},
   openOnEmptyQuery = false,
@@ -31,7 +31,15 @@ function AsyncAutocomplete({
 
       const results = await fetchOptions(query, filters);
 
-      setOptions(results || []);
+      setOptions(
+        Array.isArray(results)
+          ? results.map((item) => ({
+              ...item,
+              label: getOptionLabel(item),
+            }))
+          : [],
+      );
+
       setLoading(false);
 
       return;
@@ -64,7 +72,6 @@ function AsyncAutocomplete({
       value={value}
       onChange={(_, newValue) => onChange(newValue)}
       onInputChange={handleInputChange}
-      getOptionLabel={getOptionLabel}
       isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       disabled={disabled}
@@ -89,7 +96,7 @@ function AsyncAutocomplete({
       )}
       renderOption={(props, option, index) => {
         const key = option.id || `option-${index}`;
-        
+
         if (loading && loadingMessage) {
           return (
             <li
@@ -101,7 +108,7 @@ function AsyncAutocomplete({
             </li>
           );
         }
-      
+
         return (
           <li key={key} {...props}>
             {getOptionLabel(option)}
