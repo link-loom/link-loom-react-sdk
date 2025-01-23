@@ -83,7 +83,7 @@ function AsyncAutocomplete({
           }}
         />
       )}
-      renderOption={(props, option, index) => {
+      renderOption={(props, option, index) => {console.log(option);
         const key = option.id || `option-${index}`;
         
         if (option.title === loadingMessage) {
