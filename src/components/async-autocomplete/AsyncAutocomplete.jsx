@@ -50,7 +50,7 @@ function AsyncAutocomplete({
 
   useEffect(() => {
     fetchData(debouncedInputValue);
-  }, [debouncedInputValue]);
+  }, [debouncedInputValue, open]);
 
   const handleInputChange = (_, query) => {
     setLoading(true);
