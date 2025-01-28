@@ -17,11 +17,13 @@ module.exports = {
       file: 'dist/react-sdk.cjs.js',
       format: 'cjs',
       sourcemap: true,
+      inlineDynamicImports: true,
     },
     {
       file: 'dist/react-sdk.esm.js',
       format: 'esm',
       sourcemap: true,
+      inlineDynamicImports: true,
     },
   ],
   onwarn: function (warning, warn) {
