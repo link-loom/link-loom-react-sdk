@@ -72,7 +72,7 @@ function AsyncAutocomplete({
       value={value}
       onChange={(_, newValue) => onChange(newValue)}
       onInputChange={handleInputChange}
-      getOptionLabel={getOptionLabel(option)}
+      getOptionLabel={getOptionLabel}
       isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       disabled={disabled}
