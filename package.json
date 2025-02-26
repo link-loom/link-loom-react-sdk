@@ -10,9 +10,6 @@
     "README.md",
     "LICENSE"
   ],
-  "peerDependencies": {
-    "react": ">=17.0.0"
-  },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.17.0",
     "@emotion/react": "^11.13.3",
