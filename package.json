@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "react": ">=17.0.0 || >=18.0.0"
+    "react": ">=17.0.0"
   },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.17.0",
