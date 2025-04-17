@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
 
-let snackbarEmitter;
-
-export const useSnackbar = () => {
-  return {
-    openSnackbar : (message, action) => {
-      const event = new CustomEvent('snackbar', { detail: { message, action } });
-      window.dispatchEvent(event);
-    }
-  };
+export const openSnackbar = (message, action) => {
+  const event = new CustomEvent('snackbar', { detail: { message, action } });
+  window.dispatchEvent(event);
 };
 
 export const Snackbar = ({ children }) => {
@@ -27,7 +21,6 @@ export const Snackbar = ({ children }) => {
     window.addEventListener('snackbar', handleSnackbarEvent);
     return () => {
       window.removeEventListener('snackbar', handleSnackbarEvent);
-      snackbarEmitter = null;
     };
   }, []);
 
