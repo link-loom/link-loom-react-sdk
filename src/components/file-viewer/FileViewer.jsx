@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardActions, Button, CardHeader, CardContent } from '@mui/material';
 import DocumentViewerComponent from '@components/document-viewer/DocumentViewer.jsx';
 import DocumentActionMenu from '@components/uploader/document-action-menu/DocumentActionMenu.jsx';
-import { useSnackbar } from '@components/snackbar/Snackbar.jsx';
+import { openSnackbar } from '@components/snackbar/Snackbar.jsx';
 
 const defaultActions = [
   {
@@ -23,7 +23,6 @@ const defaultActions = [
 ];
 
 const FileViewer = ({ id, file, onEvent, actions = defaultActions, height, fileViewerConfig }) => {
-  const { openSnackbar } = useSnackbar();
   const [footerButtons, setFooterButtons] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
 
