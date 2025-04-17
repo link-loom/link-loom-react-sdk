@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
 
 export const openSnackbar = (message, action) => {
