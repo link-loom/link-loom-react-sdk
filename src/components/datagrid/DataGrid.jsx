@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   DataGrid as MuiDataGrid,
   GridToolbarQuickFilter,
@@ -61,6 +61,14 @@ const DataGrid = (props) => {
   };
 
   const CustomSearchToolbar = () => {
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.focus(); // Re-enfoca automáticamente tras render
+      }
+    });
+
     return (
       <GridToolbarContainer>
         <section className="col-12 d-flex flex-column mt-3">
@@ -73,7 +81,7 @@ const DataGrid = (props) => {
               {showExport && <GridToolbarExport />}
             </section>
 
-            <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." />
+            <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." inputRef={inputRef} />
           </div>
         </section>
       </GridToolbarContainer>
