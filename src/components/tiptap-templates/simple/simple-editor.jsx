@@ -205,7 +205,7 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
     const external = modelrawRef.current;
     
     if (editor.getHTML() !== external) {
-      editor.commands.setContent(external, false);
+      //editor.commands.setContent(external, false);
     }
   }, [editor]);
 
