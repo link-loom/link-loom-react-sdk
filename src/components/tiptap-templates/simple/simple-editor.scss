@@ -35,6 +35,7 @@ body {
 }
 
 .content-wrapper {
+  background-color: var(--tt-bg-color);
   height: calc(100% - var(--tt-toolbar-height));
   overflow-y: auto;
 
