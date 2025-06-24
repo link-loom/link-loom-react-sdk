@@ -197,7 +197,7 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
     }
   }, [isMobile, mobileView]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!editor || !modelrawRef?.current) {
       return;
     }
