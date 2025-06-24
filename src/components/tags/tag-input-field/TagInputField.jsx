@@ -44,6 +44,7 @@ function TagInputField({
 }) {
   return (
     <Autocomplete
+      fullWidth
       multiple
       freeSolo
       options={options}
@@ -55,9 +56,7 @@ function TagInputField({
           return <Chip variant="outlined" label={option} key={key} {...props} />;
         })
       }
-      renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder} />
-      )}
+      renderInput={(params) => <TextField {...params} label={label} placeholder={placeholder} />}
     />
   );
 }
