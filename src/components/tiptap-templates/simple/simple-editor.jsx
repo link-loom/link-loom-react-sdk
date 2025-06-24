@@ -64,8 +64,8 @@ import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils';
 
 // --- Styles ---
 import '@/components/tiptap-templates/simple/simple-editor.scss';
-import "@/styles/_variables.scss";
-import "@/styles/_keyframe-animations.scss";
+import '@/styles/_variables.scss';
+import '@/styles/_keyframe-animations.scss';
 
 import content from '@/components/tiptap-templates/simple/data/content.json';
 
@@ -203,42 +203,44 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
     if (!editor || !modelrawRef?.current) {
       return;
     }
-    
+
     const external = modelrawRef.current;
-    
+
     if (editor.getHTML() !== external) {
       editor.commands.setContent(external, false);
     }
   }, [editor]);
 
   return (
-    <EditorContext.Provider value={{ editor }}>
-      <Toolbar
-        ref={toolbarRef}
-        style={
-          isMobile
-            ? {
-                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-              }
-            : {}
-        }
-      >
-        {mobileView === 'main' ? (
-          <MainToolbarContent
-            onHighlighterClick={() => setMobileView('highlighter')}
-            onLinkClick={() => setMobileView('link')}
-            isMobile={isMobile}
-          />
-        ) : (
-          <MobileToolbarContent
-            type={mobileView === 'highlighter' ? 'highlighter' : 'link'}
-            onBack={() => setMobileView('main')}
-          />
-        )}
-      </Toolbar>
-      <div className="content-wrapper">
-        <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
-      </div>
-    </EditorContext.Provider>
+    <section className="simple-editor" id={id}>
+      <EditorContext.Provider value={{ editor }}>
+        <Toolbar
+          ref={toolbarRef}
+          style={
+            isMobile
+              ? {
+                  bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+                }
+              : {}
+          }
+        >
+          {mobileView === 'main' ? (
+            <MainToolbarContent
+              onHighlighterClick={() => setMobileView('highlighter')}
+              onLinkClick={() => setMobileView('link')}
+              isMobile={isMobile}
+            />
+          ) : (
+            <MobileToolbarContent
+              type={mobileView === 'highlighter' ? 'highlighter' : 'link'}
+              onBack={() => setMobileView('main')}
+            />
+          )}
+        </Toolbar>
+        <div className="content-wrapper">
+          <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
+        </div>
+      </EditorContext.Provider>
+    </section>
   );
 }
