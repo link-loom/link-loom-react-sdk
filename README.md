@@ -21,9 +21,7 @@ Install the library in your project with the following command:
 - **PopUp**: Displays modal dialogs or pop-up windows, suitable for alerts, prompts, and custom dialogs.
 - **SearchableSelect**: A select dropdown component with integrated search functionality, allowing users to filter options as they type.
 - **Spinner**: Offers visual cues for loading states, with customizable animations and styles.
-- **LabelTags**: Displays tags or labels, useful for categorization, highlighting key information, or filtering content.
-- **SelectizeTags**: Combines tag display and selection, allowing users to create and select tags within an input field.
-- **SelectorTag**: Provides a tag-based selection interface, enabling users to choose from a predefined set of tags.
+- **TagInputField**: Combines tag display and selection, allowing users to create and select tags within an input field.
 - **TextEditor**: A rich text editor component that provides a wide range of formatting options for text content.
 - **Uploader**: Facilitates file uploads, showing progress, and providing feedback to the user.
 
