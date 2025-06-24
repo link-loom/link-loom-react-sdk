@@ -21,6 +21,7 @@
   .content-wrapper {
     background-color: var(--tt-bg-color);
     height: calc(100% - var(--tt-toolbar-height));
+    min-height: 400px;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
