@@ -117,7 +117,7 @@ const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile }) => {
       <Spacer />
       {isMobile && <ToolbarSeparator />}
       <ToolbarGroup>
-        <ThemeToggle />
+        <ThemeToggle disableAutoDetect />
       </ToolbarGroup>
     </>
   );
