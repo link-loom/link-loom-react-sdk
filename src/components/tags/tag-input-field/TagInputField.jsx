@@ -47,7 +47,7 @@ function TagInputField({
       multiple
       freeSolo
       options={options}
-      value={value}
+      value={Array.isArray(value) ? value : []}
       onChange={(event, newValue) => onChange(newValue)}
       renderValue={(selected, getItemProps) =>
         selected.map((option, index) => {
