@@ -27,3 +27,5 @@ export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
 
 import './styles/icons.css';
+import './styles/_variables.scss';
+import './styles/_keyframe-animations.scss';

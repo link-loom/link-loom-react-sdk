@@ -64,6 +64,8 @@ import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils';
 
 // --- Styles ---
 import '@/components/tiptap-templates/simple/simple-editor.scss';
+import "@/styles/_variables.scss";
+import "@/styles/_keyframe-animations.scss";
 
 import content from '@/components/tiptap-templates/simple/data/content.json';
 
@@ -205,7 +207,7 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
     const external = modelrawRef.current;
     
     if (editor.getHTML() !== external) {
-      //editor.commands.setContent(external, false);
+      editor.commands.setContent(external, false);
     }
   }, [editor]);
 
