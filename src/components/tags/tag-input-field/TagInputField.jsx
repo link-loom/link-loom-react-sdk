@@ -41,6 +41,8 @@ function TagInputField({
   onChange,
   label = 'Tags',
   placeholder = 'Add a tag',
+  textFieldProps = {},
+  autocompleteProps = {},
 }) {
   return (
     <Autocomplete
@@ -56,7 +58,10 @@ function TagInputField({
           return <Chip variant="outlined" label={option} key={key} {...props} />;
         })
       }
-      renderInput={(params) => <TextField {...params} label={label} placeholder={placeholder} />}
+      renderInput={(params) => (
+        <TextField {...params} label={label} placeholder={placeholder} {...textFieldProps} />
+      )}
+      {...autocompleteProps}
     />
   );
 }
