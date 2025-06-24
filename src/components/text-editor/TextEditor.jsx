@@ -1,92 +1,50 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import TextStyle from '@tiptap/extension-text-style';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
 
 function TextEditor({ id, modelraw, onModelChange, index }) {
-  const [contentEditor, setContentEditor] = useState(null);
-  const modelrawRef = useRef(modelraw);
+  const encodedInitialValue = decodeURIComponent(modelraw || '');
+  const modelrawRef = useRef(encodedInitialValue);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      TextStyle,
+      Underline,
+      Link,
+    ],
+    content: encodedInitialValue,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      const data = {
+        model: encodeURIComponent(html),
+        modelText: editor.getText(),
+        index,
+      };
+      if (onModelChange) {
+        onModelChange(data);
+      }
+    },
+  });
 
   useEffect(() => {
-    modelrawRef.current = modelraw;
-    if (contentEditor) {
-      const decodedModelRaw = window.decodeURI(modelrawRef.current);
-      if (contentEditor.getContent() !== decodedModelRaw) {
-        try {
-          contentEditor.setContent(decodedModelRaw);
-        } catch (error) {
-          console.error('Error decoding content: ', error);
-        }
+    const decoded = decodeURIComponent(modelraw || '');
+    if (editor && decoded !== modelrawRef.current) {
+      modelrawRef.current = decoded;
+      if (editor.getHTML() !== decoded) {
+        editor.commands.setContent(decoded, false);
       }
     }
-  }, [modelraw]);
+  }, [modelraw, editor]);
 
-  useEffect(() => {
-    initializeComponent();
-
-    return () => {
-      if (window.tinymce) {
-        window.tinymce.remove(`#${id}`);
-      }
-    };
-  }, []);
-
-  const initializeComponent = async () => {
-    await initializeEditor(`#${id}`);
-    setContentEditor(window.tinymce.activeEditor);
-  };
-
-  const initializeEditor = (selector) => {
-    return window.tinymce.init({
-      selector: selector,
-      language: 'es',
-      skin: 'fabric',
-      content_css: ['fabric', '@assets/libs/tinymce/skins/fabric/fabric.css'],
-      toolbar_mode: 'floating',
-      plugins:
-        'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media table charmap hr nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons code media',
-      menubar: 'file edit view insert format tools table help',
-      toolbar:
-        'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen preview print | insertfile image media link anchor | ltr rtl',
-      mobile: {
-        plugins:
-          'print preview importcss searchreplace autolink directionality visualblocks visualchars fullscreen image link media table charmap hr nonbreaking anchor toc insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons',
-      },
-      height: 600,
-      image_caption: true,
-      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-      spellchecker_dialog: true,
-      spellchecker_whitelist: ['Ephox', 'Moxiecode'],
-      tinycomments_mode: 'embedded',
-      content_style: '.mymention{ color: gray; }',
-      contextmenu: 'link image imagetools',
-
-      init_instance_callback: (editor) => {
-        if (modelrawRef.current) {
-          try {
-            editor.setContent(window.decodeURI(modelrawRef.current));
-          } catch (error) {
-            console.error('Error decoding content: ', error);
-          }
-        }
-        editor.on('Change', (e) => {
-          emitModelChange(e, editor);
-        });
-      },
-    });
-  };
-
-  const emitModelChange = (e, editor) => {
-    const data = {
-      model: window.encodeURI(editor.getContent()),
-      modelText: editor.getContent({ format: 'text' }),
-      index: index,
-    };
-    if (onModelChange) {
-      onModelChange(data);
-    }
-  };
+  if (!editor) return null;
 
   return (
     <section className="editor-container">
-      <div id={id} className="content-input text-editor"></div>
+      <EditorContent id={id} editor={editor} className="content-input text-editor" />
     </section>
   );
 }
