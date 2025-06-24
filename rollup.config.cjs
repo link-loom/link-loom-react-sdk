@@ -39,6 +39,7 @@ module.exports = {
     peerDepsExternal(),
     alias({
       entries: [
+        { find: '@', replacement: path.resolve(__dirname, 'src') },
         { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
         { find: '@resources', replacement: path.resolve(__dirname, 'src/resources') },
       ],
