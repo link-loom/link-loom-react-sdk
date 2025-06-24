@@ -191,7 +191,7 @@ export const DropdownMenuContent = React.forwardRef((
           top: context.y ?? 0,
           left: context.x ?? 0,
           outline: "none",
-          zIndex: 1000,
+          zIndex: 9999,
           ...style,
         }}
         aria-orientation={orientation}
