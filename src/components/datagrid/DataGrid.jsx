@@ -36,6 +36,7 @@ const DataGrid = (props) => {
     onMenuItemClick,
     actions = [],
     enableActions = false,
+    sx = {},
     ...rest
   } = props;
 
@@ -65,7 +66,7 @@ const DataGrid = (props) => {
 
     useEffect(() => {
       if (inputRef.current) {
-        inputRef.current.focus(); // Re-enfoca automáticamente tras render
+        inputRef.current.focus();
       }
     });
 
@@ -81,7 +82,11 @@ const DataGrid = (props) => {
               {showExport && <GridToolbarExport />}
             </section>
 
-            <GridToolbarQuickFilter className="me-3 border-1" placeholder="Search..." inputRef={inputRef} />
+            <GridToolbarQuickFilter
+              className="me-3 border-1"
+              placeholder="Search..."
+              inputRef={inputRef}
+            />
           </div>
         </section>
       </GridToolbarContainer>
@@ -190,7 +195,12 @@ const DataGrid = (props) => {
 
   return (
     <Box sx={boxStyles}>
-      <MuiDataGrid {...dataGridProps} />
+      <MuiDataGrid
+        {...dataGridProps}
+        sx={{
+          ...sx,
+        }}
+      />
     </Box>
   );
 };
