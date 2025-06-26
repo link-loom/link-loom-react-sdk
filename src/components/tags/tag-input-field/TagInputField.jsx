@@ -60,9 +60,8 @@ function TagInputField({
         })
       }
       renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder} {...textFieldProps} />
+        <TextField {...params} label={label} placeholder={placeholder}  />
       )}
-      /* {...autocompleteProps} */
     />
   );
 }
