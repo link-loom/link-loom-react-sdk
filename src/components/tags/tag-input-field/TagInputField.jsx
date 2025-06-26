@@ -52,11 +52,10 @@ function TagInputField({
       options={options}
       value={Array.isArray(value) ? value : []}
       onChange={(event, newValue) => onChange(newValue)}
-      renderTags={(selected, getItemProps) =>
-        selected.map((option, index) => {
-          const { key, ...props } = getItemProps({ index });
-          return <Chip variant="outlined" label={option} key={key} {...props} />;
-        })
+      renderTags={(selected, getTagProps) =>
+        selected.map((option, index) => (
+          <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+        ))
       }
       renderInput={(params) => (
         <TextField {...params} label={label} placeholder={placeholder} {...textFieldProps} />
