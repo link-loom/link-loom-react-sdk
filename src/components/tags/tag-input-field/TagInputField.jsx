@@ -59,9 +59,28 @@ function TagInputField({
           return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
         })
       }
-      renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder} />
-      )}
+      renderInput={(params) => {
+        const mergedInputProps = {
+          ...params.InputProps,
+          ...(textFieldProps.InputProps || {}),
+          startAdornment: (
+            <>
+              {textFieldProps.InputProps?.startAdornment}
+              {params.InputProps?.startAdornment}
+            </>
+          ),
+        };
+
+        return (
+          <TextField
+            {...params}
+            {...textFieldProps}
+            label={label}
+            placeholder={placeholder}
+            InputProps={mergedInputProps}
+          />
+        );
+      }}
       {...autocompleteProps}
     />
   );
