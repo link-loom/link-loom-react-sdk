@@ -57,7 +57,7 @@ export default function NationalIdentificationSelector({
   disabled,
   variant,
   defaultDocumentType,
-  ui = { documentType: true },
+  ui = { documentType: true, inputSize: 'normal' },
 }) {
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -143,6 +143,7 @@ export default function NationalIdentificationSelector({
           disabled={disabled}
           variant={disabled ? 'filled' : variant ? variant : 'outlined'}
           inputRef={idInputRef}
+          size={ui?.inputSize}
         />
       </article>
 
@@ -168,6 +169,7 @@ export default function NationalIdentificationSelector({
                   disabled={disabled}
                   variant={disabled ? 'filled' : variant ? variant : 'outlined'}
                   inputRef={documentTypeInputRef}
+                  size={ui?.inputSize}
                 />
               )}
             />
@@ -211,6 +213,7 @@ export default function NationalIdentificationSelector({
                   id="country-select"
                   disabled={disabled}
                   variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+                  size={ui?.inputSize}
                   InputProps={{
                     ...params.InputProps,
                     autoComplete: 'off',

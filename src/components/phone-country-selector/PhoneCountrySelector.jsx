@@ -40,7 +40,14 @@ const transformToDatabaseFormat = (data) => {
   };
 };
 
-export default function PhoneCountrySelector({ value, label, onPhoneChange, disabled, variant }) {
+export default function PhoneCountrySelector({
+  value,
+  label,
+  onPhoneChange,
+  disabled,
+  variant,
+  ui = { inputSize: 'normal' },
+}) {
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
@@ -141,6 +148,7 @@ export default function PhoneCountrySelector({ value, label, onPhoneChange, disa
               id="link-loom-select"
               disabled={disabled}
               variant={disabled ? 'filled' : variant ? variant : 'outlined'}
+              size={ui?.inputSize}
               InputProps={{
                 ...params.InputProps,
                 autoComplete: 'link-loom-select',
@@ -175,6 +183,7 @@ export default function PhoneCountrySelector({ value, label, onPhoneChange, disa
           disabled={!isCountrySelected || disabled}
           variant={!isCountrySelected || disabled ? 'filled' : variant ? variant : 'outlined'}
           inputRef={phoneInputRef}
+          size={ui?.inputSize}
         />
       </article>
     </section>
