@@ -22,6 +22,7 @@ export { default as NationalIdentificationSelector } from './components/national
 export { default as CountrySelector } from './components/country-selector/CountrySelector.jsx';
 export { default as Container } from './components/container/Container.jsx';
 export { default as AsyncAutocomplete } from './components/async-autocomplete/AsyncAutocomplete.jsx';
+export { default as QuickLinkCard } from './components/quick-link-card/QuickLinkCard.component.jsx';
 
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
