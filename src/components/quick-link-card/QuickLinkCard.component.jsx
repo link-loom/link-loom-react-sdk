@@ -35,7 +35,16 @@ const HoverableCard = styled(Card)`
   }
 `;
 
-const QuickLinkCard = ({ href, title, description, Icon, colorName, iconColor, backgroundPercentage, className ='d-flex col-12 col-sm-6 col-md-4 col-lg-3 mb-3' }) => {
+const QuickLinkCard = ({
+  href,
+  title,
+  description,
+  Icon,
+  colorName,
+  iconColor,
+  backgroundPercentage,
+  className = 'd-flex col-12 col-sm-6 col-md-6 col-lg-6 mb-3',
+}) => {
   const resolvedHex = iconColor || DEFAULT_COLORS[colorName] || DEFAULT_COLORS.indigo;
   const resolvedBg = hexToRgba(resolvedHex, backgroundPercentage ?? 0.15);
 
@@ -43,7 +52,7 @@ const QuickLinkCard = ({ href, title, description, Icon, colorName, iconColor, b
     <article className={className}>
       <Link to={href} className="flex-fill text-decoration-none">
         <HoverableCard className="border-0 shadow-sm h-100">
-          <Card className='d-flex flex-column h-100'>
+          <Card className="d-flex flex-column h-100">
             <CardContent className="d-flex flex-column justify-content-between h-100">
               <header className="mb-2">
                 <span
