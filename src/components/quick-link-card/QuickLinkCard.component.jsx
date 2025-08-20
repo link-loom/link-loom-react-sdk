@@ -40,9 +40,9 @@ const QuickLinkCard = ({
   title,
   description,
   Icon,
-  colorName,
+  colorName = 'indigo',
   iconColor,
-  backgroundPercentage,
+  backgroundPercentage = 0.15,
   className = 'd-flex col-12 col-sm-6 col-md-6 col-lg-6 mb-3',
 }) => {
   const resolvedHex = iconColor || DEFAULT_COLORS[colorName] || DEFAULT_COLORS.indigo;
@@ -85,12 +85,6 @@ QuickLinkCard.propTypes = {
   colorName: PropTypes.oneOf(['indigo', 'cyan', 'amber', 'red']),
   iconColor: PropTypes.string, // HEX
   backgroundPercentage: PropTypes.number,
-};
-
-QuickLinkCard.defaultProps = {
-  colorName: 'indigo',
-  iconColor: undefined,
-  backgroundPercentage: 0.15,
 };
 
 export default QuickLinkCard;
