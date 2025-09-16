@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import styled from 'styled-components';
@@ -57,17 +57,34 @@ export default function PhoneCountrySelector({
   // Refs
   const phoneInputRef = useRef(null);
 
+  const onChangeRef = useRef(onPhoneChange);
   useEffect(() => {
-    if (!isEmpty(phoneInputValue)) {
-      const internationalPhoneNumber = `${selectedCountry?.dialCode}${phoneInputValue || ''}`;
+    onChangeRef.current = onPhoneChange;
+  }, [onPhoneChange]);
 
-      onPhoneChange({
-        country: transformToDatabaseFormat(selectedCountry),
-        international_phone_number: internationalPhoneNumber,
-        phone_number: phoneInputValue,
-      });
+  const lastEmittedRef = useRef(null);
+
+  useEffect(() => {
+    if (isEmpty(phoneInputValue)) return;
+
+    const internationalPhoneNumber = `${selectedCountry?.dialCode ?? ''}${phoneInputValue}`;
+    const payload = {
+      country: transformToDatabaseFormat(selectedCountry),
+      international_phone_number: internationalPhoneNumber,
+      phone_number: phoneInputValue,
+    };
+
+    const last = lastEmittedRef.current;
+    if (
+      !last ||
+      last.phone_number !== payload.phone_number ||
+      last.country?.iso_code !== payload.country?.iso_code ||
+      last.country?.dial_code !== payload.country?.dial_code
+    ) {
+      lastEmittedRef.current = payload;
+      onChangeRef.current?.(payload);
     }
-  }, [phoneInputValue, selectedCountry, onPhoneChange]);
+  }, [phoneInputValue, selectedCountry]);
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
@@ -108,12 +125,14 @@ export default function PhoneCountrySelector({
     }
   }, [value]);
 
+  const options = useMemo(() => countries.map(transformNormalizedData), []);
+
   return (
     <section className="row">
       <article className="col-md-6 col-12">
         <Autocomplete
           id="select-country"
-          options={countries.map(transformNormalizedData)}
+          options={options}
           autoHighlight
           value={selectedCountry}
           onChange={handleCountryChange}
