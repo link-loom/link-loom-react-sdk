@@ -51,7 +51,6 @@ export default function PhoneCountrySelector({
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
-  const [phoneFieldClicked, setPhoneFieldClicked] = useState(false);
   const [phoneInputValue, setPhoneInputValue] = useState('');
 
   // Refs
@@ -94,7 +93,6 @@ export default function PhoneCountrySelector({
   const handlePhoneClick = () => {
     if (!isCountrySelected) {
       setSelectedCountry(null);
-      setPhoneFieldClicked(true);
     }
   };
 
