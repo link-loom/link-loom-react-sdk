@@ -64,8 +64,9 @@ export default function PhoneCountrySelector({
   const lastEmittedRef = useRef(null);
 
   useEffect(() => {
-    if (isEmpty(phoneInputValue)) return;
-    console.log('[selector] emit', { phoneInputValue, selectedCountry });
+    if (isEmpty(phoneInputValue)) {
+      return;
+    }
 
     const internationalPhoneNumber = `${selectedCountry?.dialCode ?? ''}${phoneInputValue}`;
     const payload = {
