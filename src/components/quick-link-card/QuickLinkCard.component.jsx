@@ -29,7 +29,7 @@ export const DEFAULT_COLORS = {
 const HoverableCard = styled(Card)`
   box-shadow: var(--ct-box-shadow-sm) !important;
   transition: box-shadow 0.3s ease;
-  border-radius: 30px;
+  border-radius: 30px!important;
 
   &:hover {
     box-shadow: var(--ct-box-shadow-lg) !important;
