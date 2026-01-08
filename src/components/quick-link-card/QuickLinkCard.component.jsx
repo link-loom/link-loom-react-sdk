@@ -29,6 +29,7 @@ export const DEFAULT_COLORS = {
 const HoverableCard = styled(Card)`
   box-shadow: var(--ct-box-shadow-sm) !important;
   transition: box-shadow 0.3s ease;
+  border-radius: 30px;
 
   &:hover {
     box-shadow: var(--ct-box-shadow-lg) !important;
@@ -53,7 +54,10 @@ const QuickLinkCard = ({
       <Link to={href} className="flex-fill text-decoration-none">
         <HoverableCard className="border-0 shadow-sm h-100">
           <Card className="d-flex flex-column h-100">
-            <CardContent className="d-flex flex-column justify-content-between h-100">
+            <CardContent
+              className="d-flex flex-column justify-content-between h-100"
+              sx={{ padding: '30px 30px 15px 30px' }}
+            >
               <header className="mb-2">
                 <span
                   className="d-inline-flex align-items-center justify-content-center rounded p-2"
@@ -67,7 +71,10 @@ const QuickLinkCard = ({
               </header>
             </CardContent>
 
-            <CardActions className="d-flex justify-content-end">
+            <CardActions
+              className="d-flex justify-content-end"
+              sx={{ padding: '0px 1.5rem 1rem 0px' }}
+            >
               <ArrowForwardIcon fontSize="small" className="text-success" />
             </CardActions>
           </Card>
