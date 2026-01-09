@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
+import { CloudUpload as CloudUploadIcon } from '@mui/icons-material';
 import PopUp from '@components/popup/PopUp.jsx';
 import DropZone from '@components/uploader/uploadButton/DropZone.jsx';
 
@@ -21,11 +22,10 @@ const UploadButton = (props) => {
     <>
       <div className="my-1 d-flex align-items-center justify-content-between border border-1 p-2">
         <section className="d-flex align-items-center w-50">
-          <i className="mdi mdi-cloud-upload display-3" />
+          <CloudUploadIcon sx={{ fontSize: '3rem' }} />
           <span className="ms-3 text-muted">
-            {`(${componentTexts?.fileAccepted || 'File accepted'}: ${accept} - ${
-              componentTexts?.maxFileSize || 'Max file size'
-            }: ${componentTexts?.fileSize})`}
+            {`(${componentTexts?.fileAccepted || 'File accepted'}: ${accept} - ${componentTexts?.maxFileSize || 'Max file size'
+              }: ${componentTexts?.fileSize})`}
           </span>
         </section>
         <section>

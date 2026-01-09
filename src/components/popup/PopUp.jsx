@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { Typography, IconButton } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import styled from 'styled-components';
 
 const CloseButton = styled(IconButton)`
@@ -49,7 +50,7 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
     >
       <Box className="position-absolute top-50 start-50 translate-middle bg-white" style={styles}>
         <CloseButton onClick={handleClose}>
-          <i className={'mdi mdi-close ' + styles?.closeButtonColor}></i>
+          <CloseIcon className={styles?.closeButtonColor} />
         </CloseButton>
 
         <Typography id="modal-modal-title" variant="h6" component="h2">

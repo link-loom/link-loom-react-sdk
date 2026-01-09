@@ -9,6 +9,7 @@ import {
   GridToolbarExport,
 } from '@mui/x-data-grid';
 import { Box, IconButton, Menu, MenuItem, ListItemText, ButtonGroup, Button } from '@mui/material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 const boxStyles = {
   '.MuiTablePagination-displayedRows': {
@@ -110,7 +111,7 @@ const DataGrid = (props) => {
                 actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget)
               }
             >
-              <i className="mdi mdi-dots-vertical fs-4"></i>
+              <MoreVertIcon className="fs-4" />
             </IconButton>
             <Menu
               elevation={1}

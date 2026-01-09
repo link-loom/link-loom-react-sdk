@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, MenuItem, IconButton } from '@mui/material';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
 
 const DocumentActionMenu = ({ file, itemOnAction, actions }) => {
   const [activeAnchorEl, setActiveAnchorEl] = useState(null);
@@ -18,7 +19,7 @@ const DocumentActionMenu = ({ file, itemOnAction, actions }) => {
     !isMenuActive && (
       <section className="ml-auto">
         <IconButton disableRipple aria-label="settings" onClick={handleMenu}>
-          <i className="mdi mdi-dots-vertical" />
+          <MoreVertIcon />
         </IconButton>
         <Menu
           id={'basic-menu-' + file?.filename}
