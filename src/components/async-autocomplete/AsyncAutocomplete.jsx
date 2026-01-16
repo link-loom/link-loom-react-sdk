@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Autocomplete, CircularProgress } from '@mui/material';
-import { useDebounce } from '@link-loom/react-sdk';
+import useDebounce from '../../hooks/useDebounce';
 
 function AsyncAutocomplete({
   label,
@@ -34,9 +34,9 @@ function AsyncAutocomplete({
       setOptions(
         Array.isArray(results)
           ? results.map((item) => ({
-              ...item,
-              label: getOptionLabel(item),
-            }))
+            ...item,
+            label: getOptionLabel(item),
+          }))
           : [],
       );
 

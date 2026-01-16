@@ -57,4 +57,22 @@
       padding: 1rem 1.5rem;
     }
   }
+
+  /* Auto-grow mode for chat input usage */
+  &.auto-grow {
+    height: auto;
+    
+    .content-wrapper {
+      height: auto;
+      min-height: unset;
+      background-color: transparent;
+      padding-top: 5px;
+    }
+
+    .simple-editor-content .tiptap.ProseMirror {
+      padding: 8px 12px;
+      min-height: 24px; /* Approx 1 line */
+      /* Max-height will be set inline via JS */
+    }
+  }
 }

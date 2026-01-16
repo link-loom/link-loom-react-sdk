@@ -69,56 +69,76 @@ import '@/styles/_keyframe-animations.scss';
 
 import content from '@/components/tiptap-templates/simple/data/content.json';
 
-const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile }) => {
+const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile, options }) => {
+  const shouldShow = (id) => !options || options.includes(id);
+
   return (
     <>
       <Spacer />
+      {shouldShow('undo') && (
+        <ToolbarGroup>
+          <UndoRedoButton action="undo" />
+          <UndoRedoButton action="redo" />
+        </ToolbarGroup>
+      )}
+      {shouldShow('undo') && <ToolbarSeparator />}
+
+      {(shouldShow('heading') || shouldShow('list') || shouldShow('blockquote') || shouldShow('codeBlock')) && (
+        <ToolbarGroup>
+          {shouldShow('heading') && <HeadingDropdownMenu levels={[1, 2, 3, 4]} />}
+          {shouldShow('list') && <ListDropdownMenu types={['bulletList', 'orderedList', 'taskList']} />}
+          {shouldShow('blockquote') && <BlockquoteButton />}
+          {shouldShow('codeBlock') && <CodeBlockButton />}
+        </ToolbarGroup>
+      )}
+      {(shouldShow('heading') || shouldShow('list') || shouldShow('blockquote') || shouldShow('codeBlock')) && <ToolbarSeparator />}
+
       <ToolbarGroup>
-        <UndoRedoButton action="undo" />
-        <UndoRedoButton action="redo" />
-      </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
-        <HeadingDropdownMenu levels={[1, 2, 3, 4]} />
-        <ListDropdownMenu types={['bulletList', 'orderedList', 'taskList']} />
-        <BlockquoteButton />
-        <CodeBlockButton />
-      </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
-        <MarkButton type="bold" />
-        <MarkButton type="italic" />
-        <MarkButton type="strike" />
-        <MarkButton type="code" />
-        <MarkButton type="underline" />
-        {!isMobile ? (
+        {shouldShow('bold') && <MarkButton type="bold" />}
+        {shouldShow('italic') && <MarkButton type="italic" />}
+        {shouldShow('strike') && <MarkButton type="strike" />}
+        {shouldShow('code') && <MarkButton type="code" />}
+        {shouldShow('underline') && <MarkButton type="underline" />}
+        {shouldShow('highlight') && (!isMobile ? (
           <ColorHighlightPopover />
         ) : (
           <ColorHighlightPopoverButton onClick={onHighlighterClick} />
-        )}
-        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        ))}
+        {shouldShow('link') && (!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />)}
       </ToolbarGroup>
       <ToolbarSeparator />
-      <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
-      </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
-      </ToolbarGroup>
-      <ToolbarSeparator />
-      <ToolbarGroup>
-        <ImageUploadButton text="Add" />
-      </ToolbarGroup>
+
+      {(shouldShow('superscript') || shouldShow('subscript')) && (
+        <ToolbarGroup>
+          {shouldShow('superscript') && <MarkButton type="superscript" />}
+          {shouldShow('subscript') && <MarkButton type="subscript" />}
+        </ToolbarGroup>
+      )}
+      {(shouldShow('superscript') || shouldShow('subscript')) && <ToolbarSeparator />}
+
+      {shouldShow('align') && (
+        <ToolbarGroup>
+          <TextAlignButton align="left" />
+          <TextAlignButton align="center" />
+          <TextAlignButton align="right" />
+          <TextAlignButton align="justify" />
+        </ToolbarGroup>
+      )}
+      {shouldShow('align') && <ToolbarSeparator />}
+
+      {shouldShow('image') && (
+        <ToolbarGroup>
+          <ImageUploadButton text="Add" />
+        </ToolbarGroup>
+      )}
+
       <Spacer />
       {isMobile && <ToolbarSeparator />}
-      <ToolbarGroup>
-        <ThemeToggle disableAutoDetect />
-      </ToolbarGroup>
+      {shouldShow('theme') && (
+        <ToolbarGroup>
+          <ThemeToggle disableAutoDetect />
+        </ToolbarGroup>
+      )}
     </>
   );
 };
@@ -142,7 +162,7 @@ const MobileToolbarContent = ({ type, onBack }) => (
   </>
 );
 
-export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef }) {
+export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef, minRows, maxRows, toolbarOptions, autoGrow, externalContent }) {
   const isMobile = useMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState('main');
@@ -200,27 +220,48 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
   }, [isMobile, mobileView]);
 
   React.useEffect(() => {
-    if (!editor || !modelrawRef?.current) {
+    if (!editor) {
       return;
     }
 
-    const external = modelrawRef.current;
+    // Use externalContent if provided (reactive), otherwise fallback to modelrawRef (ref-based)
+    const targetContent = typeof externalContent !== 'undefined' ? externalContent : modelrawRef?.current;
 
-    if (editor.getHTML() !== external) {
-      editor.commands.setContent(external, false);
+    if (targetContent === undefined || targetContent === null) return;
+
+    // Strict clearing check
+    if (targetContent === '') {
+      editor.commands.setContent('');
+      return;
     }
-  }, [editor]);
+
+    // General sync
+    if (editor.getHTML() !== targetContent) {
+      // Only update if significantly different to avoid cursor jumps on minor diffs
+      // For clearing validation, check if we need to enforce
+      if (targetContent !== modelrawRef.current) {
+        // External prop changed, so we respect it
+        editor.commands.setContent(targetContent, false);
+      }
+    }
+  }, [editor, externalContent]);
 
   return (
-    <section className="simple-editor" id={id}>
+    <section className={`simple-editor ${autoGrow ? 'auto-grow' : ''}`} id={id}>
+      <style>{`
+        #${id} .simple-editor-content .tiptap.ProseMirror {
+           ${maxRows ? `max-height: ${maxRows * 24}px; overflow-y: auto;` : ''}
+           ${minRows ? `min-height: ${minRows * 24}px;` : ''}
+        }
+      `}</style>
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}
           style={
             isMobile
               ? {
-                  bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-                }
+                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+              }
               : {}
           }
         >
@@ -229,6 +270,7 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef 
               onHighlighterClick={() => setMobileView('highlighter')}
               onLinkClick={() => setMobileView('link')}
               isMobile={isMobile}
+              options={toolbarOptions}
             />
           ) : (
             <MobileToolbarContent
