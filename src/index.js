@@ -29,6 +29,7 @@ export { default as RecentActivityList } from './components/RecentActivityList/R
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
 export { default as RecentActivityService } from './services/recent-activity.service.js';
+export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
 
 
 import './styles/_variables.scss';
