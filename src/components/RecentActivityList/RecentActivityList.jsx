@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
 const RecentActivityList = ({ config }) => {
     const {
@@ -13,7 +15,22 @@ const RecentActivityList = ({ config }) => {
         routes = {
             scopedDashboard: (scopeKey) => `/${scopeKey}/dashboard`,
         },
+        showItemIcon = true,
     } = config;
+
+    const { classNames = {} } = config; // Destructure classNames from config (or props if preferred directly on component)
+    // Applying default classNames if not provided
+    const styles = {
+        container: classNames.container || 'RecentActivityList',
+        title: classNames.title || 'menu-title', // Matches sidebar 'menu-title'
+        list: classNames.list || 'list-unstyled',
+        item: classNames.item || 'mb-3 px-3',
+        itemLink: classNames.itemLink || 'text-secondary', // Matches sidebar 'text-secondary'
+        itemTitle: classNames.itemTitle || '', // Removed fw-bold to match sidebar font weight
+        itemSubtitle: classNames.itemSubtitle || '',
+        emptyContainer: classNames.emptyContainer || 'recent-activity-list recent-activity-empty',
+        emptyLink: classNames.emptyLink || 'text-primary'
+    };
 
     const [activities, setActivities] = useState([]);
     const [scope, setScope] = useState({ key: '', isGlobal: false });
@@ -80,11 +97,11 @@ const RecentActivityList = ({ config }) => {
 
     if (!scope.isGlobal && activities.length === 0) {
         return (
-            <div className="recent-activity-list recent-activity-empty">
-                <h5 className="header-title mb-2">{titles.header || 'Recent'}</h5>
-                <a href={routes.scopedDashboard(scope.key)} className="text-muted">
+            <div className={styles.emptyContainer}>
+                <div className={styles.title}>{titles.header || 'Recent'}</div>
+                <Link to={routes.scopedDashboard(scope.key)} className={styles.emptyLink}>
                     {titles.emptyScoped}
-                </a>
+                </Link>
             </div>
         );
     }
@@ -94,18 +111,19 @@ const RecentActivityList = ({ config }) => {
     }
 
     return (
-        <div className="recent-activity-list">
-            <h5 className="header-title mb-2">{titles.header || 'Recent'}</h5>
-            <ul className="list-unstyled">
+        <div className={styles.container}>
+            <div className={styles.title}>{titles.header || 'Recent'}</div>
+            <ul className={styles.list}>
                 {activities.map((activity, index) => (
-                    <li key={`${activity.scopeKey}-${activity.entityId}-${index}`} className="mb-2">
-                        <a href={activity.route} className="text-body d-block">
-                            <span className="fw-bold">{activity.title}</span>
+                    <li key={`${activity.scopeKey}-${activity.entityId}-${index}`} className={styles.item}>
+                        <Link to={activity.route} className={styles.itemLink}>
+                            {showItemIcon && <PanoramaFishEyeIcon className="me-2" style={{ fontSize: '1.2em', verticalAlign: 'middle' }} />}
+                            <span className={styles.itemTitle}>{activity.title}</span>
                             <br />
-                            <small className="text-muted">
+                            <span className={styles.itemSubtitle}>
                                 {activity.subtitle || activity.scopeKey}
-                            </small>
-                        </a>
+                            </span>
+                        </Link>
                     </li>
                 ))}
             </ul>
@@ -125,6 +143,18 @@ RecentActivityList.propTypes = {
         routes: PropTypes.shape({
             scopedDashboard: PropTypes.func,
         }),
+        classNames: PropTypes.shape({
+            container: PropTypes.string,
+            title: PropTypes.string,
+            list: PropTypes.string,
+            item: PropTypes.string,
+            itemLink: PropTypes.string,
+            itemTitle: PropTypes.string,
+            itemSubtitle: PropTypes.string,
+            emptyContainer: PropTypes.string,
+            emptyLink: PropTypes.string,
+        }),
+        showItemIcon: PropTypes.bool,
     }).isRequired,
 };
 
