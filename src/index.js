@@ -34,3 +34,5 @@ export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
 
 import './styles/_variables.scss';
 import './styles/_keyframe-animations.scss';
+
+export { serializeToMarkdown } from './lib/markdown-serializer.js';
