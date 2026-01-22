@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor';
 
-function TextEditor({ id, modelraw, onModelChange, index, ...props }) {
+import { serializeToMarkdown } from '@/lib/markdown-serializer';
+
+function TextEditor({ id, modelraw, onModelChange, index, outputFormat = 'html', ...props }) {
   const decodedInitialValue = decodeURIComponent(modelraw || '');
   const modelrawRef = useRef(decodedInitialValue);
 
@@ -14,10 +16,19 @@ function TextEditor({ id, modelraw, onModelChange, index, ...props }) {
   }, [modelraw]);
 
   const handleChange = (editor) => {
-    const html = editor.getHTML();
+    let content;
+
+    if (outputFormat === 'markdown') {
+      const json = editor.getJSON();
+      content = serializeToMarkdown(json);
+    } else {
+      content = editor.getHTML();
+    }
+
     const data = {
-      model: encodeURIComponent(html),
+      model: encodeURIComponent(content),
       modelText: editor.getText(),
+      json: editor.getJSON(),
       index,
     };
     onModelChange?.(data);
