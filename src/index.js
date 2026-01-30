@@ -1,5 +1,6 @@
 // src/index.js
 export { default as Alert } from './components/alert/Alert.jsx';
+export { default as CodeEditor } from './components/code-editor/CodeEditor.jsx';
 export { default as DataGrid } from './components/datagrid/DataGrid.jsx';
 export { default as DocumentViewer } from './components/document-viewer/DocumentViewer.jsx';
 export { default as OffCanvas } from './components/offcanvas/OffCanvas.jsx';
@@ -30,7 +31,6 @@ export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
 export { default as RecentActivityService } from './services/recent-activity.service.js';
 export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
-
 
 import './styles/_variables.scss';
 import './styles/_keyframe-animations.scss';
