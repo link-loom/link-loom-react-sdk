@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 
+import {
+  ContentCopy as ContentCopyIcon,
+  Check as CheckIcon,
+  BorderColorOutlined as BorderColorOutlinedIcon,
+} from '@mui/icons-material';
+
 function SnapData(props) {
   const { id, data, onEdit, emptyText, alignment, variant, className, icon } = props;
   const [copied, setCopied] = useState(false);
@@ -47,8 +53,11 @@ function SnapData(props) {
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             {renderData()}
             <div className="ms-1">
-              <button className={`${icon?.className || 'btn btn-link py-0 px-1'}`} onClick={copyOnClick}>
-                <i className="fe-copy"></i>
+              <button
+                className={`${icon?.className || 'btn btn-link py-0 px-1'}`}
+                onClick={copyOnClick}
+              >
+                <ContentCopyIcon />
               </button>
             </div>
           </section>
@@ -57,7 +66,7 @@ function SnapData(props) {
             <span>Copied!</span>
             <div className="ms-1">
               <button className={`${icon?.className || 'btn btn-link py-0 px-1'}`}>
-                <i className="fe-check"></i>
+                <CheckIcon />
               </button>
             </div>
           </section>
@@ -66,8 +75,11 @@ function SnapData(props) {
         <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
           <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
-            <button className={`${icon?.className || 'btn btn-link py-0 px-1'}`} onClick={editOnClick}>
-              <i className="fe-edit"></i>
+            <button
+              className={`${icon?.className || 'btn btn-link py-0 px-1'}`}
+              onClick={editOnClick}
+            >
+              <BorderColorOutlinedIcon />
             </button>
           </div>
         </section>
