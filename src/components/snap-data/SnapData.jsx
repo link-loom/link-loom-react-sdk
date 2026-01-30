@@ -54,7 +54,7 @@ function SnapData(props) {
             {renderData()}
             <div className="ms-1">
               <button
-                className={`${icon?.className || 'btn btn-link py-0 px-1 fs-6 lh-1'}`}
+                className={`${icon?.className || 'btn btn-link lh-1 my-1 px-1 py-0'}`}
                 onClick={copyOnClick}
               >
                 <ContentCopyIcon fontSize="inherit" />
@@ -65,7 +65,7 @@ function SnapData(props) {
           <section className={`d-flex align-items-center ${alignmentClass ? alignmentClass : ''}`}>
             <span>Copied!</span>
             <div className="ms-1">
-              <button className={`${icon?.className || 'btn btn-link py-0 px-1 fs-6 lh-1'}`}>
+              <button className={`${icon?.className || 'btn btn-link lh-1 my-1 px-1 py-0'}`}>
                 <CheckIcon fontSize="inherit" />
               </button>
             </div>
@@ -76,7 +76,7 @@ function SnapData(props) {
           <span>{emptyText || 'N/A'}</span>
           <div className="ms-1">
             <button
-              className={`${icon?.className || 'btn btn-link py-0 px-1 fs-6 lh-1'}`}
+              className={`${icon?.className || 'btn btn-link lh-1 my-1 px-1 py-0'}`}
               onClick={editOnClick}
             >
               <BorderColorOutlinedIcon fontSize="inherit" />
