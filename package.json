@@ -45,7 +45,7 @@
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "version-patch": "npm version patch",
-    "version-publish": "npm publish"
+    "version-deploy": "npm publish"
   },
   "author": "Camilo Alexander Rodriguez Cuaran <camiepisode@outlook.com>",
   "license": "MIT",
