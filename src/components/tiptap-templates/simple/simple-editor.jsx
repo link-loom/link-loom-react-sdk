@@ -226,7 +226,6 @@ export function SimpleEditor({
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: content,
   });
 
   const bodyRect = useCursorVisibility({
@@ -239,6 +238,17 @@ export function SimpleEditor({
       setMobileView('main');
     }
   }, [isMobile, mobileView]);
+
+  React.useEffect(() => {
+    if (editor && autoFocus) {
+      const timer = setTimeout(() => {
+        if (!editor.isFocused) {
+          editor.commands.focus('end');
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [editor, autoFocus]);
 
   React.useEffect(() => {
     if (!editor) {
