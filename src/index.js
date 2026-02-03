@@ -32,6 +32,15 @@ export { default as useNavigate } from './hooks/useNavigate.js';
 export { default as RecentActivityService } from './services/recent-activity.service.js';
 export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
 
+export { default as OmniSearch } from './components/omni-search/OmniSearch.component.jsx';
+export { default as OmniSearchTrigger } from './components/omni-search/OmniSearchTrigger.component.jsx';
+export {
+  useOmniSearchRegistry,
+  OmniSearchRegistryProvider,
+} from './components/omni-search/contexts/OmniSearchRegistryContext.jsx';
+export { useOmniSearchRegisterCommand } from './components/omni-search/hooks/useOmniSearchRegisterCommand.js';
+export { useGlobalShortcuts } from './components/omni-search/hooks/useGlobalShortcuts.js';
+
 import './styles/_variables.scss';
 import './styles/_keyframe-animations.scss';
 
