@@ -83,15 +83,23 @@ const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile, options
       )}
       {shouldShow('undo') && <ToolbarSeparator />}
 
-      {(shouldShow('heading') || shouldShow('list') || shouldShow('blockquote') || shouldShow('codeBlock')) && (
+      {(shouldShow('heading') ||
+        shouldShow('list') ||
+        shouldShow('blockquote') ||
+        shouldShow('codeBlock')) && (
         <ToolbarGroup>
           {shouldShow('heading') && <HeadingDropdownMenu levels={[1, 2, 3, 4]} />}
-          {shouldShow('list') && <ListDropdownMenu types={['bulletList', 'orderedList', 'taskList']} />}
+          {shouldShow('list') && (
+            <ListDropdownMenu types={['bulletList', 'orderedList', 'taskList']} />
+          )}
           {shouldShow('blockquote') && <BlockquoteButton />}
           {shouldShow('codeBlock') && <CodeBlockButton />}
         </ToolbarGroup>
       )}
-      {(shouldShow('heading') || shouldShow('list') || shouldShow('blockquote') || shouldShow('codeBlock')) && <ToolbarSeparator />}
+      {(shouldShow('heading') ||
+        shouldShow('list') ||
+        shouldShow('blockquote') ||
+        shouldShow('codeBlock')) && <ToolbarSeparator />}
 
       <ToolbarGroup>
         {shouldShow('bold') && <MarkButton type="bold" />}
@@ -99,11 +107,12 @@ const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile, options
         {shouldShow('strike') && <MarkButton type="strike" />}
         {shouldShow('code') && <MarkButton type="code" />}
         {shouldShow('underline') && <MarkButton type="underline" />}
-        {shouldShow('highlight') && (!isMobile ? (
-          <ColorHighlightPopover />
-        ) : (
-          <ColorHighlightPopoverButton onClick={onHighlighterClick} />
-        ))}
+        {shouldShow('highlight') &&
+          (!isMobile ? (
+            <ColorHighlightPopover />
+          ) : (
+            <ColorHighlightPopoverButton onClick={onHighlighterClick} />
+          ))}
         {shouldShow('link') && (!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />)}
       </ToolbarGroup>
       <ToolbarSeparator />
@@ -162,7 +171,18 @@ const MobileToolbarContent = ({ type, onBack }) => (
   </>
 );
 
-export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef, minRows, maxRows, toolbarOptions, autoGrow, externalContent }) {
+export function SimpleEditor({
+  id,
+  initialContent,
+  onContentUpdate,
+  modelrawRef,
+  minRows,
+  maxRows,
+  toolbarOptions,
+  autoGrow,
+  externalContent,
+  autoFocus,
+}) {
   const isMobile = useMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState('main');
@@ -171,6 +191,7 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef,
   const editor = useEditor({
     content: initialContent,
     immediatelyRender: false,
+    autofocus: autoFocus ? 'end' : false,
     onUpdate: ({ editor }) => {
       onContentUpdate?.(editor);
     },
@@ -225,7 +246,8 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef,
     }
 
     // Use externalContent if provided (reactive), otherwise fallback to modelrawRef (ref-based)
-    const targetContent = typeof externalContent !== 'undefined' ? externalContent : modelrawRef?.current;
+    const targetContent =
+      typeof externalContent !== 'undefined' ? externalContent : modelrawRef?.current;
 
     if (targetContent === undefined || targetContent === null) return;
 
@@ -260,8 +282,8 @@ export function SimpleEditor({ id, initialContent, onContentUpdate, modelrawRef,
           style={
             isMobile
               ? {
-                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-              }
+                  bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+                }
               : {}
           }
         >

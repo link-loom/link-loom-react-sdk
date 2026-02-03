@@ -3,7 +3,15 @@ import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor
 
 import { serializeToMarkdown } from '@/lib/markdown-serializer';
 
-function TextEditor({ id, modelraw, onModelChange, index, outputFormat = 'html', ...props }) {
+function TextEditor({
+  id,
+  modelraw,
+  onModelChange,
+  index,
+  outputFormat = 'html',
+  autoFocus,
+  ...props
+}) {
   const decodedInitialValue = decodeURIComponent(modelraw || '');
   const modelrawRef = useRef(decodedInitialValue);
 
@@ -45,6 +53,7 @@ function TextEditor({ id, modelraw, onModelChange, index, outputFormat = 'html',
       maxRows={props.maxRows}
       toolbarOptions={props.toolbarOptions}
       autoGrow={props.autoGrow}
+      autoFocus={autoFocus}
     />
   );
 }
