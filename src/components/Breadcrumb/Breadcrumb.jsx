@@ -8,7 +8,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
  * Breadcrumb Component
  * Renders a human-readable breadcrumb based on the current URL and configuration.
  */
-const Breadcrumb = ({ config }) => {
+const Breadcrumb = ({ config, params: extraParams = {} }) => {
   const location = useLocation();
   const { pathname } = location;
   const {
@@ -26,9 +26,12 @@ const Breadcrumb = ({ config }) => {
   let matchedRoute = null;
   let matchResult = null;
 
+  // console.log('Breadcrumb Debug:', { pathname, routesKeys: Object.keys(routes) });
+
   for (const routePattern in routes) {
     const match = matchPath({ path: routePattern, end: true }, pathname);
     if (match) {
+      // console.log('Matched Route:', routePattern, match);
       matchedRoute = routes[routePattern];
       matchResult = match;
       break;
@@ -40,7 +43,17 @@ const Breadcrumb = ({ config }) => {
   }
 
   const { segments, labels = {} } = matchedRoute;
-  const { params } = matchResult;
+  // Merge URL params with extra params provided via props
+  const params = { ...matchResult.params, ...extraParams };
+
+  const interpolatePath = (path, params) => {
+    let result = path;
+    Object.keys(params).forEach((key) => {
+      // Replace :paramName with value
+      result = result.replace(new RegExp(`:${key}`, 'g'), params[key]);
+    });
+    return result;
+  };
 
   const renderSegment = (segment, index, isLast) => {
     let text = '';
@@ -66,11 +79,11 @@ const Breadcrumb = ({ config }) => {
           text = fallbacks[paramName] || paramValue;
         }
       }
+    }
 
-      // 3. Apply Prefix
-      if (prefixes[paramName]) {
-        text = `${prefixes[paramName]} ${text}`;
-      }
+    // 3. Apply Prefix
+    if (isParam && prefixes[segment.param]) {
+      text = `${prefixes[segment.param]} ${text}`;
     }
 
     const content = text;
@@ -85,8 +98,9 @@ const Breadcrumb = ({ config }) => {
 
     // If 'to' property is provided, render as Link
     if (segment.to) {
+      const toPath = interpolatePath(segment.to, params);
       return (
-        <Link component={RouterLink} to={segment.to} key={index} underline="hover" color="inherit">
+        <Link component={RouterLink} to={toPath} key={index} underline="hover" color="inherit">
           {content}
         </Link>
       );
@@ -138,6 +152,7 @@ Breadcrumb.propTypes = {
       }),
     ).isRequired,
   }).isRequired,
+  params: PropTypes.object,
 };
 
 export default Breadcrumb;
