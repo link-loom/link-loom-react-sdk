@@ -1,28 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, matchPath, Link as RouterLink } from 'react-router-dom';
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 /**
  * Breadcrumb Component
  * Renders a human-readable breadcrumb based on the current URL and configuration.
  */
-const Breadcrumb = ({ config }) => {
+const Breadcrumb = ({ config, params: extraParams = {} }) => {
   const location = useLocation();
   const { pathname } = location;
-  const {
-    separator = '/',
-    prefixes = {},
-    fallbacks = {
-      pathId: 'Path',
-      courseId: 'Course',
-      capsuleId: 'Micro-capsule',
-    },
-    routes = {},
-  } = config;
+  const { separator = '/', prefixes = {}, fallbacks = {}, routes = {} } = config;
 
-  // Find matching route
   let matchedRoute = null;
   let matchResult = null;
 
@@ -40,7 +30,15 @@ const Breadcrumb = ({ config }) => {
   }
 
   const { segments, labels = {} } = matchedRoute;
-  const { params } = matchResult;
+  const params = { ...matchResult.params, ...extraParams };
+
+  const interpolatePath = (path, params) => {
+    let result = path;
+    Object.keys(params).forEach((key) => {
+      result = result.replace(new RegExp(`:${key}`, 'g'), params[key]);
+    });
+    return result;
+  };
 
   const renderSegment = (segment, index, isLast) => {
     let text = '';
@@ -52,50 +50,42 @@ const Breadcrumb = ({ config }) => {
       isParam = true;
       const paramName = segment.param;
       const paramValue = params[paramName];
-
-      // 1. Try to get label from dictionary
       const dictionary = labels[paramName];
+
       if (dictionary && dictionary[paramValue]) {
         text = dictionary[paramValue];
       } else {
-        // 2. Use Fallback or Default
-        // Special rule: institutionSlug is rendered as-is
-        if (paramName === 'institutionSlug') {
-          text = paramValue;
-        } else {
-          text = fallbacks[paramName] || paramValue;
-        }
+        text = fallbacks[paramName] || paramValue;
       }
+    }
 
-      // 3. Apply Prefix
-      if (prefixes[paramName]) {
-        text = `${prefixes[paramName]} ${text}`;
-      }
+    if (isParam && prefixes[segment.param]) {
+      text = `${prefixes[segment.param]} ${text}`;
     }
 
     const content = text;
 
     if (isLast) {
       return (
-        <Typography key={index} color="text.primary">
+        <span key={index} className="text-secondary">
           {content}
-        </Typography>
+        </span>
       );
     }
 
-    // If 'to' property is provided, render as Link
     if (segment.to) {
+      const toPath = interpolatePath(segment.to, params);
       return (
-        <Link component={RouterLink} to={segment.to} key={index} underline="hover" color="inherit">
+        <Link component={RouterLink} to={toPath} key={index} underline="hover" color="inherit">
           {content}
         </Link>
       );
     }
 
     return (
-      <Typography key={index} color="inherit">
+      <span key={index} className="text-muted">
         {content}
-      </Typography>
+      </span>
     );
   };
 
@@ -127,7 +117,6 @@ Breadcrumb.propTypes = {
             PropTypes.shape({ param: PropTypes.string }),
             PropTypes.shape({ param: PropTypes.string }),
             PropTypes.shape({ text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]) }),
-            // Allow 'to' for future proofing or explicit links if config updates
             PropTypes.shape({
               text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
               to: PropTypes.string,
@@ -138,6 +127,7 @@ Breadcrumb.propTypes = {
       }),
     ).isRequired,
   }).isRequired,
+  params: PropTypes.object,
 };
 
 export default Breadcrumb;

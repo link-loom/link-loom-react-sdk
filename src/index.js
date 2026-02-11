@@ -26,6 +26,8 @@ export { default as AsyncAutocomplete } from './components/async-autocomplete/As
 export { default as QuickLinkCard } from './components/quick-link-card/QuickLinkCard.component.jsx';
 export { default as VirtualList } from './components/virtual-list/VirtualList.jsx';
 export { default as RecentActivityList } from './components/RecentActivityList/RecentActivityList.jsx';
+export { default as ImageCardSelect } from './components/image-card-select/ImageCardSelect.jsx';
+export { default as MultiSelectChips } from './components/multi-select-chips/MultiSelectChips.jsx';
 
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';

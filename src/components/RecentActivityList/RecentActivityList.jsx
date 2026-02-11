@@ -1,161 +1,287 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
+import { Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import {
+  PanoramaFishEye,
+  Map as MapIcon,
+  ViewModule,
+  LibraryBooks,
+  School,
+  Article,
+  Assignment,
+  WorkspacePremium,
+} from '@mui/icons-material';
+
+const ICON_MAP = {
+  Map: MapIcon,
+  ViewModule: ViewModule,
+  LibraryBooks: LibraryBooks,
+  School: School,
+  Article: Article,
+  Assignment: Assignment,
+  WorkspacePremium: WorkspacePremium,
+  Default: PanoramaFishEye,
+};
+
+// Fallback components in case they are not provided via config.components
+const DefaultContainer = ({ children, className }) => (
+  <section className={className}>{children}</section>
+);
+const DefaultTitle = ({ children, className }) => (
+  <h5 className={`mb-3 ${className}`}>{children}</h5>
+);
+const DefaultList = ({ children, className }) => (
+  <ul className={`list-unstyled m-0 p-0 ${className}`}>{children}</ul>
+);
+const DefaultItem = ({ children, className }) => <li className={className}>{children}</li>;
+const DefaultItemLink = ({ children, to, className }) => (
+  <Link to={to} className={className}>
+    {children}
+  </Link>
+);
+const StyledIconWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: ${({ $bgColor }) => $bgColor || '#f5f5f5'};
+  color: ${({ $color }) => $color || '#757575'};
+  margin-right: 1rem;
+  flex-shrink: 0;
+`;
+
+const DefaultIconWrapper = ({ children, $bgColor, $color }) => (
+  <StyledIconWrapper
+    $bgColor={$bgColor}
+    $color={$color}
+    className="rounded-circle d-flex align-items-center justify-content-center"
+  >
+    {children}
+  </StyledIconWrapper>
+);
+const DefaultContentWrapper = ({ children }) => <div className="overflow-hidden">{children}</div>;
+const DefaultStyledTitleSpan = ({ children, className }) => (
+  <h6 className={`m-0 ${className}`}>{children}</h6>
+);
+const DefaultItemSubtitle = ({ children, className }) => (
+  <small className={`d-block ${className}`}>{children}</small>
+);
+const DefaultEmptyContainer = ({ children, className }) => (
+  <section className={className}>{children}</section>
+);
+const DefaultEmptyLink = ({ children, to, className }) => (
+  <Link to={to} className={className}>
+    {children}
+  </Link>
+);
 
 const RecentActivityList = ({ config }) => {
-    const {
-        storageKey,
-        maxItems = 3,
-        globalRoots = ['dashboard', 'institutions', 'settings'],
-        titles = {
-            header: 'Recent',
-            emptyScoped: 'Go to Dashboard',
-        },
-        routes = {
-            scopedDashboard: (scopeKey) => `/${scopeKey}/dashboard`,
-        },
-        showItemIcon = true,
-    } = config;
+  const location = useLocation();
+  const {
+    storageKey,
+    maxItems = 3,
+    globalRoots = [],
+    titles = {
+      header: 'Recent',
+      emptyScoped: 'Go to Dashboard',
+    },
+    routes = {},
+    showItemIcon = true,
+    components = {},
+  } = config;
 
-    const { classNames = {} } = config; // Destructure classNames from config (or props if preferred directly on component)
-    // Applying default classNames if not provided
-    const styles = {
-        container: classNames.container || 'RecentActivityList',
-        title: classNames.title || 'menu-title', // Matches sidebar 'menu-title'
-        list: classNames.list || 'list-unstyled',
-        item: classNames.item || 'mb-3 px-3',
-        itemLink: classNames.itemLink || 'text-secondary', // Matches sidebar 'text-secondary'
-        itemTitle: classNames.itemTitle || '', // Removed fw-bold to match sidebar font weight
-        itemSubtitle: classNames.itemSubtitle || '',
-        emptyContainer: classNames.emptyContainer || 'recent-activity-list recent-activity-empty',
-        emptyLink: classNames.emptyLink || 'text-primary'
-    };
+  const { classNames = {} } = config;
 
-    const [activities, setActivities] = useState([]);
-    const [scope, setScope] = useState({ key: '', isGlobal: false });
+  const Container = components.Container || DefaultContainer;
+  const Title = components.Title || DefaultTitle;
+  const List = components.List || DefaultList;
+  const Item = components.Item || DefaultItem;
+  const ItemLink = components.ItemLink || DefaultItemLink;
+  const IconWrapper = components.IconWrapper || DefaultIconWrapper;
+  const ContentWrapper = components.ContentWrapper || DefaultContentWrapper;
+  const StyledTitleSpan = components.StyledTitleSpan || DefaultStyledTitleSpan;
+  const ItemSubtitle = components.ItemSubtitle || DefaultItemSubtitle;
+  const EmptyContainer = components.EmptyContainer || DefaultEmptyContainer;
+  const EmptyLink = components.EmptyLink || DefaultEmptyLink;
 
-    useEffect(() => {
-        const loadActivities = () => {
-            // 1. Determine Scope
-            const pathSegments = window.location.pathname.split('/').filter(Boolean);
-            const firstSegment = pathSegments[0] || '';
-            const isGlobal = globalRoots.includes(firstSegment);
-            setScope({ key: firstSegment, isGlobal });
+  const [activities, setActivities] = useState([]);
 
-            // 2. Read from LocalStorage
-            try {
-                const storedData = localStorage.getItem(storageKey);
-                if (storedData) {
-                    let parsedData = JSON.parse(storedData);
-                    if (Array.isArray(parsedData)) {
-                        const filtered = parsedData.filter(item => {
-                            if (isGlobal) {
-                                return true;
-                            } else {
-                                const scopeMatch = item.scopeKey === firstSegment;
-                                const routeSafe = item.route && item.route.startsWith(`/${firstSegment}/`);
-                                return scopeMatch && routeSafe;
-                            }
-                        });
+  const passedScope = config.scope;
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const firstSegment = pathSegments[0] || '';
 
-                        filtered.sort((a, b) => b.updatedAt - a.updatedAt);
-                        setActivities(filtered.slice(0, maxItems));
-                    }
-                }
-            } catch (error) {
-                console.error("Error reading recent activity", error);
-            }
-        };
+  const determinedKey = passedScope || firstSegment;
+  const isGlobal = globalRoots.includes(determinedKey) || globalRoots.includes(firstSegment);
 
-        loadActivities();
+  useEffect(() => {
+    const loadActivities = () => {
+      try {
+        const storedData = localStorage.getItem(storageKey);
+        if (!storedData) return;
 
-        const handleStorageUpdate = (event) => {
-            if (event.detail && event.detail.storageKey === storageKey) {
-                loadActivities();
-            }
-        };
+        const parsedData = JSON.parse(storedData);
+        if (!Array.isArray(parsedData)) {
+          return;
+        }
 
-        window.addEventListener('recentActivityUpdated', handleStorageUpdate);
+        const filtered = parsedData.filter((item) => {
+          if (isGlobal) {
+            return true;
+          }
 
-        // Optional: Listen to 'storage' event for cross-tab updates
-        window.addEventListener('storage', (e) => {
-            if (e.key === storageKey) loadActivities();
+          const scopeMatch = item.scopeKey === determinedKey;
+          const routeSafe =
+            item.route &&
+            (item.route.startsWith(`/${determinedKey}/`) || item.route === `/${determinedKey}`);
+
+          return scopeMatch && (routeSafe || !!passedScope);
         });
 
-        return () => {
-            window.removeEventListener('recentActivityUpdated', handleStorageUpdate);
-            window.removeEventListener('storage', loadActivities);
-        };
+        filtered.sort((activityA, activityB) => activityB.updatedAt - activityA.updatedAt);
+        setActivities(filtered.slice(0, maxItems));
+      } catch (error) {
+        console.error('Error reading recent activity', error);
+      }
+    };
 
-    }, [storageKey, maxItems, JSON.stringify(globalRoots), window.location.pathname]);
-    // But usually Sidebar re-renders on route change if parent updates.
-    // If not, we might need useLocation from router or reliable event.
-    // Since this is an SDK component, we might not have access to specific Router hooks easily 
-    // without peerDeps. Standard SDKs might use window events or expect re-render.
-    // Let's assume parent re-renders sidebar on route change.
+    loadActivities();
 
-    if (!scope.isGlobal && activities.length === 0) {
-        return (
-            <div className={styles.emptyContainer}>
-                <div className={styles.title}>{titles.header || 'Recent'}</div>
-                <Link to={routes.scopedDashboard(scope.key)} className={styles.emptyLink}>
-                    {titles.emptyScoped}
-                </Link>
-            </div>
-        );
-    }
+    const handleStorageUpdate = (event) => {
+      if (event.detail && event.detail.storageKey === storageKey) {
+        loadActivities();
+      }
+    };
 
-    if (scope.isGlobal && activities.length === 0) {
-        return null;
-    }
+    const handleCrossTabUpdate = (storageEvent) => {
+      if (storageEvent.key === storageKey) {
+        loadActivities();
+      }
+    };
 
+    window.addEventListener('recentActivityUpdated', handleStorageUpdate);
+    window.addEventListener('storage', handleCrossTabUpdate);
+
+    return () => {
+      window.removeEventListener('recentActivityUpdated', handleStorageUpdate);
+      window.removeEventListener('storage', handleCrossTabUpdate);
+    };
+  }, [
+    storageKey,
+    maxItems,
+    JSON.stringify(globalRoots),
+    location.pathname,
+    passedScope,
+    determinedKey,
+    isGlobal,
+  ]);
+
+  if (!isGlobal && activities.length === 0) {
     return (
-        <div className={styles.container}>
-            <div className={styles.title}>{titles.header || 'Recent'}</div>
-            <ul className={styles.list}>
-                {activities.map((activity, index) => (
-                    <li key={`${activity.scopeKey}-${activity.entityId}-${index}`} className={styles.item}>
-                        <Link to={activity.route} className={styles.itemLink}>
-                            {showItemIcon && <PanoramaFishEyeIcon className="me-2" style={{ fontSize: '1.2em', verticalAlign: 'middle' }} />}
-                            <span className={styles.itemTitle}>{activity.title}</span>
-                            <br />
-                            <span className={styles.itemSubtitle}>
-                                {activity.subtitle || activity.scopeKey}
-                            </span>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </div>
+      <EmptyContainer
+        className={
+          classNames.emptyContainer ||
+          (components.EmptyContainer ? '' : 'recent-activity-list recent-activity-empty')
+        }
+      >
+        <Title className={classNames.title || (components.Title ? '' : 'menu-title')}>
+          {titles.header || 'Recent'}
+        </Title>
+        {routes.scopedDashboard && (
+          <EmptyLink
+            to={routes.scopedDashboard(determinedKey)}
+            className={classNames.emptyLink || (components.EmptyLink ? '' : 'text-primary')}
+          >
+            {titles.emptyScoped}
+          </EmptyLink>
+        )}
+      </EmptyContainer>
     );
+  }
+
+  if (isGlobal && activities.length === 0) {
+    return null;
+  }
+
+  return (
+    <Container
+      className={classNames.container || (components.Container ? '' : 'RecentActivityList')}
+    >
+      <Title className={classNames.title || (components.Title ? '' : 'menu-title')}>
+        {titles.header || 'Recent'}
+      </Title>
+      <List className={classNames.list || (components.List ? '' : 'list-unstyled')}>
+        {activities.map((activity, index) => {
+          const IconComponent = ICON_MAP[activity.icon] || ICON_MAP.Default;
+
+          return (
+            <Item
+              key={`${activity.scopeKey}-${activity.entityId}-${index}`}
+              className={classNames.item || (components.Item ? '' : 'mb-3 px-3')}
+            >
+              <ItemLink
+                to={activity.route}
+                className={
+                  classNames.itemLink ||
+                  (components.ItemLink ? '' : 'text-decoration-none d-flex align-items-center')
+                }
+              >
+                {showItemIcon && (
+                  <IconWrapper $bgColor={activity.bgColor} $color={activity.color}>
+                    <IconComponent fontSize="medium" />
+                  </IconWrapper>
+                )}
+                <ContentWrapper>
+                  <StyledTitleSpan
+                    className={
+                      classNames.itemTitle ||
+                      (components.StyledTitleSpan ? '' : 'text-truncate d-block fw-bold text-dark')
+                    }
+                  >
+                    {activity.title}
+                  </StyledTitleSpan>
+                  <ItemSubtitle
+                    className={
+                      classNames.itemSubtitle ||
+                      (components.ItemSubtitle ? '' : 'text-truncate d-block text-muted')
+                    }
+                  >
+                    {activity.subtitle || activity.scopeKey}
+                  </ItemSubtitle>
+                </ContentWrapper>
+              </ItemLink>
+            </Item>
+          );
+        })}
+      </List>
+    </Container>
+  );
 };
 
 RecentActivityList.propTypes = {
-    config: PropTypes.shape({
-        storageKey: PropTypes.string.isRequired,
-        maxItems: PropTypes.number,
-        globalRoots: PropTypes.arrayOf(PropTypes.string),
-        titles: PropTypes.shape({
-            header: PropTypes.string,
-            emptyScoped: PropTypes.string,
-        }),
-        routes: PropTypes.shape({
-            scopedDashboard: PropTypes.func,
-        }),
-        classNames: PropTypes.shape({
-            container: PropTypes.string,
-            title: PropTypes.string,
-            list: PropTypes.string,
-            item: PropTypes.string,
-            itemLink: PropTypes.string,
-            itemTitle: PropTypes.string,
-            itemSubtitle: PropTypes.string,
-            emptyContainer: PropTypes.string,
-            emptyLink: PropTypes.string,
-        }),
-        showItemIcon: PropTypes.bool,
-    }).isRequired,
+  config: PropTypes.shape({
+    storageKey: PropTypes.string.isRequired,
+    maxItems: PropTypes.number,
+    globalRoots: PropTypes.arrayOf(PropTypes.string),
+    scope: PropTypes.string,
+    titles: PropTypes.shape({
+      header: PropTypes.string,
+      emptyScoped: PropTypes.string,
+    }),
+    routes: PropTypes.shape({
+      scopedDashboard: PropTypes.func,
+    }),
+    classNames: PropTypes.shape({
+      container: PropTypes.string,
+      title: PropTypes.string,
+      list: PropTypes.string,
+      item: PropTypes.string,
+      itemLink: PropTypes.string,
+      itemTitle: PropTypes.string,
+      itemSubtitle: PropTypes.string,
+      emptyContainer: PropTypes.string,
+      emptyLink: PropTypes.string,
+    }),
+    showItemIcon: PropTypes.bool,
+  }).isRequired,
 };
 
 export default RecentActivityList;
