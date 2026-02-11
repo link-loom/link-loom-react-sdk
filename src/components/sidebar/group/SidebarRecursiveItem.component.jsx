@@ -54,7 +54,7 @@ const SidebarRecursiveItemComponent = ({ item, level = 0, onItemClick = null }) 
       <SidebarItem onClick={handleClick} sx={{ paddingLeft }} className={item.className} disabled={item.disabled}>
         {/* Icon: Only show for Level 0 (User's Level 1) */}
         {level === 0 && item.icon && (
-          <SidebarItemIcon className="d-flex justify-content-center" sx={{ minWidth: 30 }}>
+          <SidebarItemIcon className="d-flex justify-content-center">
             {item.icon}
           </SidebarItemIcon>
         )}

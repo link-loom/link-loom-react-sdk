@@ -64,7 +64,7 @@ const SidebarGroupComponent = ({
   };
 
   return (
-    <List component="nav" className="w-100 p-0">
+    <List component="nav" className="w-100 p-0 justify-content-center">
       {/* Header */}
       <Tooltip title={isCondensed ? title : ""} placement="right">
         <SidebarSectionHeader onClick={handleHeaderClick}>
