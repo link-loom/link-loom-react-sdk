@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, matchPath, Link as RouterLink } from 'react-router-dom';
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 /**
@@ -11,27 +11,14 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 const Breadcrumb = ({ config, params: extraParams = {} }) => {
   const location = useLocation();
   const { pathname } = location;
-  const {
-    separator = '/',
-    prefixes = {},
-    fallbacks = {
-      pathId: 'Path',
-      courseId: 'Course',
-      capsuleId: 'Micro-capsule',
-    },
-    routes = {},
-  } = config;
+  const { separator = '/', prefixes = {}, fallbacks = {}, routes = {} } = config;
 
-  // Find matching route
   let matchedRoute = null;
   let matchResult = null;
-
-  // console.log('Breadcrumb Debug:', { pathname, routesKeys: Object.keys(routes) });
 
   for (const routePattern in routes) {
     const match = matchPath({ path: routePattern, end: true }, pathname);
     if (match) {
-      // console.log('Matched Route:', routePattern, match);
       matchedRoute = routes[routePattern];
       matchResult = match;
       break;
@@ -43,13 +30,11 @@ const Breadcrumb = ({ config, params: extraParams = {} }) => {
   }
 
   const { segments, labels = {} } = matchedRoute;
-  // Merge URL params with extra params provided via props
   const params = { ...matchResult.params, ...extraParams };
 
   const interpolatePath = (path, params) => {
     let result = path;
     Object.keys(params).forEach((key) => {
-      // Replace :paramName with value
       result = result.replace(new RegExp(`:${key}`, 'g'), params[key]);
     });
     return result;
@@ -65,23 +50,15 @@ const Breadcrumb = ({ config, params: extraParams = {} }) => {
       isParam = true;
       const paramName = segment.param;
       const paramValue = params[paramName];
-
-      // 1. Try to get label from dictionary
       const dictionary = labels[paramName];
+
       if (dictionary && dictionary[paramValue]) {
         text = dictionary[paramValue];
       } else {
-        // 2. Use Fallback or Default
-        // Special rule: institutionSlug is rendered as-is
-        if (paramName === 'institutionSlug') {
-          text = paramValue;
-        } else {
-          text = fallbacks[paramName] || paramValue;
-        }
+        text = fallbacks[paramName] || paramValue;
       }
     }
 
-    // 3. Apply Prefix
     if (isParam && prefixes[segment.param]) {
       text = `${prefixes[segment.param]} ${text}`;
     }
@@ -90,13 +67,12 @@ const Breadcrumb = ({ config, params: extraParams = {} }) => {
 
     if (isLast) {
       return (
-        <Typography key={index} color="text.primary">
+        <span key={index} className="text-secondary">
           {content}
-        </Typography>
+        </span>
       );
     }
 
-    // If 'to' property is provided, render as Link
     if (segment.to) {
       const toPath = interpolatePath(segment.to, params);
       return (
@@ -107,9 +83,9 @@ const Breadcrumb = ({ config, params: extraParams = {} }) => {
     }
 
     return (
-      <Typography key={index} color="inherit">
+      <span key={index} className="text-muted">
         {content}
-      </Typography>
+      </span>
     );
   };
 
@@ -141,7 +117,6 @@ Breadcrumb.propTypes = {
             PropTypes.shape({ param: PropTypes.string }),
             PropTypes.shape({ param: PropTypes.string }),
             PropTypes.shape({ text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]) }),
-            // Allow 'to' for future proofing or explicit links if config updates
             PropTypes.shape({
               text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
               to: PropTypes.string,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   PanoramaFishEye,
   Map as MapIcon,
@@ -11,7 +12,6 @@ import {
   Assignment,
   WorkspacePremium,
 } from '@mui/icons-material';
-import styled from 'styled-components';
 
 const ICON_MAP = {
   Map: MapIcon,
@@ -25,44 +25,48 @@ const ICON_MAP = {
 };
 
 // Fallback components in case they are not provided via config.components
-const DefaultContainer = ({ children, className }) => <div className={className}>{children}</div>;
-const DefaultTitle = ({ children, className }) => <div className={className}>{children}</div>;
-const DefaultList = ({ children, className }) => <ul className={className}>{children}</ul>;
+const DefaultContainer = ({ children, className }) => (
+  <section className={className}>{children}</section>
+);
+const DefaultTitle = ({ children, className }) => (
+  <h5 className={`mb-3 ${className}`}>{children}</h5>
+);
+const DefaultList = ({ children, className }) => (
+  <ul className={`list-unstyled m-0 p-0 ${className}`}>{children}</ul>
+);
 const DefaultItem = ({ children, className }) => <li className={className}>{children}</li>;
 const DefaultItemLink = ({ children, to, className }) => (
   <Link to={to} className={className}>
     {children}
   </Link>
 );
+const StyledIconWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  background-color: ${({ $bgColor }) => $bgColor || '#f5f5f5'};
+  color: ${({ $color }) => $color || '#757575'};
+  margin-right: 1rem;
+  flex-shrink: 0;
+`;
+
 const DefaultIconWrapper = ({ children, $bgColor, $color }) => (
-  <div
-    style={{
-      width: '40px',
-      height: '40px',
-      borderRadius: '50%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: $bgColor || '#f5f5f5',
-      color: $color || '#757575',
-      marginRight: '1rem',
-      flexShrink: 0,
-    }}
+  <StyledIconWrapper
+    $bgColor={$bgColor}
+    $color={$color}
+    className="rounded-circle d-flex align-items-center justify-content-center"
   >
     {children}
-  </div>
+  </StyledIconWrapper>
 );
-const DefaultContentWrapper = ({ children }) => (
-  <div style={{ overflow: 'hidden' }}>{children}</div>
-);
+const DefaultContentWrapper = ({ children }) => <div className="overflow-hidden">{children}</div>;
 const DefaultStyledTitleSpan = ({ children, className }) => (
-  <span className={className}>{children}</span>
+  <h6 className={`m-0 ${className}`}>{children}</h6>
 );
 const DefaultItemSubtitle = ({ children, className }) => (
-  <span className={className}>{children}</span>
+  <small className={`d-block ${className}`}>{children}</small>
 );
 const DefaultEmptyContainer = ({ children, className }) => (
-  <div className={className}>{children}</div>
+  <section className={className}>{children}</section>
 );
 const DefaultEmptyLink = ({ children, to, className }) => (
   <Link to={to} className={className}>
@@ -75,21 +79,18 @@ const RecentActivityList = ({ config }) => {
   const {
     storageKey,
     maxItems = 3,
-    globalRoots = ['dashboard', 'institutions', 'institution', 'settings'],
+    globalRoots = [],
     titles = {
       header: 'Recent',
       emptyScoped: 'Go to Dashboard',
     },
-    routes = {
-      scopedDashboard: (scopeKey) => `/${scopeKey}/dashboard`,
-    },
+    routes = {},
     showItemIcon = true,
     components = {},
   } = config;
 
   const { classNames = {} } = config;
 
-  // Use provided components or default fallbacks
   const Container = components.Container || DefaultContainer;
   const Title = components.Title || DefaultTitle;
   const List = components.List || DefaultList;
@@ -104,12 +105,10 @@ const RecentActivityList = ({ config }) => {
 
   const [activities, setActivities] = useState([]);
 
-  // 1. Determine Scope and Context (Derived from props and URL)
   const passedScope = config.scope;
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const firstSegment = pathSegments[0] || '';
 
-  // If a scope is explicitly passed (e.g. institution UUID), use it. Otherwise, use URL-derived scope.
   const determinedKey = passedScope || firstSegment;
   const isGlobal = globalRoots.includes(determinedKey) || globalRoots.includes(firstSegment);
 
@@ -117,29 +116,28 @@ const RecentActivityList = ({ config }) => {
     const loadActivities = () => {
       try {
         const storedData = localStorage.getItem(storageKey);
-        if (storedData) {
-          let parsedData = JSON.parse(storedData);
-          if (Array.isArray(parsedData)) {
-            const filtered = parsedData.filter((item) => {
-              if (isGlobal) {
-                // In global mode, show everything.
-                return true;
-              } else {
-                // In scoped mode, match the specific scope.
-                const scopeMatch = item.scopeKey === determinedKey;
-                const routeSafe =
-                  item.route &&
-                  (item.route.startsWith(`/${determinedKey}/`) ||
-                    item.route === `/${determinedKey}`);
-                // We show it if it matches the scope AND (is on a valid route OR we have an explicit scope passed)
-                return scopeMatch && (routeSafe || !!passedScope);
-              }
-            });
+        if (!storedData) return;
 
-            filtered.sort((a, b) => b.updatedAt - a.updatedAt);
-            setActivities(filtered.slice(0, maxItems));
-          }
+        const parsedData = JSON.parse(storedData);
+        if (!Array.isArray(parsedData)) {
+          return;
         }
+
+        const filtered = parsedData.filter((item) => {
+          if (isGlobal) {
+            return true;
+          }
+
+          const scopeMatch = item.scopeKey === determinedKey;
+          const routeSafe =
+            item.route &&
+            (item.route.startsWith(`/${determinedKey}/`) || item.route === `/${determinedKey}`);
+
+          return scopeMatch && (routeSafe || !!passedScope);
+        });
+
+        filtered.sort((activityA, activityB) => activityB.updatedAt - activityA.updatedAt);
+        setActivities(filtered.slice(0, maxItems));
       } catch (error) {
         console.error('Error reading recent activity', error);
       }
@@ -153,8 +151,8 @@ const RecentActivityList = ({ config }) => {
       }
     };
 
-    const handleCrossTabUpdate = (e) => {
-      if (e.key === storageKey) {
+    const handleCrossTabUpdate = (storageEvent) => {
+      if (storageEvent.key === storageKey) {
         loadActivities();
       }
     };
@@ -187,12 +185,14 @@ const RecentActivityList = ({ config }) => {
         <Title className={classNames.title || (components.Title ? '' : 'menu-title')}>
           {titles.header || 'Recent'}
         </Title>
-        <EmptyLink
-          to={routes.scopedDashboard(determinedKey)}
-          className={classNames.emptyLink || (components.EmptyLink ? '' : 'text-primary')}
-        >
-          {titles.emptyScoped}
-        </EmptyLink>
+        {routes.scopedDashboard && (
+          <EmptyLink
+            to={routes.scopedDashboard(determinedKey)}
+            className={classNames.emptyLink || (components.EmptyLink ? '' : 'text-primary')}
+          >
+            {titles.emptyScoped}
+          </EmptyLink>
+        )}
       </EmptyContainer>
     );
   }
