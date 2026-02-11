@@ -59,7 +59,8 @@ const SidebarProfileComponent = ({ user, isCondensed }) => {
       <Tooltip
         title={
           isCondensed
-            ? user?.linked_organizations?.[0]?.context?.organization_display_name ||
+            ? user?.linked_organizations?.[0]?.context?.organization?.profile?.display_name ||
+              user?.linked_organizations?.[0]?.context?.organization_display_name ||
               'Blackwood Stone Holdings, inc.'
             : 'Organizations'
         }
@@ -79,7 +80,10 @@ const SidebarProfileComponent = ({ user, isCondensed }) => {
               isCondensed ? '' : 'me-3'
             }`}
           >
-            {user?.linked_organizations?.[0]?.context?.organization_display_name
+            {(
+              user?.linked_organizations?.[0]?.context?.organization?.profile?.display_name ||
+              user?.linked_organizations?.[0]?.context?.organization_display_name
+            )
               ?.charAt(0)
               ?.toUpperCase() || 'B'}
           </OrganizationAvatar>
@@ -87,7 +91,8 @@ const SidebarProfileComponent = ({ user, isCondensed }) => {
           {!isCondensed && (
             <div className="d-flex flex-column overflow-hidden text-start flex-grow-1">
               <OrganizationName className="fw-bold text-dark text-truncate">
-                {user?.linked_organizations?.[0]?.context?.organization_display_name ||
+                {user?.linked_organizations?.[0]?.context?.organization?.profile?.display_name ||
+                  user?.linked_organizations?.[0]?.context?.organization_display_name ||
                   'Blackwood Stone Holdings, inc.'}
               </OrganizationName>
               <small className="text-muted">{user?.payload?.roles?.[0]?.context?.role_name}</small>
