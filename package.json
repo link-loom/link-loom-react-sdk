@@ -66,6 +66,12 @@
     "link-loom",
     "react"
   ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-router-dom": ">=5.0.0",
+    "@monaco-editor/react": ">=4.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.24.3",
     "@babel/preset-env": "^7.24.3",

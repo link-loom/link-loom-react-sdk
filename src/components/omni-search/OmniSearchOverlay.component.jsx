@@ -447,19 +447,23 @@ function OmniSearchOverlay({
               />
             )}
 
-            {/* 2. Slash Commands */}
-            {(isCommandMode || !query || query.length < 2) && activeFilter === 'all' && (
+            {/* 2. Slash Commands - ALWAYS RENDER if 'all', let CMDK handle matching */}
+            {activeFilter === 'all' && (
               <Command.Group heading="Command Center  ⌘/">
                 {slashCommands
                   .filter((cmd) => {
-                    if (isCommandMode) return true;
+                    // If we have a query (slash or text), let CMDK match it.
+                    // If empty, only show priority.
+                    if (query && query.length > 0) return true;
                     return cmd.isPriority;
                   })
                   .map((cmd) => (
                     <Command.Item
                       key={cmd.id}
                       onSelect={() => handleStaticSelect(cmd)}
-                      value={cmd.label}
+                      // Hack: Prepend / so it matches when user types / (Command Mode)
+                      // Append description so it's searchable too
+                      value={`/ ${cmd.label} ${cmd.description || ''}`}
                     >
                       {cmd.icon}
                       <div className="d-flex flex-column">
