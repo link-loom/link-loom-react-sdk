@@ -199,21 +199,16 @@ function OmniSearchOverlay({
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeValue, setActiveValue] = useState('');
 
-  // Consume Distributed Commands
   const { commands: contextCommands } = useOmniSearchRegistry();
 
-  // Merge props and context commands
   const slashCommands = useMemo(() => {
     return [...propSlashCommands, ...contextCommands];
   }, [propSlashCommands, contextCommands]);
 
-  // Slash Command Mode
   const isCommandMode = query.startsWith('/');
 
-  // Use the custom hook
   const debouncedQuery = useDebounce(query, 300);
 
-  // Reset State Function
   const resetSearchState = useCallback(() => {
     setActiveFilter('all');
     setResults({});
@@ -222,14 +217,12 @@ function OmniSearchOverlay({
     onQueryChange('');
   }, [onQueryChange]);
 
-  // Search Effect triggering on debounced value
   useEffect(() => {
     if (!open) {
       resetSearchState();
       return;
     }
 
-    // Skip API search if in command mode
     if (debouncedQuery.startsWith('/')) {
       setResults({});
       return;
@@ -243,7 +236,6 @@ function OmniSearchOverlay({
     const performSearch = async () => {
       setLoading(true);
       try {
-        // Filter categories if a specific filter is active
         const targetCategories =
           activeFilter === 'all' ? categories : categories.filter((c) => c.id === activeFilter);
 
@@ -275,15 +267,12 @@ function OmniSearchOverlay({
     };
 
     performSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery, activeFilter, categories, open, resetSearchState]);
 
-  // Handle Selection
   const handleSelect = useCallback(
     (item, category) => {
       onOpenChange(false);
-      resetSearchState(); // Replaced individual clears with reset function
-      // Execute category action
+      resetSearchState();
       if (category.onSelect) {
         category.onSelect(item);
       }
@@ -294,20 +283,18 @@ function OmniSearchOverlay({
   const handleStaticSelect = useCallback(
     (cmd) => {
       onOpenChange(false);
-      resetSearchState(); // Replaced individual clears with reset function
-      if (cmd.action) cmd.action();
+      resetSearchState();
+      if (cmd.action) {
+        cmd.action();
+      }
     },
     [onOpenChange, resetSearchState],
   );
 
-  // Autocomplete on Tab
   const handleKeyDown = (e) => {
     if (e.key === 'Tab') {
-      e.preventDefault(); // Stop focus loss immediately
-
-      // 1. Try to use the highlighted item from cmdk
+      e.preventDefault();
       if (activeValue) {
-        // Check static commands
         const staticMatch = staticCommands.find(
           (cmd) => cmd.label.toLowerCase() === activeValue.toLowerCase(),
         );
@@ -315,7 +302,6 @@ function OmniSearchOverlay({
           onQueryChange(staticMatch.label);
           return;
         }
-        // Check slash commands
         const slashMatch = slashCommands.find(
           (cmd) => cmd.label.toLowerCase() === activeValue.toLowerCase(),
         );
@@ -325,7 +311,6 @@ function OmniSearchOverlay({
         }
       }
 
-      // 2. Fallback: If no item is highlighted (rare), try to autocomplete best text match based on query
       if (query && query.length > 0) {
         let bestMatch = null;
         if (query.startsWith('/')) {
@@ -400,7 +385,6 @@ function OmniSearchOverlay({
                 active={activeFilter === cat.id}
                 onClick={() => setActiveFilter(cat.id)}
               >
-                {/* Render icon if needed, maybe simplistic? */}
                 {cat.label}
               </FilterChip>
             ))}
@@ -409,7 +393,6 @@ function OmniSearchOverlay({
           <Command.List>
             <Command.Empty>No results found.</Command.Empty>
 
-            {/* 1. Core Suggestions (Static Commands) */}
             {activeFilter === 'all' && !isCommandMode && (
               <Command.Group heading={!query || query.length < 2 ? 'Suggestions' : 'Navigation'}>
                 {staticCommands
@@ -447,22 +430,19 @@ function OmniSearchOverlay({
               />
             )}
 
-            {/* 2. Slash Commands - ALWAYS RENDER if 'all', let CMDK handle matching */}
             {activeFilter === 'all' && (
               <Command.Group heading="Command Center  ⌘/">
                 {slashCommands
                   .filter((cmd) => {
-                    // If we have a query (slash or text), let CMDK match it.
-                    // If empty, only show priority.
-                    if (query && query.length > 0) return true;
+                    if (query && query.length > 0) {
+                      return true;
+                    }
                     return cmd.isPriority;
                   })
                   .map((cmd) => (
                     <Command.Item
                       key={cmd.id}
                       onSelect={() => handleStaticSelect(cmd)}
-                      // Hack: Prepend / so it matches when user types / (Command Mode)
-                      // Append description so it's searchable too
                       value={`/ ${cmd.label} ${cmd.description || ''}`}
                     >
                       {cmd.icon}
@@ -483,11 +463,12 @@ function OmniSearchOverlay({
               </Command.Group>
             )}
 
-            {/* API Results - Hide in Command Mode */}
             {!isCommandMode &&
               Object.entries(results).map(([catId, items]) => {
                 const category = categories.find((c) => c.id === catId);
-                if (!category) return null;
+                if (!category) {
+                  return null;
+                }
 
                 return (
                   <Command.Group key={catId} heading={category.label}>
@@ -504,7 +485,6 @@ function OmniSearchOverlay({
                 );
               })}
 
-            {/* Create Options - Hide in Command Mode */}
             {query.length > 2 &&
               !isCommandMode &&
               categories
