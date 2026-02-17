@@ -77,6 +77,5 @@ module.exports = {
       targets: [{ src: 'src/fonts/*', dest: 'dist/fonts' }],
     }),
   ],
-  
   external: ['react', 'react-dom', 'react-router-dom'],
 };
