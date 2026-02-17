@@ -13,9 +13,7 @@ import { fetchMultipleEntities } from '../../services/utils/entityServiceAdapter
 import useDebounce from '../../hooks/useDebounce';
 
 const StyledCommand = styled(Command)(({ theme }) => ({
-  width: '100%',
   maxWidth: '680px',
-  height: 'auto',
   maxHeight: '800px',
   backgroundColor: 'rgba(22, 22, 24, 0.92)',
   borderRadius: '16px',
@@ -26,11 +24,7 @@ const StyledCommand = styled(Command)(({ theme }) => ({
   `,
   border: '1px solid rgba(255, 255, 255, 0.08)',
   fontFamily: 'inherit',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
   outline: 'none',
-  position: 'relative',
   zIndex: 1301,
   transform: 'translateZ(0)',
 
@@ -134,25 +128,16 @@ const Kbd = styled('kbd')({
   fontWeight: 500,
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   minWidth: '22px',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+
   marginRight: '8px',
   color: 'rgba(255, 255, 255, 0.8)',
   boxShadow: '0 1px 0 rgba(0,0,0,0.2)',
 });
 
-const ShortcutLabel = styled('span')({
-  display: 'flex',
-  alignItems: 'center',
-});
-
 const FilterChipsContainer = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
   gap: '8px',
   padding: '12px 24px 4px 24px',
-  overflowX: 'auto',
+
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
     display: 'none',
@@ -170,9 +155,7 @@ const FilterChip = styled('button')(({ active }) => ({
   fontWeight: 500,
   cursor: 'pointer',
   transition: 'background 0.1s ease',
-  whiteSpace: 'nowrap',
-  display: 'flex',
-  alignItems: 'center',
+
   gap: '6px',
   outline: 'none',
 
@@ -239,10 +222,10 @@ function OmniSearchOverlay({
         const targetCategories =
           activeFilter === 'all' ? categories : categories.filter((c) => c.id === activeFilter);
 
-        const payloadList = targetCategories.map((cat) => ({
-          service: cat.service,
+        const payloadList = targetCategories.map((category) => ({
+          service: category.service,
           payload: {
-            ...cat.payload,
+            ...category.payload,
             query: { search: debouncedQuery },
           },
         }));
@@ -250,11 +233,11 @@ function OmniSearchOverlay({
         const responses = await fetchMultipleEntities(payloadList);
 
         const newResults = {};
-        targetCategories.forEach((cat, index) => {
+        targetCategories.forEach((category, index) => {
           const response = responses[index];
           const items = Array.isArray(response) ? response : response?.items || [];
           if (items.length > 0) {
-            newResults[cat.id] = items;
+            newResults[category.id] = items;
           }
         });
 
@@ -281,29 +264,29 @@ function OmniSearchOverlay({
   );
 
   const handleStaticSelect = useCallback(
-    (cmd) => {
+    (command) => {
       onOpenChange(false);
       resetSearchState();
-      if (cmd.action) {
-        cmd.action();
+      if (command.action) {
+        command.action();
       }
     },
     [onOpenChange, resetSearchState],
   );
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
+  const handleKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
       if (activeValue) {
         const staticMatch = staticCommands.find(
-          (cmd) => cmd.label.toLowerCase() === activeValue.toLowerCase(),
+          (comma) => comma.label.toLowerCase() === activeValue.toLowerCase(),
         );
         if (staticMatch) {
           onQueryChange(staticMatch.label);
           return;
         }
         const slashMatch = slashCommands.find(
-          (cmd) => cmd.label.toLowerCase() === activeValue.toLowerCase(),
+          (comma) => comma.label.toLowerCase() === activeValue.toLowerCase(),
         );
         if (slashMatch) {
           onQueryChange(slashMatch.label);
@@ -314,12 +297,12 @@ function OmniSearchOverlay({
       if (query && query.length > 0) {
         let bestMatch = null;
         if (query.startsWith('/')) {
-          bestMatch = slashCommands.find((cmd) =>
-            cmd.label.toLowerCase().startsWith(query.toLowerCase()),
+          bestMatch = slashCommands.find((command) =>
+            command.label.toLowerCase().startsWith(query.toLowerCase()),
           );
         } else {
-          bestMatch = staticCommands.find((cmd) =>
-            cmd.label.toLowerCase().startsWith(query.toLowerCase()),
+          bestMatch = staticCommands.find((command) =>
+            command.label.toLowerCase().startsWith(query.toLowerCase()),
           );
         }
 
@@ -340,6 +323,7 @@ function OmniSearchOverlay({
     >
       <Fade in={open}>
         <StyledCommand
+          className="w-100 h-auto overflow-hidden d-flex flex-column position-relative"
           label="OmniSearch"
           onValueChange={(v) => setActiveValue(v)}
           shouldFilter={true}
@@ -371,21 +355,27 @@ function OmniSearchOverlay({
           </div>
 
           <FilterChipsContainer
+            className="d-flex align-items-center overflow-auto"
             style={{
               opacity: isCommandMode ? 0.3 : 1,
               pointerEvents: isCommandMode ? 'none' : 'auto',
             }}
           >
-            <FilterChip active={activeFilter === 'all'} onClick={() => setActiveFilter('all')}>
+            <FilterChip
+              className="text-nowrap d-flex align-items-center"
+              active={activeFilter === 'all'}
+              onClick={() => setActiveFilter('all')}
+            >
               All
             </FilterChip>
-            {categories.map((cat) => (
+            {categories.map((category) => (
               <FilterChip
-                key={cat.id}
-                active={activeFilter === cat.id}
-                onClick={() => setActiveFilter(cat.id)}
+                className="text-nowrap d-flex align-items-center"
+                key={category.id}
+                active={activeFilter === category.id}
+                onClick={() => setActiveFilter(category.id)}
               >
-                {cat.label}
+                {category.label}
               </FilterChip>
             ))}
           </FilterChipsContainer>
@@ -396,23 +386,25 @@ function OmniSearchOverlay({
             {activeFilter === 'all' && !isCommandMode && (
               <Command.Group heading={!query || query.length < 2 ? 'Suggestions' : 'Navigation'}>
                 {staticCommands
-                  .filter((cmd) => {
+                  .filter((command) => {
                     if (!query || query.length < 2) {
-                      return cmd.isPriority;
+                      return command.isPriority;
                     }
                     return true;
                   })
-                  .map((cmd) => (
+                  .map((command) => (
                     <Command.Item
-                      key={cmd.id}
-                      onSelect={() => handleStaticSelect(cmd)}
-                      value={cmd.label}
+                      key={command.id}
+                      onSelect={() => handleStaticSelect(command)}
+                      value={command.label}
                     >
-                      {cmd.icon}
-                      <span>{cmd.label}</span>
-                      {cmd.shortcut && (
+                      {command.icon}
+                      <span>{command.label}</span>
+                      {command.shortcut && (
                         <div style={{ marginLeft: 'auto' }}>
-                          <Kbd>{cmd.shortcut}</Kbd>
+                          <Kbd className="d-inline-flex align-items-center justify-content-center">
+                            {command.shortcut}
+                          </Kbd>
                         </div>
                       )}
                     </Command.Item>
@@ -433,30 +425,32 @@ function OmniSearchOverlay({
             {activeFilter === 'all' && (
               <Command.Group heading="Command Center  ⌘/">
                 {slashCommands
-                  .filter((cmd) => {
+                  .filter((command) => {
                     if (query && query.length > 0) {
                       return true;
                     }
-                    return cmd.isPriority;
+                    return command.isPriority;
                   })
-                  .map((cmd) => (
+                  .map((command) => (
                     <Command.Item
-                      key={cmd.id}
-                      onSelect={() => handleStaticSelect(cmd)}
-                      value={`/ ${cmd.label} ${cmd.description || ''}`}
+                      key={command.id}
+                      onSelect={() => handleStaticSelect(command)}
+                      value={`/ ${command.label} ${command.description || ''}`}
                     >
-                      {cmd.icon}
+                      {command.icon}
                       <div className="d-flex flex-column">
                         <div className="d-flex align-items-center gap-2">
-                          <span className="text-white">{cmd.label}</span>
-                          <span className="text-white-50 small">{cmd.description}</span>
+                          <span className="text-white">{command.label}</span>
+                          <span className="text-white-50 small">{command.description}</span>
                         </div>
-                        {cmd.app && (
-                          <span className="text-secondary opacity-75 small">{cmd.app}</span>
+                        {command.app && (
+                          <span className="text-secondary opacity-75 small">{command.app}</span>
                         )}
                       </div>
                       <div className="ms-auto d-flex gap-2">
-                        <Kbd>↵</Kbd>
+                        <Kbd className="d-inline-flex align-items-center justify-content-center">
+                          ↵
+                        </Kbd>
                       </div>
                     </Command.Item>
                   ))}
@@ -488,15 +482,15 @@ function OmniSearchOverlay({
             {query.length > 2 &&
               !isCommandMode &&
               categories
-                .filter((c) => activeFilter === 'all' || activeFilter === c.id)
+                .filter((category) => activeFilter === 'all' || activeFilter === category.id)
                 .map(
-                  (cat) =>
-                    cat.onCreate && (
-                      <Command.Group key={`create-${cat.id}`} heading={cat.label}>
+                  (category) =>
+                    category.onCreate && (
+                      <Command.Group key={`create-${category.id}`} heading={category.label}>
                         <Command.Item
                           onSelect={() => {
                             onOpenChange(false);
-                            cat.onCreate(query);
+                            category.onCreate(query);
                           }}
                         >
                           <ArrowForwardIcon />
@@ -508,25 +502,25 @@ function OmniSearchOverlay({
           </Command.List>
 
           <div cmdk-footer="true">
-            <ShortcutLabel>
-              <Kbd>
+            <span className="d-flex align-items-center">
+              <Kbd className="d-inline-flex align-items-center justify-content-center">
                 <ArrowUpIcon sx={{ fontSize: 12 }} />
               </Kbd>
-              <Kbd>
+              <Kbd className="d-inline-flex align-items-center justify-content-center">
                 <ArrowDownIcon sx={{ fontSize: 12 }} />
               </Kbd>
               Navigate
-            </ShortcutLabel>
-            <ShortcutLabel>
-              <Kbd>
+            </span>
+            <span className="d-flex align-items-center">
+              <Kbd className="d-inline-flex align-items-center justify-content-center">
                 <EnterIcon sx={{ fontSize: 12 }} />
               </Kbd>
               Select
-            </ShortcutLabel>
-            <ShortcutLabel>
-              <Kbd>esc</Kbd>
+            </span>
+            <span className="d-flex align-items-center">
+              <Kbd className="d-inline-flex align-items-center justify-content-center">esc</Kbd>
               Close
-            </ShortcutLabel>
+            </span>
           </div>
         </StyledCommand>
       </Fade>
