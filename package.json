@@ -66,6 +66,10 @@
     "link-loom",
     "react"
   ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.24.3",
     "@babel/preset-env": "^7.24.3",
@@ -77,6 +81,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-url": "^8.0.2",
     "postcss": "^8.4.38",
+    "react-router-dom": "^7.13.0",
     "rollup": "^4.13.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",

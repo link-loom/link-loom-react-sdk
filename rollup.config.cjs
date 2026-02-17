@@ -74,10 +74,8 @@ module.exports = {
       preventAssignment: true,
     }),
     copy({
-      targets: [
-        { src: 'src/fonts/*', dest: 'dist/fonts' }
-      ]
-    })
+      targets: [{ src: 'src/fonts/*', dest: 'dist/fonts' }],
+    }),
   ],
   external: ['react', 'react-dom'],
 };
