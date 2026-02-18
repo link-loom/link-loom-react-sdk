@@ -54,6 +54,7 @@ function TextEditor({
       toolbarOptions={props.toolbarOptions}
       autoGrow={props.autoGrow}
       autoFocus={autoFocus}
+      onSubmit={props.onSubmit}
     />
   );
 }

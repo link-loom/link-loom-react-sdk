@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
+import { Extension } from '@tiptap/core';
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from '@tiptap/starter-kit';
@@ -68,6 +69,33 @@ import '@/styles/_variables.scss';
 import '@/styles/_keyframe-animations.scss';
 
 import content from '@/components/tiptap-templates/simple/data/content.json';
+
+/**
+ * Custom TipTap extension that overrides the Enter key to trigger form submission.
+ * Shift+Enter retains the default behavior (inserts a hard break / new line).
+ *
+ * Uses a ref-based pattern so the keyboard shortcut always reads the latest
+ * `onSubmit` callback, avoiding stale-closure issues with TipTap's `useEditor`
+ * (which only initializes extensions once on mount).
+ *
+ * @param {React.MutableRefObject<Function|null>} onSubmitRef - Ref holding the current onSubmit callback.
+ */
+const createSubmitOnEnterExtension = (onSubmitRef) =>
+  Extension.create({
+    name: 'submitOnEnter',
+
+    addKeyboardShortcuts() {
+      return {
+        Enter: () => {
+          if (typeof onSubmitRef.current === 'function') {
+            onSubmitRef.current();
+            return true;
+          }
+          return false;
+        },
+      };
+    },
+  });
 
 const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile, options }) => {
   const shouldShow = (id) => !options || options.includes(id);
@@ -182,11 +210,23 @@ export function SimpleEditor({
   autoGrow,
   externalContent,
   autoFocus,
+  onSubmit,
 }) {
   const isMobile = useMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState('main');
   const toolbarRef = React.useRef(null);
+
+  /**
+   * Keep a ref to the latest onSubmit callback so the TipTap extension
+   * (created once on mount) always calls the current handler.
+   */
+  const onSubmitRef = React.useRef(onSubmit);
+  React.useEffect(() => {
+    onSubmitRef.current = onSubmit;
+  }, [onSubmit]);
+
+  const submitOnEnterExtension = React.useMemo(() => createSubmitOnEnterExtension(onSubmitRef), []);
 
   const editor = useEditor({
     content: initialContent,
@@ -225,6 +265,7 @@ export function SimpleEditor({
       }),
       TrailingNode,
       Link.configure({ openOnClick: false }),
+      submitOnEnterExtension,
     ],
   });
 
