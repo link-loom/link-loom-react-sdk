@@ -236,9 +236,12 @@ function OmniSearchOverlay({
         targetCategories.forEach((category, index) => {
           const response = responses[index];
           const items = Array.isArray(response) ? response : response?.items || [];
-          if (items.length > 0) {
-            newResults[category.id] = items;
+
+          if (!items || items.length === 0) {
+            return;
           }
+
+          newResults[category.id] = items;
         });
 
         setResults(newResults);
@@ -275,50 +278,59 @@ function OmniSearchOverlay({
   );
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
+    if (event.key !== 'Tab') {
+      return;
+    }
 
-      if (activeValue) {
-        const staticMatch = staticCommands.find(
-          (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
-        );
-        if (staticMatch) {
-          onQueryChange(staticMatch.label);
-          return;
-        }
+    event.preventDefault();
 
-        const slashMatch = slashCommands.find(
-          (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
-        );
-        if (slashMatch) {
-          const prefix = slashMatch.label?.startsWith('/') ? '' : '/';
-          onQueryChange(`${prefix}${slashMatch.label} `);
-          return;
-        }
+    if (activeValue) {
+      const staticMatch = staticCommands.find(
+        (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
+      );
+
+      if (staticMatch) {
+        onQueryChange(staticMatch.label);
+        return;
       }
 
-      if (query && query.length > 0) {
-        if (query.startsWith('/')) {
-          const searchStr = query.toLowerCase().trim();
-          const bestMatch = slashCommands.find((command) => {
-            const label = command.label?.toLowerCase() || '';
-            const labelHasSlash = label.startsWith('/');
-            const compareStr = labelHasSlash ? label : `/${label}`;
-            return compareStr.startsWith(searchStr);
-          });
-          if (bestMatch) {
-            const prefix = bestMatch.label?.startsWith('/') ? '' : '/';
-            onQueryChange(`${prefix}${bestMatch.label} `);
-          }
-        } else {
-          const bestMatch = staticCommands.find((command) =>
-            command.label?.toLowerCase().startsWith(query.toLowerCase()),
-          );
-          if (bestMatch) {
-            onQueryChange(bestMatch.label);
-          }
-        }
+      const slashMatch = slashCommands.find(
+        (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
+      );
+
+      if (slashMatch) {
+        const prefix = slashMatch.label?.startsWith('/') ? '' : '/';
+        onQueryChange(`${prefix}${slashMatch.label} `);
+        return;
       }
+    }
+
+    if (!query || query.length === 0) {
+      return;
+    }
+
+    if (query.startsWith('/')) {
+      const searchStr = query.toLowerCase().trim();
+      const bestMatch = slashCommands.find((command) => {
+        const label = command.label?.toLowerCase() || '';
+        const labelHasSlash = label.startsWith('/');
+        const compareStr = labelHasSlash ? label : `/${label}`;
+        return compareStr.startsWith(searchStr);
+      });
+
+      if (bestMatch) {
+        const prefix = bestMatch.label?.startsWith('/') ? '' : '/';
+        onQueryChange(`${prefix}${bestMatch.label} `);
+      }
+      return;
+    }
+
+    const bestMatch = staticCommands.find((command) =>
+      command.label?.toLowerCase().startsWith(query.toLowerCase()),
+    );
+
+    if (bestMatch) {
+      onQueryChange(bestMatch.label);
     }
   };
 
