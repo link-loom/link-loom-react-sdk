@@ -277,37 +277,46 @@ function OmniSearchOverlay({
   const handleKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
+
       if (activeValue) {
         const staticMatch = staticCommands.find(
-          (comma) => comma.label.toLowerCase() === activeValue.toLowerCase(),
+          (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
         );
         if (staticMatch) {
           onQueryChange(staticMatch.label);
           return;
         }
+
         const slashMatch = slashCommands.find(
-          (comma) => comma.label.toLowerCase() === activeValue.toLowerCase(),
+          (command) => command.label?.toLowerCase() === activeValue.toLowerCase(),
         );
         if (slashMatch) {
-          onQueryChange(slashMatch.label);
+          const prefix = slashMatch.label?.startsWith('/') ? '' : '/';
+          onQueryChange(`${prefix}${slashMatch.label} `);
           return;
         }
       }
 
       if (query && query.length > 0) {
-        let bestMatch = null;
         if (query.startsWith('/')) {
-          bestMatch = slashCommands.find((command) =>
-            command.label.toLowerCase().startsWith(query.toLowerCase()),
-          );
+          const searchStr = query.toLowerCase().trim();
+          const bestMatch = slashCommands.find((command) => {
+            const label = command.label?.toLowerCase() || '';
+            const labelHasSlash = label.startsWith('/');
+            const compareStr = labelHasSlash ? label : `/${label}`;
+            return compareStr.startsWith(searchStr);
+          });
+          if (bestMatch) {
+            const prefix = bestMatch.label?.startsWith('/') ? '' : '/';
+            onQueryChange(`${prefix}${bestMatch.label} `);
+          }
         } else {
-          bestMatch = staticCommands.find((command) =>
-            command.label.toLowerCase().startsWith(query.toLowerCase()),
+          const bestMatch = staticCommands.find((command) =>
+            command.label?.toLowerCase().startsWith(query.toLowerCase()),
           );
-        }
-
-        if (bestMatch) {
-          onQueryChange(bestMatch.label);
+          if (bestMatch) {
+            onQueryChange(bestMatch.label);
+          }
         }
       }
     }
@@ -325,7 +334,8 @@ function OmniSearchOverlay({
         <StyledCommand
           className="w-100 h-auto overflow-hidden d-flex flex-column position-relative"
           label="OmniSearch"
-          onValueChange={(v) => setActiveValue(v)}
+          value={activeValue}
+          onValueChange={setActiveValue}
           shouldFilter={true}
         >
           <div style={{ position: 'relative' }}>
@@ -396,7 +406,8 @@ function OmniSearchOverlay({
                     <Command.Item
                       key={command.id}
                       onSelect={() => handleStaticSelect(command)}
-                      value={command.label}
+                      value={command.label ? String(command.label) : `cmd-${command.id}`}
+                      keywords={[command.shortcut].filter(Boolean)}
                     >
                       {command.icon}
                       <span>{command.label}</span>
@@ -435,7 +446,13 @@ function OmniSearchOverlay({
                     <Command.Item
                       key={command.id}
                       onSelect={() => handleStaticSelect(command)}
-                      value={`/ ${command.label} ${command.description || ''}`}
+                      value={command.label ? String(command.label) : `slash-${command.id}`}
+                      keywords={[
+                        `/${command.label}`,
+                        `/ ${command.label}`,
+                        command.description,
+                        command.app,
+                      ].filter(Boolean)}
                     >
                       {command.icon}
                       <div className="d-flex flex-column">
@@ -470,6 +487,9 @@ function OmniSearchOverlay({
                       <Command.Item
                         key={item._id || item.id}
                         onSelect={() => handleSelect(item, category)}
+                        value={String(
+                          item.name || item.title || item.label || `item-${item._id || item.id}`,
+                        )}
                       >
                         {category.icon}
                         <span>{item.name || item.title || item.label || 'Unknown Item'}</span>
@@ -488,6 +508,7 @@ function OmniSearchOverlay({
                     category.onCreate && (
                       <Command.Group key={`create-${category.id}`} heading={category.label}>
                         <Command.Item
+                          value={`Create ${query}`}
                           onSelect={() => {
                             onOpenChange(false);
                             category.onCreate(query);
