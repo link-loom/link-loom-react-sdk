@@ -87,6 +87,18 @@ const createSubmitOnEnterExtension = (onSubmitRef) =>
     addKeyboardShortcuts() {
       return {
         Enter: () => {
+          // If we are in a list or code block, let Tiptap handle the Enter key natively
+          if (
+            this.editor.isActive('listItem') ||
+            this.editor.isActive('bulletList') ||
+            this.editor.isActive('orderedList') ||
+            this.editor.isActive('taskList') ||
+            this.editor.isActive('taskItem') ||
+            this.editor.isActive('codeBlock')
+          ) {
+            return false;
+          }
+
           if (typeof onSubmitRef.current === 'function') {
             onSubmitRef.current();
             return true;
