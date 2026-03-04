@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Command } from 'cmdk';
 import { styled, alpha } from '@mui/material/styles';
 import { Modal, Backdrop, Fade } from '@mui/material';
@@ -25,7 +25,7 @@ const StyledCommand = styled(Command)(({ theme }) => ({
   border: '1px solid rgba(255, 255, 255, 0.08)',
   fontFamily: 'inherit',
   outline: 'none',
-  zIndex: 1301,
+  zIndex: 1500,
   transform: 'translateZ(0)',
 
   '& [cmdk-input]': {
@@ -49,6 +49,22 @@ const StyledCommand = styled(Command)(({ theme }) => ({
     padding: '8px 12px',
     scrollBehavior: 'smooth',
     overscrollBehavior: 'contain',
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#383839 transparent',
+    '&::-webkit-scrollbar': {
+      width: '4px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#383839',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: '#d1d5db',
+    },
   },
 
   '& [cmdk-empty]': {
@@ -118,6 +134,7 @@ const StyledCommand = styled(Command)(({ theme }) => ({
 
 const StyledBackdrop = styled(Backdrop)({
   backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  zIndex: 1500,
 });
 
 const Kbd = styled('kbd')({
@@ -181,6 +198,7 @@ function OmniSearchOverlay({
   const [results, setResults] = useState({});
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeValue, setActiveValue] = useState('');
+  const commandRef = useRef(null);
 
   const { commands: contextCommands } = useOmniSearchRegistry();
 
@@ -199,6 +217,19 @@ function OmniSearchOverlay({
     setActiveValue('');
     onQueryChange('');
   }, [onQueryChange]);
+
+  const handleFadeEntered = useCallback(() => {
+    const input = commandRef.current?.querySelector('[cmdk-input]');
+    if (input && typeof input.focus === 'function') {
+      input.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(handleFadeEntered, 350);
+    return () => clearTimeout(t);
+  }, [open, handleFadeEntered]);
 
   useEffect(() => {
     if (!open) {
@@ -267,17 +298,34 @@ function OmniSearchOverlay({
   );
 
   const handleStaticSelect = useCallback(
-    (command) => {
+    (command, currentQuery) => {
       onOpenChange(false);
       resetSearchState();
       if (command.action) {
-        command.action();
+        command.action(currentQuery);
       }
     },
     [onOpenChange, resetSearchState],
   );
 
   const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      const trimmed = (query || '').trim();
+      if (trimmed.startsWith('/') && trimmed.length > 1) {
+        const searchStr = trimmed.toLowerCase();
+        const bestMatch = slashCommands.find((command) => {
+          const label = command.label?.toLowerCase() || '';
+          const normalizedLabel = label.startsWith('/') ? label : `/${label}`;
+          return searchStr === normalizedLabel || searchStr.startsWith(normalizedLabel + ' ');
+        });
+        if (bestMatch) {
+          event.preventDefault();
+          handleStaticSelect(bestMatch, query);
+          return;
+        }
+      }
+    }
+
     if (event.key !== 'Tab') {
       return;
     }
@@ -339,11 +387,14 @@ function OmniSearchOverlay({
       open={open}
       onClose={() => onOpenChange(false)}
       closeAfterTransition
+      disableAutoFocus
       slots={{ backdrop: StyledBackdrop }}
+      sx={{ zIndex: 1500 }}
       className="d-flex align-items-center justify-content-center"
     >
-      <Fade in={open}>
+      <Fade in={open} onEntered={handleFadeEntered}>
         <StyledCommand
+          ref={commandRef}
           className="w-100 h-auto overflow-hidden d-flex flex-column position-relative"
           label="OmniSearch"
           value={activeValue}
@@ -417,7 +468,7 @@ function OmniSearchOverlay({
                   .map((command) => (
                     <Command.Item
                       key={command.id}
-                      onSelect={() => handleStaticSelect(command)}
+                      onSelect={() => handleStaticSelect(command, query)}
                       value={command.label ? String(command.label) : `cmd-${command.id}`}
                       keywords={[command.shortcut].filter(Boolean)}
                     >
@@ -457,7 +508,7 @@ function OmniSearchOverlay({
                   .map((command) => (
                     <Command.Item
                       key={command.id}
-                      onSelect={() => handleStaticSelect(command)}
+                      onSelect={() => handleStaticSelect(command, query)}
                       value={command.label ? String(command.label) : `slash-${command.id}`}
                       keywords={[
                         `/${command.label}`,
