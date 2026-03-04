@@ -1,0 +1,19 @@
+.command-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a1a;
+  background-color: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.command-chip::before {
+  content: '/';
+  margin-right: 0px;
+  color: #5b4d7a;
+  font-weight: 600;
+}

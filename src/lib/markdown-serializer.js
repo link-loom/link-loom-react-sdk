@@ -63,6 +63,8 @@ export const serializeToMarkdown = (json) => {
                 return '\n';
             case 'image':
                 return `![${node.attrs.alt || ''}](${node.attrs.src})\n\n`;
+            case 'commandChip':
+                return '[/' + (node.attrs.label || '').trim() + ']';
             default:
                 return children;
         }
