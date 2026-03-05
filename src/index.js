@@ -50,7 +50,6 @@ export { serializeToMarkdown } from './lib/markdown-serializer.js';
 
 // Sidebar Components
 export { default as SidebarGroup } from './components/sidebar/group/SidebarGroup.component.jsx';
-export { default as SidebarProfile } from './components/sidebar/footer/SidebarProfile.component.jsx';
 export { default as SidebarFooter } from './components/sidebar/footer/SidebarFooter.component.jsx';
 export { default as SidebarRecursiveItem } from './components/sidebar/group/SidebarRecursiveItem.component.jsx';
 export * from './components/sidebar/group/Sidebar.styles.jsx';
