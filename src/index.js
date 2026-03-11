@@ -52,8 +52,8 @@ export { serializeToMarkdown } from './lib/markdown-serializer.js';
 export {
   AppRuntimeHostComponent as AppRuntimeHost,
   AppStudioComponent as AppStudio,
-  AppCatalogGridComponent as AppCatalogGrid,
-  AppCatalogCardComponent as AppCatalogCard,
+  AppMarketplaceGridComponent as AppMarketplaceGrid,
+  AppMarketplaceCardComponent as AppMarketplaceCard,
   AppEngineSDKProvider,
   useAppEngineSDK,
   useAppStudio,
