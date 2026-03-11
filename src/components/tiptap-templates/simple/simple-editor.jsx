@@ -18,6 +18,8 @@ import { Underline } from '@tiptap/extension-underline';
 import { Link } from '@/components/tiptap-extension/link-extension';
 import { Selection } from '@/components/tiptap-extension/selection-extension';
 import { TrailingNode } from '@/components/tiptap-extension/trailing-node-extension';
+import { CommandChip } from '@/components/tiptap-extension/command-chip-extension';
+import '@/components/tiptap-extension/command-chip.scss';
 
 // --- UI Primitives ---
 import { Button } from '@/components/tiptap-ui-primitive/button';
@@ -223,6 +225,7 @@ export function SimpleEditor({
   externalContent,
   autoFocus,
   onSubmit,
+  onEditorReady,
 }) {
   const isMobile = useMobile();
   const windowSize = useWindowSize();
@@ -238,6 +241,16 @@ export function SimpleEditor({
     onSubmitRef.current = onSubmit;
   }, [onSubmit]);
 
+  /**
+   * Keep a ref to the latest onContentUpdate callback.
+   * TipTap's useEditor creates the editor once on mount, so onUpdate closes
+   * over the initial value and never sees prop updates. The ref fixes this.
+   */
+  const onContentUpdateRef = React.useRef(onContentUpdate);
+  React.useEffect(() => {
+    onContentUpdateRef.current = onContentUpdate;
+  }, [onContentUpdate]);
+
   const submitOnEnterExtension = React.useMemo(() => createSubmitOnEnterExtension(onSubmitRef), []);
 
   const editor = useEditor({
@@ -245,7 +258,7 @@ export function SimpleEditor({
     immediatelyRender: false,
     autofocus: autoFocus ? 'end' : false,
     onUpdate: ({ editor }) => {
-      onContentUpdate?.(editor);
+      onContentUpdateRef.current?.(editor);
     },
     editorProps: {
       attributes: {
@@ -277,6 +290,7 @@ export function SimpleEditor({
       }),
       TrailingNode,
       Link.configure({ openOnClick: false }),
+      CommandChip,
       submitOnEnterExtension,
     ],
   });
@@ -302,6 +316,12 @@ export function SimpleEditor({
       return () => clearTimeout(timer);
     }
   }, [editor, autoFocus]);
+
+  React.useEffect(() => {
+    if (editor && onEditorReady) {
+      onEditorReady(editor);
+    }
+  }, [editor, onEditorReady]);
 
   React.useEffect(() => {
     if (!editor) {

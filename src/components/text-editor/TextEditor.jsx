@@ -55,6 +55,7 @@ function TextEditor({
       autoGrow={props.autoGrow}
       autoFocus={autoFocus}
       onSubmit={props.onSubmit}
+      onEditorReady={props.onEditorReady}
     />
   );
 }
