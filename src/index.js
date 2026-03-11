@@ -48,6 +48,31 @@ import './styles/_keyframe-animations.scss';
 
 export { serializeToMarkdown } from './lib/markdown-serializer.js';
 
+// App Engine (from @link-loom/cloud-sdk)
+export {
+  AppRuntimeHostComponent as AppRuntimeHost,
+  AppStudioComponent as AppStudio,
+  AppCatalogGridComponent as AppCatalogGrid,
+  AppCatalogCardComponent as AppCatalogCard,
+  AppEngineSDKProvider,
+  useAppEngineSDK,
+  useAppStudio,
+  useAppRuntime,
+  AppEngineAppDefinitionService,
+  AppEngineAppVersionService,
+  AppEngineAppFileService,
+  AppEngineAppBuildService,
+  AppEngineAppSessionService,
+  AppEngineAppPreferenceService,
+  AppEngineAppScaffoldService,
+  fetchEntityCollection,
+  fetchMultipleEntities,
+  fetchEntityRecord,
+  updateEntityRecord,
+  createEntityRecord,
+  deleteEntityRecord,
+} from '@link-loom/cloud-sdk';
+
 // Sidebar Components
 export { default as SidebarGroup } from './components/sidebar/group/SidebarGroup.component.jsx';
 export { default as SidebarFooter } from './components/sidebar/footer/SidebarFooter.component.jsx';

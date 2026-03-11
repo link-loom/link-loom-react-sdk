@@ -35,12 +35,14 @@
     "@tiptap/pm": "^2.22.3",
     "@tiptap/react": "^2.22.3",
     "@tiptap/starter-kit": "^2.22.3",
+    "axios": "^1.13.6",
     "clipboard": "^2.0.11",
     "cmdk": "^1.1.1",
     "react-select": "^5.8.0",
     "react-virtuoso": "^4.18.1",
     "sweetalert2": "^11.22.4",
-    "sweetalert2-react-content": "^5.1.0"
+    "sweetalert2-react-content": "^5.1.0",
+    "@link-loom/cloud-sdk": "1.0.2"
   },
   "scripts": {
     "build": "rollup -c",
