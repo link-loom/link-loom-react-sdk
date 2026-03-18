@@ -123,42 +123,66 @@ const DataGrid = (props) => {
                 'aria-labelledby': 'datagrid-action-menu-btn',
               }}
             >
-              {actions.map((action, index) =>
-                action.type === 'group' ? (
-                  <MenuItem
-                    key={index}
-                    disableRipple
-                    disableTouchRipple
-                    sx={{
-                      cursor: 'default',
-                      '&:hover': {
-                        backgroundColor: 'inherit',
-                      },
-                    }}
-                  >
-                    <ButtonGroup variant="outlined" aria-label="grouped actions" size="small">
-                      {action.items.map((item, idx) => (
-                        <Button
-                          key={idx}
-                          onClick={(event) => handleMenuItemClick(event, item.id, params)}
-                          data-testid={`datagrid-${action.id}-action-btn`}
-                        >
-                          {item.label}
-                        </Button>
-                      ))}
-                    </ButtonGroup>
-                  </MenuItem>
-                ) : (
-                  <MenuItem
-                    key={index}
-                    onClick={(event) => handleMenuItemClick(event, action.id, params)}
-                    data-testid={`datagrid-${action.id}-action-btn`}
-                  >
-                    {action.icon}
-                    <ListItemText>{action.label}</ListItemText>
-                  </MenuItem>
-                ),
-              )}
+              {actions
+                .filter((action) => {
+                  if (typeof action.hidden === 'function') {
+                    return !action.hidden(params.row);
+                  }
+                  return !action.hidden;
+                })
+                .map((action, index) =>
+                  action.type === 'group' ? (
+                    <MenuItem
+                      key={index}
+                      disableRipple
+                      disableTouchRipple
+                      sx={{
+                        cursor: 'default',
+                        '&:hover': {
+                          backgroundColor: 'inherit',
+                        },
+                      }}
+                    >
+                      <ButtonGroup variant="outlined" aria-label="grouped actions" size="small">
+                        {action.items
+                          .filter((item) => {
+                            if (typeof item.hidden === 'function') {
+                              return !item.hidden(params.row);
+                            }
+                            return !item.hidden;
+                          })
+                          .map((item, idx) => (
+                            <Button
+                              key={idx}
+                              onClick={(event) => handleMenuItemClick(event, item.id, params)}
+                              data-testid={`datagrid-${action.id}-action-btn`}
+                              disabled={
+                                typeof item.disabled === 'function'
+                                  ? item.disabled(params.row)
+                                  : item.disabled
+                              }
+                            >
+                              {item.label}
+                            </Button>
+                          ))}
+                      </ButtonGroup>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      key={index}
+                      onClick={(event) => handleMenuItemClick(event, action.id, params)}
+                      data-testid={`datagrid-${action.id}-action-btn`}
+                      disabled={
+                        typeof action.disabled === 'function'
+                          ? action.disabled(params.row)
+                          : action.disabled
+                      }
+                    >
+                      {action.icon}
+                      <ListItemText>{action.label}</ListItemText>
+                    </MenuItem>
+                  ),
+                )}
             </Menu>
           </>
         ),
