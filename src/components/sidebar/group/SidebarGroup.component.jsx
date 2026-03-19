@@ -121,7 +121,7 @@ const SidebarGroupComponent = ({
           sx={{ ml: 1 }}
         >
           <MenuItem disabled sx={{ fontWeight: 600, fontSize: "0.8rem", opacity: "1 !important" }}>
-            {title?.toUpperCase() || title || ''}
+            {typeof title === 'string' ? title.toUpperCase() : title || ''}
           </MenuItem>
           {items.map((item) => (
             <MenuItem
