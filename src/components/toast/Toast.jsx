@@ -304,14 +304,11 @@ export const Toast = ({ children, maxVisible = 4 }) => {
             )
           )}
 
-          {toasts.length > MAX_VISIBLE_CARDS && (
-            <div style={{ pointerEvents: 'auto', display: 'flex', justifyContent: 'center' }}>
+          {toasts.length > 1 && (
+            <div style={{ pointerEvents: 'auto', display: 'flex', justifyContent: 'center', gap: 8 }}>
               <button
                 type="button"
                 onClick={() => {
-                  window.dispatchEvent(
-                    new CustomEvent(VIEW_ALL_EVENT_NAME, { detail: { count: toasts.length } })
-                  );
                   toasts.forEach((t) => dismissToast(t.uid));
                 }}
                 style={{
@@ -331,8 +328,37 @@ export const Toast = ({ children, maxVisible = 4 }) => {
                 onMouseEnter={(e) => { e.currentTarget.style.background = '#F3F4F6'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.92)'; }}
               >
-                See all {toasts.length} tasks →
+                Hide all
               </button>
+              {toasts.length > MAX_VISIBLE_CARDS && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new CustomEvent(VIEW_ALL_EVENT_NAME, { detail: { count: toasts.length } })
+                    );
+                    toasts.forEach((t) => dismissToast(t.uid));
+                  }}
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    padding: '6px 20px',
+                    borderRadius: 20,
+                    border: '1px solid rgba(0,0,0,0.12)',
+                    background: 'rgba(255,255,255,0.92)',
+                    backdropFilter: 'blur(4px)',
+                    color: '#374151',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+                    transition: 'background 0.15s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#F3F4F6'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.92)'; }}
+                >
+                  See all {toasts.length} tasks →
+                </button>
+              )}
             </div>
           )}
         </div>
