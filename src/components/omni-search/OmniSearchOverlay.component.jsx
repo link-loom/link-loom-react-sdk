@@ -266,7 +266,9 @@ function OmniSearchOverlay({
         const newResults = {};
         targetCategories.forEach((category, index) => {
           const response = responses[index];
-          const items = Array.isArray(response) ? response : response?.items || [];
+          const items = Array.isArray(response)
+            ? response
+            : response?.result?.items || response?.items || [];
 
           if (!items || items.length === 0) {
             return;
@@ -437,7 +439,7 @@ function OmniSearchOverlay({
             <FilterChip
               className="text-nowrap d-flex align-items-center"
               active={activeFilter === 'all'}
-              onClick={() => setActiveFilter('all')}
+              onClick={() => { setActiveFilter('all'); handleFadeEntered(); }}
             >
               All
             </FilterChip>
@@ -446,7 +448,7 @@ function OmniSearchOverlay({
                 className="text-nowrap d-flex align-items-center"
                 key={category.id}
                 active={activeFilter === category.id}
-                onClick={() => setActiveFilter(category.id)}
+                onClick={() => { setActiveFilter(category.id); handleFadeEntered(); }}
               >
                 {category.label}
               </FilterChip>
@@ -548,10 +550,10 @@ function OmniSearchOverlay({
                   <Command.Group key={catId} heading={category.label}>
                     {items.map((item) => (
                       <Command.Item
-                        key={item._id || item.id}
+                        key={item.id || item._id}
                         onSelect={() => handleSelect(item, category)}
                         value={String(
-                          item.name || item.title || item.label || `item-${item._id || item.id}`,
+                          item.name || item.title || item.label || `item-${item.id || item._id}`,
                         )}
                       >
                         {category.icon}
