@@ -24,6 +24,29 @@ const boxStyles = {
   width: '100%',
 };
 
+const CustomSearchToolbar = ({ showExport }) => {
+  return (
+    <GridToolbarContainer>
+      <section className="col-12 d-flex flex-column mt-3">
+        <div className="d-flex justify-content-between mb-3">
+          <section>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+
+            {showExport && <GridToolbarExport />}
+          </section>
+
+          <GridToolbarQuickFilter
+            className="me-3 border-1"
+            placeholder="Search..."
+          />
+        </div>
+      </section>
+    </GridToolbarContainer>
+  );
+};
+
 const DataGrid = (props) => {
   const {
     rows,
@@ -60,38 +83,6 @@ const DataGrid = (props) => {
     if (onMenuItemClick) {
       onMenuItemClick(action, params?.row ?? {});
     }
-  };
-
-  const CustomSearchToolbar = () => {
-    const inputRef = useRef(null);
-
-    useEffect(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    });
-
-    return (
-      <GridToolbarContainer>
-        <section className="col-12 d-flex flex-column mt-3">
-          <div className="d-flex justify-content-between mb-3">
-            <section>
-              <GridToolbarColumnsButton />
-              <GridToolbarFilterButton />
-              <GridToolbarDensitySelector />
-
-              {showExport && <GridToolbarExport />}
-            </section>
-
-            <GridToolbarQuickFilter
-              className="me-3 border-1"
-              placeholder="Search..."
-              inputRef={inputRef}
-            />
-          </div>
-        </section>
-      </GridToolbarContainer>
-    );
   };
 
   const enhancedColumns = columns.map((column) => {
@@ -199,6 +190,7 @@ const DataGrid = (props) => {
   const defaultSlotProps = {
     toolbar: {
       showQuickFilter: true,
+      showExport,
     },
     ...slotProps,
   };
