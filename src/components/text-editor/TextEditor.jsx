@@ -56,6 +56,7 @@ function TextEditor({
       autoFocus={autoFocus}
       onSubmit={props.onSubmit}
       onEditorReady={props.onEditorReady}
+      ui={props.ui}
     />
   );
 }

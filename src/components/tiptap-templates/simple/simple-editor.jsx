@@ -226,6 +226,7 @@ export function SimpleEditor({
   autoFocus,
   onSubmit,
   onEditorReady,
+  ui,
 }) {
   const isMobile = useMobile();
   const windowSize = useWindowSize();
@@ -360,30 +361,58 @@ export function SimpleEditor({
         }
       `}</style>
       <EditorContext.Provider value={{ editor }}>
-        <Toolbar
-          ref={toolbarRef}
-          style={
-            isMobile
-              ? {
-                  bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-                }
-              : {}
-          }
-        >
-          {mobileView === 'main' ? (
-            <MainToolbarContent
-              onHighlighterClick={() => setMobileView('highlighter')}
-              onLinkClick={() => setMobileView('link')}
-              isMobile={isMobile}
-              options={toolbarOptions}
-            />
-          ) : (
-            <MobileToolbarContent
-              type={mobileView === 'highlighter' ? 'highlighter' : 'link'}
-              onBack={() => setMobileView('main')}
-            />
-          )}
-        </Toolbar>
+        {ui?.toolbar?.layout === 'inline' ? (
+          <div
+            ref={toolbarRef}
+            className={ui.toolbar.className || ''}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '8px 12px',
+              borderBottom: ui.toolbar.borderBottom || 'none',
+            }}
+          >
+            {ui.toolbar.title && (
+              <span style={{ fontSize: '13px', fontWeight: 600, color: ui.toolbar.titleColor || '#283439', whiteSpace: 'nowrap' }}>
+                {ui.toolbar.title}
+              </span>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <MainToolbarContent
+                onHighlighterClick={() => setMobileView('highlighter')}
+                onLinkClick={() => setMobileView('link')}
+                isMobile={isMobile}
+                options={toolbarOptions}
+              />
+            </div>
+          </div>
+        ) : (
+          <Toolbar
+            ref={toolbarRef}
+            style={
+              isMobile
+                ? {
+                    bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
+                  }
+                : {}
+            }
+          >
+            {mobileView === 'main' ? (
+              <MainToolbarContent
+                onHighlighterClick={() => setMobileView('highlighter')}
+                onLinkClick={() => setMobileView('link')}
+                isMobile={isMobile}
+                options={toolbarOptions}
+              />
+            ) : (
+              <MobileToolbarContent
+                type={mobileView === 'highlighter' ? 'highlighter' : 'link'}
+                onBack={() => setMobileView('main')}
+              />
+            )}
+          </Toolbar>
+        )}
         <div className="content-wrapper">
           <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
         </div>
