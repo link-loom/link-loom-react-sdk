@@ -50,10 +50,12 @@ const Breadcrumb = ({ config, params: extraParams = {} }) => {
       isParam = true;
       const paramName = segment.param;
       const paramValue = params[paramName];
-      const dictionary = labels[paramName];
+      const labelEntry = labels[paramName];
 
-      if (dictionary && dictionary[paramValue]) {
-        text = dictionary[paramValue];
+      if (typeof labelEntry === 'string') {
+        text = labelEntry;
+      } else if (labelEntry && labelEntry[paramValue]) {
+        text = labelEntry[paramValue];
       } else {
         text = fallbacks[paramName] || paramValue;
       }
