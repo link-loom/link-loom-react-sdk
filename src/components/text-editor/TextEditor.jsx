@@ -10,6 +10,8 @@ function TextEditor({
   index,
   outputFormat = 'html',
   autoFocus,
+  focusPosition = 'end',
+  syncMode = 'controlled',
   ...props
 }) {
   const decodedInitialValue = decodeURIComponent(modelraw || '');
@@ -54,6 +56,8 @@ function TextEditor({
       toolbarOptions={props.toolbarOptions}
       autoGrow={props.autoGrow}
       autoFocus={autoFocus}
+      focusPosition={focusPosition}
+      syncMode={syncMode}
       onSubmit={props.onSubmit}
       onEditorReady={props.onEditorReady}
       ui={props.ui}

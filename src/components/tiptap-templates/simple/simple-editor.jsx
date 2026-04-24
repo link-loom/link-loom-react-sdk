@@ -224,6 +224,8 @@ export function SimpleEditor({
   autoGrow,
   externalContent,
   autoFocus,
+  focusPosition = 'end',
+  syncMode = 'controlled',
   onSubmit,
   onEditorReady,
   ui,
@@ -257,7 +259,7 @@ export function SimpleEditor({
   const editor = useEditor({
     content: initialContent,
     immediatelyRender: false,
-    autofocus: autoFocus ? 'end' : false,
+    autofocus: autoFocus ? focusPosition : false,
     onUpdate: ({ editor }) => {
       onContentUpdateRef.current?.(editor);
     },
@@ -311,12 +313,25 @@ export function SimpleEditor({
     if (editor && autoFocus) {
       const timer = setTimeout(() => {
         if (!editor.isFocused) {
-          editor.commands.focus('end');
+          editor.commands.focus(focusPosition);
+          // When focusing at the start of a long document the cursor is
+          // technically visible, but the scroll container may still be
+          // parked at the bottom from a prior view. Pull the top-most
+          // block into view so the user lands where the cursor actually
+          // sits.
+          if (focusPosition === 'start') {
+            const root = editor.view?.dom;
+            if (root && typeof root.scrollTo === 'function') {
+              root.scrollTo({ top: 0 });
+            } else if (root) {
+              root.scrollTop = 0;
+            }
+          }
         }
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, [editor, autoFocus]);
+  }, [editor, autoFocus, focusPosition]);
 
   React.useEffect(() => {
     if (editor && onEditorReady) {
@@ -324,8 +339,18 @@ export function SimpleEditor({
     }
   }, [editor, onEditorReady]);
 
+  const externalSyncSeededRef = React.useRef(false);
   React.useEffect(() => {
     if (!editor) {
+      return;
+    }
+
+    // `uncontrolled` syncMode: accept the initial content once and then let
+    // the editor be the single source of truth. The parent can still read
+    // changes via `onContentUpdate`, but any re-render passing a stale
+    // `externalContent` (e.g. a round-trip through markdown→html that does
+    // not converge) will NOT clobber the editor state and the cursor.
+    if (syncMode === 'uncontrolled' && externalSyncSeededRef.current) {
       return;
     }
 
@@ -338,6 +363,7 @@ export function SimpleEditor({
     // Strict clearing check
     if (targetContent === '') {
       editor.commands.setContent('');
+      externalSyncSeededRef.current = true;
       return;
     }
 
@@ -350,7 +376,9 @@ export function SimpleEditor({
         editor.commands.setContent(targetContent, false);
       }
     }
-  }, [editor, externalContent]);
+
+    externalSyncSeededRef.current = true;
+  }, [editor, externalContent, syncMode]);
 
   return (
     <section className={`simple-editor ${autoGrow ? 'auto-grow' : ''}`} id={id}>
