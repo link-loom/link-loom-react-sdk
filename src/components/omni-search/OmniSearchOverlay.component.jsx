@@ -299,15 +299,90 @@ function OmniSearchOverlay({
     [onOpenChange, resetSearchState],
   );
 
+  const commandHasArgs = (command) => {
+    const props = command?.schema?.properties;
+    if (!props || typeof props !== 'object') {
+      return false;
+    }
+    return Object.keys(props).length > 0;
+  };
+
+  const queryHasArgsBeyondLabel = (currentQuery, label) => {
+    if (!currentQuery || !label) {
+      return false;
+    }
+    const labelHasSlash = label.startsWith('/');
+    const normalized = labelHasSlash ? label : `/${label}`;
+    const trimmed = currentQuery.trim();
+    if (!trimmed.toLowerCase().startsWith(normalized.toLowerCase())) {
+      return false;
+    }
+    const tail = trimmed.slice(normalized.length).trim();
+    return tail.length > 0;
+  };
+
+  const normalizeSlashTerm = (text) =>
+    String(text || '')
+      .trim()
+      .toLowerCase()
+      .replace(/^\/+/, '');
+
+  const overlayFilter = (value, search, keywords) => {
+    // Slash mode: match strictly against the command label so `description`
+    // and `app` (rendered for UX) never participate in filtering. Prefix
+    // matches outrank substring so the visible top item aligns with what
+    // Tab/Enter would autocomplete via handleKeyDown.
+    if (typeof search === 'string' && search.startsWith('/')) {
+      const normalizedValue = normalizeSlashTerm(value);
+      const normalizedSearch = normalizeSlashTerm(search);
+      if (!normalizedSearch) {
+        return 1;
+      }
+      if (normalizedValue.startsWith(normalizedSearch)) {
+        return 2;
+      }
+      return normalizedValue.includes(normalizedSearch) ? 1 : 0;
+    }
+    // Non-slash mode: substring match across value + keywords. Approximates
+    // cmdk's default behavior for static commands and dynamic category items
+    // without including command-center description/app fields.
+    const haystack = [value, ...(keywords || [])]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    const normalizedSearch = String(search || '').trim().toLowerCase();
+    if (!normalizedSearch) {
+      return 1;
+    }
+    return haystack.includes(normalizedSearch) ? 1 : 0;
+  };
+
   const handleStaticSelect = useCallback(
-    (command, currentQuery) => {
+    (command, currentQuery, options = {}) => {
+      const { forceExecute = false } = options;
+      // Defer execution for commands that accept arguments so the user can type
+      // them in the OmniSearch input before sending. When the user explicitly
+      // submits via Enter (forceExecute), we hand off to the command's action
+      // so the host can route the chip into the Cognitive Entry instead.
+      if (!forceExecute && commandHasArgs(command) && !queryHasArgsBeyondLabel(currentQuery, command.label)) {
+        const labelHasSlash = command.label?.startsWith('/');
+        const prefix = labelHasSlash ? '' : '/';
+        onQueryChange(`${prefix}${command.label} `);
+        setActiveValue(command.label);
+        const input = commandRef.current?.querySelector('[cmdk-input]');
+        if (input && typeof input.focus === 'function') {
+          input.focus();
+        }
+        return;
+      }
+
       onOpenChange(false);
       resetSearchState();
       if (command.action) {
         command.action(currentQuery);
       }
     },
-    [onOpenChange, resetSearchState],
+    [onOpenChange, resetSearchState, onQueryChange],
   );
 
   const handleKeyDown = (event) => {
@@ -322,7 +397,7 @@ function OmniSearchOverlay({
         });
         if (bestMatch) {
           event.preventDefault();
-          handleStaticSelect(bestMatch, query);
+          handleStaticSelect(bestMatch, query, { forceExecute: true });
           return;
         }
       }
@@ -402,6 +477,7 @@ function OmniSearchOverlay({
           value={activeValue}
           onValueChange={setActiveValue}
           shouldFilter={true}
+          filter={overlayFilter}
         >
           <div style={{ position: 'relative' }}>
             <SearchIcon
@@ -456,7 +532,7 @@ function OmniSearchOverlay({
           </FilterChipsContainer>
 
           <Command.List>
-            <Command.Empty>No results found.</Command.Empty>
+            <Command.Empty>{isCommandMode ? 'No matching commands.' : 'No results found.'}</Command.Empty>
 
             {activeFilter === 'all' && !isCommandMode && (
               <Command.Group heading={!query || query.length < 2 ? 'Suggestions' : 'Navigation'}>
@@ -513,10 +589,8 @@ function OmniSearchOverlay({
                       onSelect={() => handleStaticSelect(command, query)}
                       value={command.label ? String(command.label) : `slash-${command.id}`}
                       keywords={[
-                        `/${command.label}`,
-                        `/ ${command.label}`,
-                        command.description,
-                        command.app,
+                        command.label,
+                        command.label?.startsWith('/') ? command.label.slice(1) : `/${command.label}`,
                       ].filter(Boolean)}
                     >
                       {command.icon}
