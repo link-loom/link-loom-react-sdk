@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { List, Collapse, Tooltip, ListItemText, Menu, MenuItem, ListItemIcon } from "@mui/material";
+import {
+  List,
+  Collapse,
+  Tooltip,
+  ListItemText,
+  MenuItem,
+  ListItemIcon,
+  Popper,
+  Paper,
+  MenuList,
+  ClickAwayListener,
+} from "@mui/material";
 import {
   SidebarSectionHeader,
   SidebarHeaderIcon,
@@ -105,49 +116,50 @@ const SidebarGroupComponent = ({
           </List>
         </Collapse>
       ) : (
-        /* Condensed Mode Menu */
-        <Menu
+        /* Condensed Mode Popper (non-modal so it does not lock body scroll,
+           does not trap focus, and does not block clicks elsewhere; closes on
+           click outside via ClickAwayListener) */
+        <Popper
           anchorEl={headerAnchorEl}
           open={Boolean(headerAnchorEl)}
-          onClose={handleHeaderClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          sx={{ ml: 1 }}
+          placement="right-start"
+          modifiers={[{ name: "offset", options: { offset: [0, 8] } }]}
+          sx={{ zIndex: (theme) => theme.zIndex.modal, ml: 1 }}
         >
-          <MenuItem disabled sx={{ fontWeight: 600, fontSize: "0.8rem", opacity: "1 !important" }}>
-            {title}
-          </MenuItem>
-          {items.map((item) => (
-            <MenuItem
-              key={item.id}
-              onClick={(e) => {
-                if (item.onClick) item.onClick(e);
-                handleHeaderClose();
-              }}
-              sx={{ fontSize: "0.9rem", color: "#6c757d" }}
-            >
-              <ListItemIcon sx={{ minWidth: "30px !important" }}>{item.icon}</ListItemIcon>
-              {item.label}
-            </MenuItem>
-          ))}
-          {footer && (
-            <MenuItem
-              onClick={() => {
-                if (footer.onClick) footer.onClick();
-                handleHeaderClose();
-              }}
-              sx={{ borderTop: "1px solid rgba(0,0,0,0.05)", mt: 1, fontSize: "0.9rem", fontWeight: 500 }}
-            >
-              {footer.label}
-            </MenuItem>
-          )}
-        </Menu>
+          <ClickAwayListener onClickAway={handleHeaderClose}>
+            <Paper elevation={3}>
+              <MenuList autoFocusItem={false} dense>
+                <MenuItem disabled sx={{ fontWeight: 600, fontSize: "0.8rem", opacity: "1 !important" }}>
+                  {title}
+                </MenuItem>
+                {items.map((item) => (
+                  <MenuItem
+                    key={item.id}
+                    onClick={(e) => {
+                      if (item.onClick) item.onClick(e);
+                      handleHeaderClose();
+                    }}
+                    sx={{ fontSize: "0.9rem", color: "#6c757d" }}
+                  >
+                    <ListItemIcon sx={{ minWidth: "30px !important" }}>{item.icon}</ListItemIcon>
+                    {item.label}
+                  </MenuItem>
+                ))}
+                {footer && (
+                  <MenuItem
+                    onClick={() => {
+                      if (footer.onClick) footer.onClick();
+                      handleHeaderClose();
+                    }}
+                    sx={{ borderTop: "1px solid rgba(0,0,0,0.05)", mt: 1, fontSize: "0.9rem", fontWeight: 500 }}
+                  >
+                    {footer.label}
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Paper>
+          </ClickAwayListener>
+        </Popper>
       )}
     </List>
   );
