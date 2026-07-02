@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import styled from 'styled-components';
@@ -37,22 +37,35 @@ const transformToDatabaseFormat = (data) => {
 export default function CountrySelector({ value, label, onChange, disabled, variant }) {
   // UI States
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const isFirstRender = useRef(true);
 
+  // Sync selectedCountry from incoming `value` prop without breaking referential stability:
+  // only update state when the country actually changes (compared by primitive countryCode).
   useEffect(() => {
+    if (!value) return;
+
+    const next = transformNormalizedData(value?.country ?? null);
+    setSelectedCountry((prev) => {
+      if (prev?.countryCode === next?.countryCode) return prev;
+      return next;
+    });
+  }, [value]);
+
+  // Notify parent only when the selection actually changes (by primitive code),
+  // and skip the initial mount to avoid a phantom onChange before user interaction.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     onChange({
       country: transformToDatabaseFormat(selectedCountry),
     });
-  }, [selectedCountry]);
+  }, [selectedCountry?.countryCode]);
 
   const handleCountryChange = (event, newValue) => {
     setSelectedCountry(newValue);
   };
-
-  useEffect(() => {
-    if (value) {
-      setSelectedCountry(transformNormalizedData(value?.country ?? null));
-    }
-  }, [value]);
 
   return (
     <section className="row">
