@@ -106,6 +106,7 @@ const DataGrid = (props) => {
             </IconButton>
             <Menu
               elevation={1}
+              disableScrollLock
               id={'list-item-menu-' + params.row?.id}
               anchorEl={menuActionsAnchorElement}
               open={menuActionsSelected === `list-item-menu-${params.row?.id}`}
