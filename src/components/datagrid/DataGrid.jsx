@@ -116,6 +116,11 @@ const DataGrid = (props) => {
           : {};
 
       return {
+        // `display: 'flex'` makes the cell a flex container, which both centres
+        // the button and stops the cell's `text-overflow: ellipsis` from
+        // painting a clipped ellipsis dot when the button overflows its box.
+        display: 'flex',
+        align: 'center',
         ...widthDefault,
         ...column,
         renderCell: (params) => (
@@ -127,15 +132,18 @@ const DataGrid = (props) => {
               id={`list-item-menu-${params.row?.id}`}
               aria-haspopup="true"
               sx={{ paddingBottom: 0, paddingTop: 0 }}
-              onClick={(event) =>
-                actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget)
-              }
+              onClick={(event) => {
+                // The grid's own onRowClick must not fire alongside the menu.
+                event.stopPropagation();
+                actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget);
+              }}
             >
               <ActionsIcon className="fs-4" />
             </IconButton>
             <Menu
               elevation={1}
               disableScrollLock
+              onClick={(event) => event.stopPropagation()}
               id={'list-item-menu-' + params.row?.id}
               anchorEl={menuActionsAnchorElement}
               open={menuActionsSelected === `list-item-menu-${params.row?.id}`}

@@ -36,6 +36,7 @@ export const DATAGRID_PRESETS = {
     focusOutline: false,
     checkbox: { onHoverOnly: true, width: 40 },
     actions: { width: 48, icon: 'horizontal' },
+    rowCursor: 'pointer',
     sortIcons: 'hover',
     columnMenu: false,
     columnSeparators: false,
@@ -179,6 +180,7 @@ const has = (value) => value !== undefined && value !== null;
  *   checkbox.onHoverOnly     → sx opacity fade on .MuiDataGrid-cellCheckbox / -columnHeaderCheckbox
  *   sortIcons                → sx .MuiDataGrid-iconButtonContainer ('hover' | 'always' | 'none')
  *   columnSeparators: false  → sx .MuiDataGrid-columnSeparator display none
+ *   rowCursor                → sx .MuiDataGrid-row cursor ('pointer' on clickable lists)
  *   footer.height            → sx .MuiDataGrid-footerContainer (+ .MuiTablePagination-toolbar) minHeight
  *
  * Column-level keys are applied by the DataGrid component itself, because they
@@ -208,6 +210,7 @@ export const buildDataGridProps = (style = {}) => {
     selectedBg,
     radius,
     emptyMinHeight,
+    rowCursor,
   } = style || {};
 
   const props = {};
@@ -362,6 +365,10 @@ export const buildDataGridProps = (style = {}) => {
   if (columnSeparators === false) {
     rule('& .MuiDataGrid-columnSeparator', { display: 'none' });
   }
+
+  // ---- sx: row cursor -------------------------------------------------------
+  // A grid whose rows open something should say so on hover.
+  if (has(rowCursor)) rule('& .MuiDataGrid-row', { cursor: rowCursor });
 
   // ---- sx: footer -----------------------------------------------------------
   if (has(footer.height)) {
