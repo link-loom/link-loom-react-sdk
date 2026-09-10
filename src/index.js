@@ -2,6 +2,8 @@
 export { default as Alert } from './components/alert/Alert.jsx';
 export { default as CodeEditor } from './components/code-editor/CodeEditor.jsx';
 export { default as DataGrid } from './components/datagrid/DataGrid.jsx';
+export { DATAGRID_PRESETS, resolvePreset } from './components/datagrid/presets.js';
+export { getDataGridLocale } from './components/datagrid/locales.js';
 export { default as DocumentViewer } from './components/document-viewer/DocumentViewer.jsx';
 export { default as OffCanvas } from './components/offcanvas/OffCanvas.jsx';
 export { default as Placeholder } from './components/placeholder/Placeholder.jsx';
