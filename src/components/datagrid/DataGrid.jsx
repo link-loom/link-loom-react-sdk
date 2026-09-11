@@ -1,7 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { DataGrid as MuiDataGrid, GRID_CHECKBOX_SELECTION_FIELD } from '@mui/x-data-grid';
-import { Box, IconButton, Menu, MenuItem, ListItemText, ButtonGroup, Button } from '@mui/material';
-import { MoreVert as MoreVertIcon, MoreHoriz as MoreHorizIcon } from '@mui/icons-material';
+import { Box, Divider, IconButton, Menu, MenuItem, ListItemText, ButtonGroup, Button } from '@mui/material';
+import {
+  MoreVert as MoreVertIcon,
+  MoreHoriz as MoreHorizIcon,
+  ChevronRight as ChevronRightIcon,
+} from '@mui/icons-material';
 import { DefaultToolbar } from './toolbars.jsx';
 import { resolvePreset, buildDataGridProps, deepMerge } from './presets.js';
 
@@ -43,6 +47,132 @@ const toSxArray = (value) => (Array.isArray(value) ? value : [value]);
  * slotProps, initialState, pageSizeOptions, sx, ...) passed by the consumer
  * takes precedence over whatever the preset produced.
  */
+/**
+ * The actions a row actually shows: hidden ones removed, and then the dividers
+ * that no longer separate anything — leading, trailing or doubled — removed
+ * too, since which actions apply depends on the row.
+ */
+/**
+ * One entry that opens a nested menu. Keeping the related moves behind a single
+ * line is what stops a row menu from becoming a wall: the parent stays short
+ * and the detail is one hover away.
+ */
+const SubmenuItem = ({ action, row, onSelect, testId }) => {
+  const [anchor, setAnchor] = useState(null);
+  // Which way it opens is decided on the spot: to the right when the window
+  // has room, to the left when it does not — anything else and it lands on
+  // top of the menu it came from.
+  const [toLeft, setToLeft] = useState(false);
+  const closeTimer = React.useRef(null);
+
+  const items = (action.items || []).filter((item) =>
+    typeof item.hidden === 'function' ? !item.hidden(row) : !item.hidden,
+  );
+
+  if (items.length === 0) return null;
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  // A beat of grace, so crossing the gap between the two menus does not close
+  // the one you are reaching for.
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setAnchor(null), 180);
+  };
+
+  const open = (event) => {
+    cancelClose();
+    const element = event.currentTarget;
+    const rect = element.getBoundingClientRect();
+    setToLeft(window.innerWidth - rect.right < SUBMENU_MIN_WIDTH);
+    setAnchor(element);
+  };
+
+  return (
+    <>
+      <MenuItem
+        onMouseEnter={open}
+        onMouseLeave={scheduleClose}
+        onClick={(event) => {
+          event.stopPropagation();
+          open(event);
+        }}
+        data-testid={testId}
+      >
+        {action.icon}
+        <ListItemText>{action.label}</ListItemText>
+        <ChevronRightIcon fontSize="small" style={{ marginLeft: 8, opacity: 0.6 }} />
+      </MenuItem>
+      <Menu
+        elevation={1}
+        disableScrollLock
+        hideBackdrop
+        disableAutoFocus
+        disableEnforceFocus
+        disableRestoreFocus
+        anchorEl={anchor}
+        open={Boolean(anchor)}
+        onClose={() => setAnchor(null)}
+        onClick={(event) => event.stopPropagation()}
+        anchorOrigin={{ vertical: 'top', horizontal: toLeft ? 'left' : 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: toLeft ? 'right' : 'left' }}
+        // The root would otherwise sit over the parent menu and eat its hover.
+        style={{ pointerEvents: 'none' }}
+        MenuListProps={{
+          'aria-labelledby': 'datagrid-action-menu-btn',
+          onMouseEnter: cancelClose,
+          onMouseLeave: scheduleClose,
+          style: { pointerEvents: 'auto' },
+        }}
+      >
+        {items.map((item, index) => (
+          <MenuItem
+            key={index}
+            onClick={(event) => {
+              setAnchor(null);
+              onSelect(item.id, event);
+            }}
+            data-testid={`datagrid-${item.id}-action-btn`}
+            disabled={typeof item.disabled === 'function' ? item.disabled(row) : item.disabled}
+          >
+            {item.icon}
+            <ListItemText>{item.label}</ListItemText>
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+};
+
+const SUBMENU_MIN_WIDTH = 220;
+
+const visibleActions = (actions, row) => {
+  const shown = actions.filter((action) =>
+    typeof action.hidden === 'function' ? !action.hidden(row) : !action.hidden,
+  );
+
+  const usable = shown.filter(
+    (action) =>
+      action.type !== 'submenu' ||
+      (action.items || []).some((item) =>
+        typeof item.hidden === 'function' ? !item.hidden(row) : !item.hidden,
+      ),
+  );
+
+  return usable.filter((action, index) => {
+    if (action.type !== 'divider') return true;
+    const hasBefore = usable.slice(0, index).some((item) => item.type !== 'divider');
+    const hasAfter = usable.slice(index + 1).some((item) => item.type !== 'divider');
+    const previousIsDivider = usable[index - 1]?.type === 'divider';
+    return hasBefore && hasAfter && !previousIsDivider;
+  });
+};
+
 const DataGrid = (props) => {
   const {
     rows,
@@ -152,15 +282,20 @@ const DataGrid = (props) => {
                 'aria-labelledby': 'datagrid-action-menu-btn',
               }}
             >
-              {actions
-                .filter((action) => {
-                  if (typeof action.hidden === 'function') {
-                    return !action.hidden(params.row);
-                  }
-                  return !action.hidden;
-                })
-                .map((action, index) =>
-                  action.type === 'group' ? (
+              {visibleActions(actions, params.row).map((action, index) =>
+                  action.type === 'divider' ? (
+                    // `component="li"` because a menu list is a <ul>: an <hr>
+                    // is not a valid child of one and browsers drop it.
+                    <Divider key={index} component="li" sx={{ my: 0.5 }} />
+                  ) : action.type === 'submenu' ? (
+                    <SubmenuItem
+                      key={index}
+                      action={action}
+                      row={params.row}
+                      testId={`datagrid-${action.id}-action-btn`}
+                      onSelect={(id, event) => handleMenuItemClick(event, id, params)}
+                    />
+                  ) : action.type === 'group' ? (
                     <MenuItem
                       key={index}
                       disableRipple
@@ -201,17 +336,34 @@ const DataGrid = (props) => {
                       key={index}
                       onClick={(event) => handleMenuItemClick(event, action.id, params)}
                       data-testid={`datagrid-${action.id}-action-btn`}
+                      // A class as well as the sx, so a host whose stylesheet
+                      // outranks emotion can still say what destructive looks
+                      // like in its own design.
+                      className={action.danger ? 'datagrid-action--danger' : undefined}
                       disabled={
                         typeof action.disabled === 'function'
                           ? action.disabled(params.row)
                           : action.disabled
+                      }
+                      // `danger` reads as an ordinary item until the pointer is
+                      // on it, so a destructive action is never the loudest
+                      // thing in a menu you opened for something else.
+                      sx={
+                        action.danger
+                          ? {
+                              '&:hover': {
+                                color: 'error.main',
+                                backgroundColor: 'rgba(229, 72, 77, 0.08)',
+                              },
+                            }
+                          : undefined
                       }
                     >
                       {action.icon}
                       <ListItemText>{action.label}</ListItemText>
                     </MenuItem>
                   ),
-                )}
+              )}
             </Menu>
           </>
         ),
