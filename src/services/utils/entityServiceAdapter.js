@@ -2,9 +2,14 @@
  * Adapter to fetch a list of entities from a given service.
  */
 export async function fetchEntityCollection({ service, payload = {} }) {
-  const { query = {}, queryselector = 'all', exclude_status = 'deleted', page = 1, pageSize = 10 } = payload;
+  const { query = {}, queryselector = 'all', exclude_status = 'deleted', page = 1, pageSize = 10, ...rest } = payload;
   try {
+    // Anything else the caller put in the payload travels too. It used to be
+    // dropped here, which meant a consumer could not scope a search: the
+    // OmniSearch asked for every entity of a kind and got other tenants' rows
+    // back, with no way to say which organization was asking.
     return await new service().getByParameters({
+      ...rest,
       queryselector,
       exclude_status,
       search: query.search || '',
