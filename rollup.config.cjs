@@ -9,21 +9,68 @@ const peerDepsExternal = require('rollup-plugin-peer-deps-external');
 const replace = require('@rollup/plugin-replace');
 const url = require('@rollup/plugin-url');
 const copy = require('rollup-plugin-copy');
+const fs = require('fs');
+
+// Context-bearing packages come from the consumer so the kit and the host/app share one MUI, emotion and router instance.
+const EXTERNAL_PACKAGES = [
+  'react',
+  'react-dom',
+  'react-router-dom',
+  '@mui/material',
+  '@mui/icons-material',
+  '@mui/system',
+  '@mui/utils',
+  '@mui/x-data-grid',
+  '@mui/styled-engine',
+  '@emotion/react',
+  '@emotion/styled',
+];
+
+const RAW_SUFFIX = '?raw';
+const BASE64_SUFFIX = '?base64';
+
+// `import text from './file.css?raw'` → the file's contents as a string (StoneOS tokens injection).
+// `import data from './font.woff2?base64'` → the file's bytes as base64 (fonts inlined into injected CSS).
+const inlineAsset = () => ({
+  name: 'inline-asset',
+  resolveId(source, importer) {
+    const suffix = [RAW_SUFFIX, BASE64_SUFFIX].find((candidate) => source.endsWith(candidate));
+    if (!suffix || !importer) {
+      return null;
+    }
+    return path.resolve(path.dirname(importer), source.slice(0, -suffix.length)) + suffix;
+  },
+  load(id) {
+    if (id.endsWith(RAW_SUFFIX)) {
+      const filePath = id.slice(0, -RAW_SUFFIX.length);
+      this.addWatchFile(filePath);
+      return `export default ${JSON.stringify(fs.readFileSync(filePath, 'utf8'))};`;
+    }
+    if (id.endsWith(BASE64_SUFFIX)) {
+      const filePath = id.slice(0, -BASE64_SUFFIX.length);
+      this.addWatchFile(filePath);
+      return `export default ${JSON.stringify(fs.readFileSync(filePath).toString('base64'))};`;
+    }
+    return null;
+  },
+});
 
 module.exports = {
   input: 'src/index.js',
   output: [
     {
-      file: 'dist/react-sdk.cjs.js',
+      dir: 'dist',
       format: 'cjs',
       sourcemap: true,
-      inlineDynamicImports: true,
+      entryFileNames: 'react-sdk.cjs.js',
+      chunkFileNames: 'chunks/cjs/[name]-[hash].js',
     },
     {
-      file: 'dist/react-sdk.esm.js',
+      dir: 'dist',
       format: 'esm',
       sourcemap: true,
-      inlineDynamicImports: true,
+      entryFileNames: 'react-sdk.esm.js',
+      chunkFileNames: 'chunks/esm/[name]-[hash].js',
     },
   ],
   onwarn: function (warning, warn) {
@@ -36,6 +83,7 @@ module.exports = {
     warn(warning);
   },
   plugins: [
+    inlineAsset(),
     peerDepsExternal(),
     alias({
       entries: [
@@ -77,5 +125,5 @@ module.exports = {
       targets: [{ src: 'src/fonts/*', dest: 'dist/fonts' }],
     }),
   ],
-  external: ['react', 'react/jsx-runtime', 'react-dom', 'react-dom/client', 'react-router-dom'],
+  external: (id) => EXTERNAL_PACKAGES.some((name) => id === name || id.startsWith(`${name}/`)),
 };

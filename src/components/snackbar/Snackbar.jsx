@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Snackbar as MaterialSnackbar, Alert } from '@mui/material';
+import { Snackbar as MaterialSnackbar, Alert, useTheme } from '@mui/material';
 
 export const openSnackbar = (message, action) => {
   const event = new CustomEvent('snackbar', { detail: { message, action } });
@@ -7,6 +7,10 @@ export const openSnackbar = (message, action) => {
 };
 
 export const Snackbar = ({ children }) => {
+  // This provider is mounted by the host, usually above the StoneOS theme provider, so the
+  // `MuiSnackbar` portal scope in createStoneOSTheme never reaches it. It carries the scope
+  // itself instead — otherwise the toast is the one portaled surface that ignores dark mode.
+  const theme = useTheme();
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState({ message: '', action: '' });
 
@@ -29,7 +33,12 @@ export const Snackbar = ({ children }) => {
   return (
     <>
       {children}
-      <MaterialSnackbar open={isOpenSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+      <MaterialSnackbar
+        data-stos-theme={theme?.palette?.mode === 'dark' ? 'dark' : 'light'}
+        open={isOpenSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.action}

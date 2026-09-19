@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Card, CardContent, CardActions } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { ArrowForward as ArrowForwardIcon } from '@mui/icons-material';
 
 /**
  * HEX to RGBA

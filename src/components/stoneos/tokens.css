@@ -1,0 +1,448 @@
+/* ------------------------------------------------------------------
+   StoneOS UI kit tokens. Values are ported 1:1 from Mi Retail's --mr-*.
+
+   The kit is injected into host pages that own their global styles, so
+   nothing here targets an element selector at the top level: tokens and
+   base typography live under `.stos-app` (the provider's wrapper) and under
+   `[data-stos-theme]` (MUI portals: menus, popovers, dialogs, poppers).
+   ------------------------------------------------------------------ */
+.stos-app,
+[data-stos-theme='light'] {
+  --stos-font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --stos-font-display: var(--stos-font-ui);
+  --stos-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+
+  --stos-text-primary: #1b2233;
+  --stos-text-secondary: #515d72;
+  /* Kept in step with STOS_COLORS in stoneos.constants.js. */
+  --stos-text-tertiary: #596378;
+  --stos-text-disabled: #b3bac7;
+  --stos-text-inverse: #ffffff;
+
+  --stos-bg-page: #eff3f9;
+  --stos-bg-surface: #ffffff;
+  --stos-bg-muted: #f2f4f8;
+  --stos-table-surface: var(--stos-bg-page);
+  --stos-board-column: color-mix(in srgb, #8b95a7 7%, #eff3f9);
+  --stos-board-edge: color-mix(in srgb, #8b95a7 30%, #eff3f9);
+  --stos-tile-hover: color-mix(in srgb, #ffffff 55%, #eff3f9);
+  --stos-bg-hover: #f2f4f8;
+  --stos-bg-selected: #eceff5;
+  --stos-border: #e4e8ef;
+  --stos-border-strong: #d3d9e3;
+
+  --stos-brand: #3c4876;
+  --stos-brand-hover: #2f3a5f;
+  --stos-brand-tint: color-mix(in srgb, #3c4876 10%, white);
+  --stos-brand-tint-strong: color-mix(in srgb, #3c4876 16%, white);
+  --stos-brand-edge: color-mix(in srgb, #3c4876 42%, white);
+  --stos-accent: #37b6e0;
+  --stos-accent-tint: color-mix(in srgb, #37b6e0 14%, white);
+  --stos-drop-bg: color-mix(in srgb, #37b6e0 7%, white);
+  --stos-drop-ring: color-mix(in srgb, #37b6e0 45%, white);
+  --stos-menu-text: rgb(32, 32, 32);
+  --stos-menu-icon: rgb(131, 131, 131);
+
+  --stos-success: #2fb673;
+  --stos-warning: #ffb020;
+  --stos-danger: #e5484d;
+  --stos-info: #37b6e0;
+
+  --stos-state-new: #8a94a6;
+  --stos-state-ready: #4f8df5;
+  --stos-state-progress: #37b6e0;
+  --stos-state-waiting: #ffb020;
+  --stos-state-blocked: #e5484d;
+  --stos-state-review: #8b5cf6;
+  --stos-state-completed: #2fb673;
+  --stos-state-cancelled: #9a9da3;
+
+  --stos-prio-low: #8a94a6;
+  --stos-prio-medium: #4f8df5;
+  --stos-prio-high: #ffb020;
+  --stos-prio-critical: #e5484d;
+
+  --stos-c-coral: #f0655c;
+  --stos-c-cyan: #37b6e0;
+  --stos-c-amber: #ffb020;
+  --stos-c-green: #2fb673;
+  --stos-c-purple: #8b5cf6;
+  --stos-c-pink: #ef5ba1;
+  --stos-c-blue: #4f8df5;
+  --stos-c-indigo: #3c4876;
+
+  --stos-fs-11: 11px;
+  --stos-fs-12: 12px;
+  --stos-fs-13: 13px;
+  --stos-fs-14: 14px;
+  --stos-fs-16: 16px;
+  --stos-fs-18: 18px;
+  --stos-fs-22: 22px;
+  --stos-fs-28: 28px;
+
+  --stos-radius-xs: 4px;
+  --stos-radius-sm: 6px;
+  --stos-radius-md: 8px;
+  --stos-radius-lg: 12px;
+  --stos-radius-xl: 16px;
+  --stos-radius-pill: 999px;
+
+  --stos-shadow-none: none;
+  --stos-shadow-sm: 0 1px 2px rgba(19, 19, 22, 0.06);
+  --stos-shadow-md: 0 8px 24px -8px rgba(19, 19, 22, 0.16), 0 2px 6px -2px rgba(19, 19, 22, 0.06);
+  --stos-shadow-lg: 0 24px 56px -20px rgba(19, 19, 22, 0.24);
+
+  --stos-row-h: 40px;
+  --stos-row-h-compact: 36px;
+  --stos-table-header-h: 32px;
+  --stos-group-header-h: 36px;
+  --stos-topbar-h: 70px;
+  --stos-host-fab-safe: 72px;
+  --stos-sidebar-w: 240px;
+  --stos-sidebar-w-condensed: 70px;
+  --stos-launchpad-w: 50px;
+  --stos-launchpad-gap: 0px;
+  --stos-launchpad-inset: 8px;
+  --stos-leftbar-w: calc(
+    var(--stos-sidebar-w) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
+      var(--stos-launchpad-gap)
+  );
+  --stos-leftbar-w-condensed: calc(
+    var(--stos-sidebar-w-condensed) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
+      var(--stos-launchpad-gap)
+  );
+  --stos-launchpad-bg: linear-gradient(180deg, #dce7fa 0%, #eaf1fd 55%, #eaf1fd 100%);
+  --stos-launchpad-edge: rgba(31, 39, 64, 0.08);
+  --stos-launchpad-fg: #3b4560;
+  --stos-launchpad-fg-strong: #1f2740;
+  --stos-launchpad-mark: #2563eb;
+  --stos-launchpad-ring: rgba(31, 39, 64, 0.22);
+  --stos-launchpad-tile: rgba(31, 39, 64, 0.08);
+
+  --stos-kbd-bg: #f3f4f6;
+  --stos-kbd-text: #111827;
+  --stos-motion-fast: 120ms;
+}
+
+.stos-app[data-theme='dark'],
+[data-stos-theme='dark'] {
+  --stos-text-primary: #e7ebf3;
+  --stos-text-secondary: #aab3c5;
+  /* Kept in step with STOS_DARK_COLORS in stoneos.constants.js. Both were under AA at 11-12px. */
+  --stos-text-tertiary: #96a1b6;
+  --stos-text-disabled: #828da3;
+  --stos-text-inverse: #11151f;
+
+  --stos-bg-page: #11151f;
+  --stos-bg-surface: #161b27;
+  --stos-bg-muted: #1d2330;
+  --stos-board-column: color-mix(in srgb, #8b95a7 6%, #11151f);
+  --stos-board-edge: color-mix(in srgb, #8b95a7 22%, #11151f);
+  --stos-tile-hover: color-mix(in srgb, #161b27 55%, #11151f);
+  --stos-bg-hover: #1d2330;
+  --stos-bg-selected: #232a3a;
+  --stos-border: #2a3142;
+  --stos-border-strong: #353d51;
+
+  --stos-brand: #8b9bd6;
+  --stos-brand-hover: #a3b0e0;
+  --stos-brand-tint: color-mix(in srgb, #8b9bd6 14%, #161b27);
+  --stos-brand-tint-strong: color-mix(in srgb, #8b9bd6 22%, #161b27);
+  --stos-brand-edge: color-mix(in srgb, #8b9bd6 48%, #161b27);
+  --stos-accent: #4fc3ea;
+  --stos-accent-tint: color-mix(in srgb, #4fc3ea 16%, #161b27);
+  --stos-drop-bg: color-mix(in srgb, #4fc3ea 9%, #161b27);
+  --stos-drop-ring: color-mix(in srgb, #4fc3ea 45%, #161b27);
+  --stos-menu-text: #e7ebf3;
+  --stos-menu-icon: #7f8aa0;
+
+  --stos-success: #3cc985;
+  --stos-warning: #ffbe45;
+  --stos-danger: #f0676b;
+  --stos-info: #4fc3ea;
+
+  --stos-state-new: #9aa3b4;
+  --stos-state-ready: #6a9ff7;
+  --stos-state-progress: #4fc3ea;
+  --stos-state-waiting: #ffbe45;
+  --stos-state-blocked: #f0676b;
+  --stos-state-review: #a07cf8;
+  --stos-state-completed: #3cc985;
+  --stos-state-cancelled: #a6a9ae;
+
+  --stos-prio-low: #9aa3b4;
+  --stos-prio-medium: #6a9ff7;
+  --stos-prio-high: #ffbe45;
+  --stos-prio-critical: #f0676b;
+
+  --stos-c-coral: #f47d75;
+  --stos-c-cyan: #4fc3ea;
+  --stos-c-amber: #ffbe45;
+  --stos-c-green: #3cc985;
+  --stos-c-purple: #a07cf8;
+  --stos-c-pink: #f276b1;
+  --stos-c-blue: #6a9ff7;
+  --stos-c-indigo: #8b9bd6;
+
+  --stos-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --stos-shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+  --stos-shadow-lg: 0 24px 56px -20px rgba(0, 0, 0, 0.7);
+
+  --stos-launchpad-bg: linear-gradient(180deg, #1a2233 0%, #161b27 55%, #161b27 100%);
+  --stos-launchpad-edge: rgba(231, 235, 243, 0.08);
+  --stos-launchpad-fg: #aab3c5;
+  --stos-launchpad-fg-strong: #e7ebf3;
+  --stos-launchpad-mark: #6a9ff7;
+  --stos-launchpad-ring: rgba(231, 235, 243, 0.22);
+  --stos-launchpad-tile: rgba(231, 235, 243, 0.08);
+
+  --stos-kbd-bg: #232a3a;
+  --stos-kbd-text: #e7ebf3;
+}
+
+/* ===== Fonts: local() first. See README for the self-hosted woff2 files. ===== */
+/* Inter 400/500/600 faces are generated with inlined woff2 sources (theme/fontFaces.js). */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('JetBrains Mono'), local('JetBrainsMono-Regular');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('JetBrains Mono Medium'), local('JetBrainsMono-Medium');
+}
+
+/* ===== Base typography, scoped to the kit container AND to its portals ===== */
+/* Bare elements only: MUI components (Typography rendered as h2, InputLabel as label) keep their own styles.
+
+   `[data-stos-theme]` is here for the same reason it is on the token block: menus, popovers,
+   dialogs, modals, tooltips and snackbars render outside `.stos-app`, so whatever the container
+   establishes has to be re-established on them or their content falls back to the host page.
+   Ink and font travel; `background` does not — a Modal or Popper root spans the viewport, and
+   painting it with the page colour would wash the host out. */
+.stos-app,
+[data-stos-theme] {
+  font: 400 var(--stos-fs-13) / 1.5 var(--stos-font-ui);
+  color: var(--stos-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stos-app {
+  background: var(--stos-bg-page);
+}
+
+.stos-app :where(h1, h2, h3, h4, h5, h6):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h1, h2, h3, h4, h5, h6):where(:not([class*='Mui'])) {
+  font-weight: 600;
+  color: var(--stos-text-primary);
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.stos-app :where(h1):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h1):where(:not([class*='Mui'])) { font-size: var(--stos-fs-28); }
+.stos-app :where(h2):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h2):where(:not([class*='Mui'])) { font-size: var(--stos-fs-22); }
+.stos-app :where(h3):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h3):where(:not([class*='Mui'])) { font-size: var(--stos-fs-18); }
+.stos-app :where(h4):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h4):where(:not([class*='Mui'])) { font-size: var(--stos-fs-16); }
+.stos-app :where(h5):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h5):where(:not([class*='Mui'])) { font-size: var(--stos-fs-14); }
+.stos-app :where(h6):where(:not([class*='Mui'])),
+[data-stos-theme] :where(h6):where(:not([class*='Mui'])) { font-size: var(--stos-fs-13); }
+
+/* Typeface, asserted against a host that shouts.
+
+   A StoneOS surface is embedded in host pages that own their global stylesheet, and those
+   stylesheets routinely carry a blanket declaration like
+   `a, button, h1..h6, span, strong { font-family: system-ui !important }`. `!important` is not a
+   specificity contest — no selector, however precise, wins against it — so the kit has to answer
+   in the same currency or every heading, button label and chip inside it renders in the host's
+   typeface. Measured in the Mi Retail host before this rule: the app container resolved Inter
+   while every `span`, `button`, `a`, `h1`-`h6` and MUI Typography inside it, in the page body and
+   in every portal alike, resolved system-ui.
+
+   Deliberately narrow: `font-family` only, so size, weight, colour and spacing stay ordinary
+   declarations anyone can override. Elements that legitimately carry another face opt out —
+   the kit's own monospace affordances, and icon fonts, which would otherwise render their
+   private-use codepoints as literal text. */
+.stos-app
+  :where(h1, h2, h3, h4, h5, h6, a, button, span, strong, small, label, li, th, td, figcaption, legend, summary),
+[data-stos-theme]
+  :where(h1, h2, h3, h4, h5, h6, a, button, span, strong, small, label, li, th, td, figcaption, legend, summary) {
+  font-family: var(--stos-font-ui) !important;
+}
+
+.stos-app :where(code, kbd, samp, pre, pre *, .stos-mono, .stos-mono *),
+[data-stos-theme] :where(code, kbd, samp, pre, pre *, .stos-mono, .stos-mono *) {
+  font-family: var(--stos-font-mono) !important;
+}
+
+/* Icon fonts render glyphs from a private-use range; forcing a text face on them prints mojibake. */
+.stos-app :where([class*='material-icons'], [class*='material-symbols'], [class*='fa-'], [data-stos-keep-font]),
+.stos-app :where([class*='material-icons'], [class*='material-symbols'], [class*='fa-'], [data-stos-keep-font]) *,
+[data-stos-theme] :where([class*='material-icons'], [class*='material-symbols'], [class*='fa-'], [data-stos-keep-font]),
+[data-stos-theme] :where([class*='material-icons'], [class*='material-symbols'], [class*='fa-'], [data-stos-keep-font]) * {
+  font-family: inherit;
+}
+
+/* Heading ink, asserted for MUI headings too.
+
+   A StoneOS surface is usually embedded in a host that has its own global stylesheet, and hosts
+   commonly ship a rule like `body h1, body h2, ... { color: var(--host-text) }`. A MUI Typography
+   heading sets no colour of its own - it inherits - so that host rule wins over inheritance and
+   paints the heading in the host's ink. When the host is light and the embedded app is dark, the
+   heading disappears into the surface (measured at 1.08:1 before this rule).
+
+   A single class beats any number of element selectors, so `.stos-app` is enough to win without
+   escalating. `:where()` keeps the rest of the selector weightless, which leaves an explicit
+   `sx={{ color }}` on a heading (an emotion class of equal specificity, injected later) still in
+   charge. Colour only: sizing and weight stay with whatever owns them.
+
+   `[data-stos-theme]` covers MUI portals - dialogs, modals, menus, popovers, tooltips, snackbars -
+   which render outside `.stos-app` and are where most headings actually live. */
+.stos-app :where(h1, h2, h3, h4, h5, h6),
+[data-stos-theme] :where(h1, h2, h3, h4, h5, h6) {
+  color: var(--stos-text-primary);
+}
+
+.stos-app :where(small):where(:not([class*='Mui'])) {
+  font-size: var(--stos-fs-12);
+}
+
+.stos-app :where(label):where(:not([class*='Mui'])) {
+  font-size: var(--stos-fs-12);
+  font-weight: 500;
+  color: var(--stos-text-secondary);
+}
+
+.stos-mono,
+.stos-app :where(code, kbd, samp) {
+  font-family: var(--stos-font-mono);
+  font-size: 0.92em;
+}
+
+.stos-app ::selection {
+  background: var(--stos-brand-tint);
+}
+
+.stos-app :where(strong, b) {
+  font-weight: 600;
+}
+
+/* ===== Reveal on hover: secondary actions stay out of the way ===== */
+.stos-reveal-host .stos-reveal-on-hover {
+  opacity: 0;
+  transition: opacity var(--stos-motion-fast, 120ms) ease-in-out;
+}
+/* `:focus-within` also matches focus left behind by a mouse click, so clicking a row or a bubble
+   pinned its actions open long after the pointer had moved on. `:has(:focus-visible)` reveals them
+   for keyboard focus only, which is what the affordance is for, while an open menu keeps them up
+   through `aria-expanded`. */
+.stos-reveal-host:hover .stos-reveal-on-hover,
+.stos-reveal-host:has(:focus-visible) .stos-reveal-on-hover,
+.stos-reveal-host .stos-reveal-on-hover:focus-visible,
+.stos-reveal-host .stos-reveal-on-hover[aria-expanded='true'] {
+  opacity: 1;
+}
+@media (hover: none), (pointer: coarse) {
+  .stos-reveal-host .stos-reveal-on-hover {
+    opacity: 1;
+  }
+}
+
+/* ===== Row action menus (ported from Mi Retail .mr-row-menu) ===== */
+.MuiPaper-root:has(> .stos-row-menu) {
+  border-radius: var(--stos-radius-md, 8px);
+  border: 1px solid var(--stos-border, #e4e8ef);
+  box-shadow: var(--stos-shadow-md);
+  min-width: 208px;
+  overflow: hidden;
+}
+.stos-row-menu {
+  padding: 4px;
+}
+.stos-row-menu .MuiMenuItem-root {
+  min-height: 30px;
+  padding: 4px 8px;
+  border-radius: var(--stos-radius-sm, 6px);
+  font-size: var(--stos-fs-13, 13px);
+  line-height: 1.4;
+  color: var(--stos-menu-text, rgb(32, 32, 32));
+}
+.stos-row-menu .MuiMenuItem-root .MuiListItemText-primary {
+  font-size: var(--stos-fs-13, 13px);
+  color: inherit;
+}
+.stos-row-menu .MuiMenuItem-root .MuiSvgIcon-root {
+  font-size: 14px;
+  margin-right: 10px;
+  color: var(--stos-menu-icon, rgb(131, 131, 131));
+}
+.stos-row-menu .MuiDivider-root {
+  margin: 4px -4px;
+}
+.stos-row-menu .MuiMenuItem-root:has(.MuiButtonGroup-root) {
+  padding: 4px 6px 8px;
+  min-height: 0;
+}
+.stos-row-menu .MuiButtonGroup-root {
+  width: auto;
+}
+.stos-row-menu .MuiButtonGroup-root .MuiButton-root {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 3px 10px;
+  font-size: var(--stos-fs-11, 11px);
+  line-height: 1.6;
+  text-transform: none;
+  white-space: nowrap;
+  color: var(--stos-text-secondary);
+  border-color: var(--stos-border);
+}
+.stos-row-menu .MuiButtonGroup-root .MuiButton-root:hover {
+  color: var(--stos-text-primary);
+  border-color: var(--stos-border-strong);
+  background: var(--stos-bg-hover);
+}
+.stos-row-menu .stos-action--danger:hover,
+.stos-row-menu .stos-action--danger:hover .MuiSvgIcon-root {
+  color: var(--stos-danger, #e5484d);
+}
+
+/* ===== Entity detail modal: a shell with its own close hides the PopUp's floating one ===== */
+.MuiModal-root .bg-white:has(.stos-detail-shell--own-close) > button:first-child {
+  display: none;
+}
+
+/* ===== Motion ===== */
+@keyframes stos-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stos-app *,
+  .stos-app *::before,
+  .stos-app *::after,
+  [data-stos-theme] *,
+  [data-stos-theme] *::before,
+  [data-stos-theme] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

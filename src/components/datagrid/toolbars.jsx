@@ -17,8 +17,8 @@ import {
 export const CustomSearchToolbar = ({ showExport }) => {
   return (
     <GridToolbarContainer>
-      <section className="col-12 d-flex flex-column mt-3">
-        <div className="d-flex justify-content-between mb-3">
+      <section style={{ display: 'flex', flexDirection: 'column', width: '100%', marginTop: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
           <section>
             <GridToolbarColumnsButton />
             <GridToolbarFilterButton />
@@ -27,10 +27,7 @@ export const CustomSearchToolbar = ({ showExport }) => {
             {showExport && <GridToolbarExport />}
           </section>
 
-          <GridToolbarQuickFilter
-            className="me-3 border-1"
-            placeholder="Search..."
-          />
+          <GridToolbarQuickFilter sx={{ mr: 2 }} placeholder="Search..." />
         </div>
       </section>
     </GridToolbarContainer>

@@ -95,7 +95,9 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
       disableEnforceFocus
     >
       <ModalPositioner $sidebarOpen={sidebarOpen}>
-        <Box className="bg-white" style={styles}>
+        {/* The token carries its own light value as the fallback, so a host without the kit
+            renders exactly as before while a kit host follows light/dark. */}
+        <Box style={{ background: 'var(--stos-bg-surface, #ffffff)', ...styles }}>
           <CloseButton onClick={handleClose}>
             <CloseIcon className={styles?.closeButtonColor} />
           </CloseButton>
@@ -103,7 +105,7 @@ const PopUp = ({ children, title, id, isOpen, setIsOpen, styles }) => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {title}
           </Typography>
-          <Box className="overflow-auto" style={{ maxHeight: '95vh' }}>
+          <Box style={{ overflow: 'auto', maxHeight: '95vh' }}>
             {children}
           </Box>
         </Box>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import CheckIcon from '@mui/icons-material/Check';
+import { RadioButtonChecked as RadioButtonCheckedIcon, Check as CheckIcon } from '@mui/icons-material';
 
 function StatusSelector({ status, statuses, size, statusSelected }) {
   const defaultColor = '#B0BEC5';

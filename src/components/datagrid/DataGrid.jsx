@@ -268,7 +268,7 @@ const DataGrid = (props) => {
                 actionsMenuOnClick(`list-item-menu-${params.row?.id}`, event.currentTarget);
               }}
             >
-              <ActionsIcon className="fs-4" />
+              <ActionsIcon sx={{ fontSize: '1.5rem' }} />
             </IconButton>
             <Menu
               elevation={1}

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, matchPath, Link as RouterLink } from 'react-router-dom';
 import { Breadcrumbs, Link } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { NavigateNext as NavigateNextIcon } from '@mui/icons-material';
 
 /**
  * Breadcrumb Component
