@@ -6,11 +6,62 @@
    base typography live under `.stos-app` (the provider's wrapper) and under
    `[data-stos-theme]` (MUI portals: menus, popovers, dialogs, poppers).
    ------------------------------------------------------------------ */
+/* Theme-independent tokens (type, sizes, radii, layout, motion) for every scope, light or dark.
+   `[data-stos-theme]` carries them to the portals of both themes: the colour blocks below match
+   one theme each, and a dark dialog used to lose these and fall back to the host page's face. */
 .stos-app,
-[data-stos-theme='light'] {
+[data-stos-theme] {
   --stos-font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --stos-font-display: var(--stos-font-ui);
   --stos-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+
+  --stos-table-surface: var(--stos-bg-page);
+
+  --stos-fs-11: 11px;
+  --stos-fs-12: 12px;
+  --stos-fs-13: 13px;
+  --stos-fs-14: 14px;
+  --stos-fs-16: 16px;
+  --stos-fs-18: 18px;
+  --stos-fs-22: 22px;
+  --stos-fs-28: 28px;
+
+  --stos-radius-xs: 4px;
+  --stos-radius-sm: 6px;
+  --stos-radius-md: 8px;
+  --stos-radius-lg: 12px;
+  --stos-radius-xl: 16px;
+  --stos-radius-pill: 999px;
+
+  --stos-shadow-none: none;
+
+  --stos-row-h: 40px;
+  --stos-row-h-compact: 36px;
+  --stos-table-header-h: 32px;
+  --stos-group-header-h: 36px;
+  --stos-topbar-h: 70px;
+  --stos-host-fab-safe: 72px;
+  --stos-sidebar-w: 240px;
+  --stos-sidebar-w-condensed: 70px;
+  --stos-launchpad-w: 50px;
+  --stos-launchpad-gap: 0px;
+  --stos-launchpad-inset: 8px;
+  --stos-leftbar-w: calc(
+    var(--stos-sidebar-w) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
+      var(--stos-launchpad-gap)
+  );
+  --stos-leftbar-w-condensed: calc(
+    var(--stos-sidebar-w-condensed) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
+      var(--stos-launchpad-gap)
+  );
+
+  --stos-motion-fast: 120ms;
+}
+
+.stos-app,
+[data-stos-theme='light'] {
+  /* Scrollbars and native controls follow the kit's theme, not the host page's. */
+  color-scheme: light;
 
   --stos-text-primary: #1b2233;
   --stos-text-secondary: #515d72;
@@ -22,7 +73,6 @@
   --stos-bg-page: #eff3f9;
   --stos-bg-surface: #ffffff;
   --stos-bg-muted: #f2f4f8;
-  --stos-table-surface: var(--stos-bg-page);
   --stos-board-column: color-mix(in srgb, #8b95a7 7%, #eff3f9);
   --stos-board-edge: color-mix(in srgb, #8b95a7 30%, #eff3f9);
   --stos-tile-hover: color-mix(in srgb, #ffffff 55%, #eff3f9);
@@ -71,46 +121,10 @@
   --stos-c-blue: #4f8df5;
   --stos-c-indigo: #3c4876;
 
-  --stos-fs-11: 11px;
-  --stos-fs-12: 12px;
-  --stos-fs-13: 13px;
-  --stos-fs-14: 14px;
-  --stos-fs-16: 16px;
-  --stos-fs-18: 18px;
-  --stos-fs-22: 22px;
-  --stos-fs-28: 28px;
-
-  --stos-radius-xs: 4px;
-  --stos-radius-sm: 6px;
-  --stos-radius-md: 8px;
-  --stos-radius-lg: 12px;
-  --stos-radius-xl: 16px;
-  --stos-radius-pill: 999px;
-
-  --stos-shadow-none: none;
   --stos-shadow-sm: 0 1px 2px rgba(19, 19, 22, 0.06);
   --stos-shadow-md: 0 8px 24px -8px rgba(19, 19, 22, 0.16), 0 2px 6px -2px rgba(19, 19, 22, 0.06);
   --stos-shadow-lg: 0 24px 56px -20px rgba(19, 19, 22, 0.24);
 
-  --stos-row-h: 40px;
-  --stos-row-h-compact: 36px;
-  --stos-table-header-h: 32px;
-  --stos-group-header-h: 36px;
-  --stos-topbar-h: 70px;
-  --stos-host-fab-safe: 72px;
-  --stos-sidebar-w: 240px;
-  --stos-sidebar-w-condensed: 70px;
-  --stos-launchpad-w: 50px;
-  --stos-launchpad-gap: 0px;
-  --stos-launchpad-inset: 8px;
-  --stos-leftbar-w: calc(
-    var(--stos-sidebar-w) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
-      var(--stos-launchpad-gap)
-  );
-  --stos-leftbar-w-condensed: calc(
-    var(--stos-sidebar-w-condensed) + var(--stos-launchpad-inset) + var(--stos-launchpad-w) +
-      var(--stos-launchpad-gap)
-  );
   --stos-launchpad-bg: linear-gradient(180deg, #dce7fa 0%, #eaf1fd 55%, #eaf1fd 100%);
   --stos-launchpad-edge: rgba(31, 39, 64, 0.08);
   --stos-launchpad-fg: #3b4560;
@@ -121,11 +135,11 @@
 
   --stos-kbd-bg: #f3f4f6;
   --stos-kbd-text: #111827;
-  --stos-motion-fast: 120ms;
 }
 
 .stos-app[data-theme='dark'],
 [data-stos-theme='dark'] {
+  color-scheme: dark;
   --stos-text-primary: #e7ebf3;
   --stos-text-secondary: #aab3c5;
   /* Kept in step with STOS_DARK_COLORS in stoneos.constants.js. Both were under AA at 11-12px. */

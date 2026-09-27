@@ -22,7 +22,10 @@ The provider:
 
 MUI portals (menus, popovers, dialogs, poppers, drawers) render outside `.stos-app`. The theme sets
 `data-stos-theme="light|dark"` on them through `defaultProps`, and the token set is also declared on
-`[data-stos-theme]`, so `var(--stos-*)` resolves inside portals too.
+`[data-stos-theme]`, so `var(--stos-*)` resolves inside portals too: the theme-independent tokens (type,
+sizes, radii, layout, motion) on every `[data-stos-theme]`, the colours on `[data-stos-theme='light']` and
+`[data-stos-theme='dark']`. A token that is the same in both themes goes in the shared block, or a dark
+portal will not have it.
 
 ## Tokens
 
@@ -31,6 +34,8 @@ MUI portals (menus, popovers, dialogs, poppers, drawers) render outside `.stos-a
 - Dark set under `.stos-app[data-theme="dark"]`: surfaces `#11151f` / `#161b27` / `#1d2330`, borders
   `#2a3142`, text `#e7ebf3` / `#aab3c5` / `#7f8aa0`, brand `#8b9bd6`, brighter semantic hues.
 - Extra tokens: `--stos-kbd-bg`, `--stos-kbd-text`, `--stos-motion-fast` (120ms).
+- Both token blocks set `color-scheme` (`light` / `dark`), so scrollbars and native controls follow the
+  kit's theme instead of the host page's.
 - Host safe area: `--stos-host-fab-safe` (72px) is the width the host's Command Center FAB covers at the
   bottom-right corner. Apps reserve it as right padding on bottom bars whose right end touches that corner
   (`padding-right: var(--stos-host-fab-safe, 72px)`); the fallback keeps apps correct on older kits.
@@ -107,6 +112,42 @@ New:
 | `NotificationCard` | `title`, `body`, `time`, `avatarUrl`, `icon`, `severity` (`info`·`success`·`warning`·`error`), `actions[{id,label}]` (max 2), `onAction(action)`, `onClick`, `onClose`, `closeLabel`, `width`, `sx` |
 | `ShortcutKeys` | `combo` (`'mod+shift+k'` or array of combos), `sx`. `mod` = ⌘ on Apple platforms, Ctrl elsewhere. Helpers: `formatShortcut`, `isApplePlatform` |
 | `useDirtyState(initialValues, { onSave })` | → `{ values, setField, setValues, isDirty, status, error, save, discard, reset }`; `onSave` may return the new baseline; follows new `initialValues` only while clean |
+
+### Record patterns (promoted from Mi Retail Workspaces)
+
+The patterns every StoneOS business app shares in a record's detail and create form (`business-core.md`
+§5.4, `app-blueprint.md` §5). Copy lives in `labels` (English defaults, merged over the exported
+`*_LABELS`); data arrives through injected loaders, never through a fetch inside the kit.
+
+**Quiet fields.** `STOS_QUIET_FIELD` (`{ size: 'small', fullWidth: true, sx: STOS_QUIET_FIELD_SX }`) is spread
+on every `TextField`, `Autocomplete` or picker text field of a property band: no frame or fill at rest, the
+`--stos-border` frame and the paper fill on hover and focus, clear and expand affordances only while the
+field is in play, quiet while disabled. `EntityDetailShell` brings a `meta[].render` cell to
+`STOS_FIELD_TEXT_INSET` (6px) with `STOS_BAND_FIELD_SX` (text inputs, multiline, adorned, autocomplete and
+date pickers) and gives the label and the plain `value` cells the same inset, so each value starts exactly
+under its label.
+
+| Component | Props |
+|---|---|
+| `EvidenceList` | `pieces[{id,label,url,note,added_by{identity,name},added_at}]`, `editable`, `actor{identity,name}`, `onAttach(piece)` (answer `false` or throw to keep the draft), `onRemove(piece, index)` (the caller confirms), `onOpenLink(url)` (default: new tab, `noopener`), `formatTimestamp`, `labels` (`EVIDENCE_LIST_LABELS`), `sx`. Only `http(s)` links get an Open button |
+| `Pulse` | `loadPage({ page, pageSize })` (→ `{ items, totalPages }`, a Link Loom envelope or a list; a rejection or `success: false` is a failed load with a retry, never an empty history), `subjectKey`, `refreshKey`, `pageSize` (25), `labels` (`PULSE_LABELS`, merged one level deep: `periods`, `verbTitles`, `summaries`, `fields`), `locale`, `timeZone`, `summarize(entry)`, `glyphOf(entry)` (`pulseGlyphOf`), `renderValue({ change, side, value })`, `resolveReference(field, value)`, `resolvePerson(value)`, `hiddenFields`, `sx` |
+| `OrganizationPicker` | `value`, `onChange(organization \| null)`, `searchOrganizations({ search, pageSize })`, `myOrganization`, `includeMine` (true), `label`, `placeholder`, `disabled`, `autoFocus`, `error`, `helperText`, `size`, `labels` (`ORGANIZATION_PICKER_LABELS`), `sx`. Loads on open, narrows on the server (300ms), your organization first; a failed or unauthorized directory says so and offers a retry |
+| `OrganizationAvatar` | `organization{display_name,slug,logo_url}`, `size`, `sx`. Logo (falls back when it fails to load), or the initial on the muted surface |
+| `OrganizationBadge` | `organization`, `size`, `variant`, `caption`, `strong`, `labels`, `sx`. Avatar + name + Veripass verified mark (`is_verified`) |
+| `WorkspacePicker` | `organizationId`, `loadWorkspaces({ organizationId })`, `value` (id), `valueSnapshot`, `onChange(id, workspace)`, `disabled`, `label`, `placeholder`, `showSlug` (true), `renderIcon(icon, { color, fontSize })`, `labels` (`WORKSPACE_PICKER_LABELS`), `sx`. Listing-only workspaces (`is_listing_only`) carry a lock; the intake keeps its glyph and reads as `labels.intake` until renamed |
+| `WorkspaceSquare` | `workspace{id,name,slug,kind,ui{color,icon}}`, `size`, `radius`, `renderIcon`, `sx` |
+
+Pulse entries follow the Mi Retail activity shape: `{ id, verb, occurred_at, actor_identity,
+context: { actor_display_name }, source, organization_id, payload: { changes: [{ field, kind, from, to }],
+reason, target_organization, issuing_organization } }`. A verb is read by its ending
+(`record_state_changed`, `record.state_changed` → `state_changed`; `PULSE_ACTIONS`); change kinds are
+`PULSE_CHANGE_KINDS` (`text`, `rich_text`, `person`, `stage`, `date`, `catalog`, `reference`, `number`, `flag`,
+`structured`). An app's own verbs (`record_review_cancelled`) are titled by their full name in
+`labels.verbTitles`, summarized by `entry.summary` (or `summarize`) and drawn by `glyphOf`. Rows are grouped by
+`PULSE_PERIODS` in the reader's time zone; Up/Down/Home/End move the selection; under 720px of container width
+the detail replaces the list with a way back. Nothing in Pulse edits.
+Helpers: `summarizePulseEntry(entry, labels, { locale })`, `pulseGlyphOf(entry)`, `resolveWorkspaceUi`,
+`workspaceNameOf`.
 
 ### Ribbon
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 import EntityModalTopBar from './EntityModalTopBar.component.jsx';
 import KeyValueRow from './KeyValueRow.component.jsx';
+import { STOS_BAND_FIELD_SX, STOS_FIELD_TEXT_INSET } from '../quiet-field/quietField.constants.js';
 
 function NeutralTag({ label, sx = {} }) {
   return (
@@ -32,6 +33,7 @@ function NeutralTag({ label, sx = {} }) {
  * Entity detail modal skeleton: top bar → header (h3 title, mono slug, tags) → meta band on the
  * muted surface → tabs → fixed-height scrollable tab body → optional footer.
  * tags: strings, `{ label, sx }` or `{ node }`. meta: [{ label, value, mono, render }]. tabs: [{ id, label, icon, content }].
+ * A `render` cell holds a quiet field (`STOS_QUIET_FIELD`); its label is aligned with the field's text.
  */
 function EntityDetailShell({
   breadcrumbSection,
@@ -136,16 +138,29 @@ function EntityDetailShell({
           {meta.map((item) => (
             <Box key={item.label} sx={{ minWidth: 0 }}>
               {item.render ? (
+                // The label carries the inset a quiet field's own text has (and every field is brought
+                // to it), so a value starts exactly under its label: the band reads as two lines of
+                // text, not as a row of boxes each with a different margin.
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25, mb: 1 }}>
-                  <Typography variant="caption" sx={{ color: 'text.tertiary' }}>
+                  <Typography variant="caption" sx={{ color: 'text.tertiary', pl: STOS_FIELD_TEXT_INSET }}>
                     {item.label}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', minHeight: 24, minWidth: 0 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      minHeight: 24,
+                      minWidth: 0,
+                      ...STOS_BAND_FIELD_SX,
+                    }}
+                  >
                     {item.render}
                   </Box>
                 </Box>
               ) : (
-                <KeyValueRow label={item.label} value={item.value} mono={item.mono} />
+                <Box sx={{ pl: STOS_FIELD_TEXT_INSET }}>
+                  <KeyValueRow label={item.label} value={item.value} mono={item.mono} />
+                </Box>
               )}
             </Box>
           ))}
