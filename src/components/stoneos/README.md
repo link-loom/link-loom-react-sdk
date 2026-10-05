@@ -105,7 +105,7 @@ New:
 
 | Component | Props |
 |---|---|
-| `AppTopBar` | 44px. `breadcrumb[{id,label,to,onClick}]` (last = current), `onBack`, `backLabel`, `leading`, `syncIndicator`, `right`, `sticky`, `sx` |
+| `AppTopBar` | 44px. `breadcrumb[{id,label,to,onClick}]` (last = current), `breadcrumbLabel`, `onBack`, `backLabel`, `leading`, `syncIndicator`, `right`, `sticky`, `sx` |
 | `ViewModeToggle` | `value`, `onChange(value)`, `options[{value,label,icon}]` (default list/grid), `label`, `sx`. 28px segmented control, arrow keys move |
 | `SyncStatusIndicator` | `status` (`saved`·`saving`·`offline`·`conflict`·`error`), `labels`, `descriptions` (tooltip), `showCaption`, `onClick`, `sx` |
 | `DocumentCard` | `title`, `meta`, `thumbnailUrl`, `icon`, `pinned`, `pinnedLabel`, `actions` (RowActionsMenu items, revealed on hover), `actionsLabel`, `selected`, `variant` (`row`·`tile`), `untitledLabel`, `onOpen`, `sx` |

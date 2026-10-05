@@ -5,12 +5,14 @@ import { ArrowBackOutlined } from '@mui/icons-material';
 
 /**
  * 44px app chrome: back button · breadcrumb · sync indicator slot · right slot.
- * breadcrumb: [{ id, label, to, onClick }] — the last item is the current page.
+ * breadcrumb: [{ id, label, to, onClick }] — the last item is the current page; `breadcrumbLabel` names it for
+ * assistive technology (in the app's language).
  */
 function AppTopBar({
   breadcrumb = [],
   onBack,
   backLabel = 'Back',
+  breadcrumbLabel = 'Breadcrumb',
   leading,
   syncIndicator,
   right,
@@ -50,7 +52,7 @@ function AppTopBar({
 
       <Box
         component="nav"
-        aria-label="Breadcrumb"
+        aria-label={breadcrumbLabel}
         sx={{ display: 'flex', alignItems: 'center', gap: 0.5, minWidth: 0, flex: '0 1 auto' }}
       >
         {crumbs.map((crumb, index) => {
