@@ -9,8 +9,9 @@ import {
   KeyboardArrowUp as ArrowUpIcon,
   KeyboardArrowDown as ArrowDownIcon,
 } from '@mui/icons-material';
-import { fetchMultipleEntities } from '../../services/utils/entityServiceAdapter';
+import { fetchEntityCollection } from '../../services/utils/entityServiceAdapter';
 import useDebounce from '../../hooks/useDebounce';
+import { itemKeyOf, itemLabelOf, itemValueOf, runCategorySearch } from './omniSearch.helpers';
 
 const StyledCommand = styled(Command)(({ theme }) => ({
   maxWidth: '680px',
@@ -199,6 +200,12 @@ function OmniSearchOverlay({
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeValue, setActiveValue] = useState('');
   const commandRef = useRef(null);
+  // Only the last search may fill the results: a slower earlier one must not overwrite it.
+  const searchRunRef = useRef(0);
+  // The hosts rebuild `categories` on every render; a search runs when the text, the filter or
+  // the overlay change, never because a parent rendered.
+  const categoriesRef = useRef(categories);
+  categoriesRef.current = categories;
 
   const { commands: contextCommands } = useOmniSearchRegistry();
 
@@ -248,27 +255,31 @@ function OmniSearchOverlay({
     }
 
     const performSearch = async () => {
+      searchRunRef.current += 1;
+      const searchRun = searchRunRef.current;
       setLoading(true);
       try {
+        const currentCategories = categoriesRef.current;
         const targetCategories =
-          activeFilter === 'all' ? categories : categories.filter((c) => c.id === activeFilter);
+          activeFilter === 'all' ? currentCategories : currentCategories.filter((c) => c.id === activeFilter);
 
-        const payloadList = targetCategories.map((category) => ({
-          service: category.service,
-          payload: {
-            ...category.payload,
-            query: { search: debouncedQuery },
-          },
-        }));
+        const answers = await Promise.all(
+          targetCategories.map((category) =>
+            runCategorySearch({
+              category,
+              query: debouncedQuery,
+              fetchCollection: fetchEntityCollection,
+            }),
+          ),
+        );
 
-        const responses = await fetchMultipleEntities(payloadList);
+        if (searchRun !== searchRunRef.current) {
+          return;
+        }
 
         const newResults = {};
         targetCategories.forEach((category, index) => {
-          const response = responses[index];
-          const items = Array.isArray(response)
-            ? response
-            : response?.result?.items || response?.items || [];
+          const items = answers[index];
 
           if (!items || items.length === 0) {
             return;
@@ -281,12 +292,14 @@ function OmniSearchOverlay({
       } catch (error) {
         console.error('OmniSearch Error:', error);
       } finally {
-        setLoading(false);
+        if (searchRun === searchRunRef.current) {
+          setLoading(false);
+        }
       }
     };
 
     performSearch();
-  }, [debouncedQuery, activeFilter, categories, open, resetSearchState]);
+  }, [debouncedQuery, activeFilter, open, resetSearchState]);
 
   const handleSelect = useCallback(
     (item, category) => {
@@ -624,14 +637,19 @@ function OmniSearchOverlay({
                   <Command.Group key={catId} heading={category.label}>
                     {items.map((item) => (
                       <Command.Item
-                        key={item.id || item._id}
+                        key={itemKeyOf(category, item)}
                         onSelect={() => handleSelect(item, category)}
-                        value={String(
-                          item.name || item.title || item.label || `item-${item.id || item._id}`,
-                        )}
+                        value={itemValueOf(category, item)}
+                        forceMount={category.serverFiltered ? true : undefined}
                       >
-                        {category.icon}
-                        <span>{item.name || item.title || item.label || 'Unknown Item'}</span>
+                        {typeof category.renderItem === 'function' ? (
+                          category.renderItem(item)
+                        ) : (
+                          <>
+                            {category.icon}
+                            <span>{itemLabelOf(item)}</span>
+                          </>
+                        )}
                       </Command.Item>
                     ))}
                   </Command.Group>

@@ -53,7 +53,7 @@
   },
   "scripts": {
     "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && rollup -c",
-    "test": "node --test src/components/stoneos/",
+    "test": "node --test src/components/stoneos/ src/components/omni-search/",
     "version-patch": "npm version patch",
     "version-deploy": "npm publish"
   },
