@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { dirtyStateReducer, isDirtyState } from './dirtyState.reducer.js';
 
 const serialize = (value) => {
   try {
@@ -12,23 +13,24 @@ const serialize = (value) => {
  * View-first configuration state with an explicit save.
  * status: 'clean' | 'dirty' | 'saving' | 'saved' | 'error'
  * `onSave(values)` may return a value object that becomes the new baseline.
+ * A new `initialValues` is followed only while nothing is being edited (decided in the reducer, so an
+ * edit made while a new snapshot arrives is never overwritten).
  */
 export default function useDirtyState(initialValues = {}, { onSave } = {}) {
-  const [baseline, setBaseline] = useState(initialValues);
-  const [values, setValuesState] = useState(initialValues);
+  const [state, dispatch] = useReducer(dirtyStateReducer, { baseline: initialValues, values: initialValues });
   const [phase, setPhase] = useState('idle');
   const [error, setError] = useState(null);
-  const valuesRef = useRef(values);
+  const valuesRef = useRef(state.values);
   const onSaveRef = useRef(onSave);
 
-  valuesRef.current = values;
+  valuesRef.current = state.values;
   onSaveRef.current = onSave;
 
-  const isDirty = serialize(values) !== serialize(baseline);
+  const isDirty = isDirtyState(state);
   const initialKey = serialize(initialValues);
 
   const setValues = useCallback((next) => {
-    setValuesState((previous) => (typeof next === 'function' ? next(previous) : next));
+    dispatch({ type: 'edit', next });
     setPhase('idle');
   }, []);
 
@@ -38,24 +40,22 @@ export default function useDirtyState(initialValues = {}, { onSave } = {}) {
   );
 
   const reset = useCallback((nextValues) => {
-    const next = nextValues === undefined ? valuesRef.current : nextValues;
-    setBaseline(next);
-    setValuesState(next);
+    dispatch({ type: 'reset', next: nextValues === undefined ? valuesRef.current : nextValues });
     setPhase('idle');
     setError(null);
   }, []);
 
   const discard = useCallback(() => {
-    setValuesState(baseline);
+    dispatch({ type: 'discard' });
     setPhase('idle');
     setError(null);
-  }, [baseline]);
+  }, []);
 
   const save = useCallback(async () => {
     const snapshot = valuesRef.current;
 
     if (typeof onSaveRef.current !== 'function') {
-      setBaseline(snapshot);
+      dispatch({ type: 'saved', snapshot, baseline: snapshot });
       setPhase('saved');
       return snapshot;
     }
@@ -66,8 +66,7 @@ export default function useDirtyState(initialValues = {}, { onSave } = {}) {
     try {
       const result = await onSaveRef.current(snapshot);
       const nextBaseline = result && typeof result === 'object' ? result : snapshot;
-      setBaseline(nextBaseline);
-      setValuesState((current) => (current === snapshot ? nextBaseline : current));
+      dispatch({ type: 'saved', snapshot, baseline: nextBaseline });
       setPhase('saved');
       return nextBaseline;
     } catch (saveError) {
@@ -78,12 +77,8 @@ export default function useDirtyState(initialValues = {}, { onSave } = {}) {
   }, []);
 
   useEffect(() => {
-    if (isDirty) {
-      return;
-    }
-    setBaseline(initialValues);
-    setValuesState(initialValues);
-    // Follow a new server snapshot only while nothing is being edited.
+    dispatch({ type: 'follow', snapshot: initialValues });
+    // Follow a new server snapshot only while nothing is being edited (the reducer decides).
   }, [initialKey]);
 
   const status =
@@ -97,5 +92,5 @@ export default function useDirtyState(initialValues = {}, { onSave } = {}) {
             ? 'saved'
             : 'clean';
 
-  return { values, setField, setValues, isDirty, status, error, save, discard, reset };
+  return { values: state.values, setField, setValues, isDirty, status, error, save, discard, reset };
 }
