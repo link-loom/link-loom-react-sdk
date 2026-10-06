@@ -56,6 +56,19 @@ export { default as SidebarGroup } from './components/sidebar/group/SidebarGroup
 export { default as SidebarFooter } from './components/sidebar/footer/SidebarFooter.component.jsx';
 export { default as SidebarRecursiveItem } from './components/sidebar/group/SidebarRecursiveItem.component.jsx';
 export * from './components/sidebar/group/Sidebar.styles.jsx';
+export { default as SidebarLinkRow } from './components/sidebar/SidebarLinkRow.component.jsx';
+export { default as SidebarCollapseToggle } from './components/sidebar/SidebarCollapseToggle.component.jsx';
+export { default as useSidebarCondensed } from './components/sidebar/useSidebarCondensed.hook.js';
+export { SIDEBAR_TOGGLE_EVENT, toggleSidebar } from './components/sidebar/sidebar-toggle.js';
+
+// Page meta: the page declares its title and breadcrumb, the navbar shows the breadcrumb
+export {
+  PageMetaProvider,
+  usePageMetaState,
+  usePageMetaActions,
+} from './components/page-meta/PageMeta.context.jsx';
+export { default as usePageMeta } from './components/page-meta/usePageMeta.hook.js';
+export { default as NavbarBreadcrumb } from './components/page-meta/NavbarBreadcrumb.component.jsx';
 
 // StoneOS UI kit
 export { default as StoneOSThemeProvider } from './components/stoneos/theme/StoneOSThemeProvider.component.jsx';
