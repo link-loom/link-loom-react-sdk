@@ -295,7 +295,8 @@ export const buildDataGridProps = (style = {}) => {
 
   if (has(cell.paddingX)) {
     const padding = { paddingLeft: px(cell.paddingX), paddingRight: px(cell.paddingX) };
-    rule('& .MuiDataGrid-cell:not(.MuiDataGrid-cellCheckbox)', padding);
+    // The empty filler cell after the last column keeps no padding: with it the rows overflow and scroll sideways.
+    rule('& .MuiDataGrid-cell:not(.MuiDataGrid-cellCheckbox):not(.MuiDataGrid-cellEmpty)', padding);
     rule('& .MuiDataGrid-columnHeader:not(.MuiDataGrid-columnHeaderCheckbox)', padding);
   }
 
