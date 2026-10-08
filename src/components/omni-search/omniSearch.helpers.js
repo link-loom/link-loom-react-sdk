@@ -52,3 +52,21 @@ export const itemValueOf = (category, item) => {
 
 /** The text of a result when the category does not render its own. */
 export const itemLabelOf = (item) => item.name || item.title || item.label || 'Unknown Item';
+
+/** The words OmniSearch shows, in English; a host passes `labels` with any of them in its own language. */
+export const OMNISEARCH_LABELS = Object.freeze({
+  search: 'Search',
+  input: 'Ask AI anything or search...',
+  loading: 'Loading...',
+  noCommands: 'No matching commands.',
+  noResults: 'No results found.',
+  suggestions: 'Suggestions',
+  navigation: 'Navigation',
+  commandCenter: 'Command Center',
+  create: 'Create "{query}"',
+  navigate: 'Navigate',
+  select: 'Select',
+  close: 'Close',
+});
+
+export const omniSearchLabels = (labels) => ({ ...OMNISEARCH_LABELS, ...(labels || {}) });

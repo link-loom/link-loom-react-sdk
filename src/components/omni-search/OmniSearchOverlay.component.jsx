@@ -11,7 +11,7 @@ import {
 } from '@mui/icons-material';
 import { fetchEntityCollection } from '../../services/utils/entityServiceAdapter';
 import useDebounce from '../../hooks/useDebounce';
-import { itemKeyOf, itemLabelOf, itemValueOf, runCategorySearch } from './omniSearch.helpers';
+import { OMNISEARCH_LABELS, itemKeyOf, itemLabelOf, itemValueOf, runCategorySearch } from './omniSearch.helpers';
 
 const StyledCommand = styled(Command)(({ theme }) => ({
   maxWidth: '680px',
@@ -194,6 +194,7 @@ function OmniSearchOverlay({
   categories = [],
   staticCommands = [],
   slashCommands: propSlashCommands = [],
+  labels = OMNISEARCH_LABELS,
 }) {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState({});
@@ -507,13 +508,13 @@ function OmniSearchOverlay({
               value={query}
               onValueChange={onQueryChange}
               onKeyDown={handleKeyDown}
-              placeholder="Ask AI anything or search..."
+              placeholder={labels.input}
               style={{ paddingLeft: '60px' }}
             />
 
             {loading && (
               <div style={{ position: 'absolute', right: 24, top: 24 }}>
-                <span style={{ fontSize: '11px', opacity: 0.5, color: '#fff' }}>Loading...</span>
+                <span style={{ fontSize: '11px', opacity: 0.5, color: '#fff' }}>{labels.loading}</span>
               </div>
             )}
           </div>
@@ -545,10 +546,10 @@ function OmniSearchOverlay({
           </FilterChipsContainer>
 
           <Command.List>
-            <Command.Empty>{isCommandMode ? 'No matching commands.' : 'No results found.'}</Command.Empty>
+            <Command.Empty>{isCommandMode ? labels.noCommands : labels.noResults}</Command.Empty>
 
             {activeFilter === 'all' && !isCommandMode && (
-              <Command.Group heading={!query || query.length < 2 ? 'Suggestions' : 'Navigation'}>
+              <Command.Group heading={!query || query.length < 2 ? labels.suggestions : labels.navigation}>
                 {staticCommands
                   .filter((command) => {
                     if (!query || query.length < 2) {
@@ -588,7 +589,7 @@ function OmniSearchOverlay({
             )}
 
             {activeFilter === 'all' && (
-              <Command.Group heading="Command Center  ⌘/">
+              <Command.Group heading={`${labels.commandCenter}  ⌘/`}>
                 {slashCommands
                   .filter((command) => {
                     if (query && query.length > 0) {
@@ -672,7 +673,7 @@ function OmniSearchOverlay({
                           }}
                         >
                           <ArrowForwardIcon />
-                          <span>Create "{query}"</span>
+                          <span>{labels.create.replace('{query}', query)}</span>
                         </Command.Item>
                       </Command.Group>
                     ),
@@ -687,17 +688,17 @@ function OmniSearchOverlay({
               <Kbd className="d-inline-flex align-items-center justify-content-center">
                 <ArrowDownIcon sx={{ fontSize: 12 }} />
               </Kbd>
-              Navigate
+              {labels.navigate}
             </span>
             <span className="d-flex align-items-center">
               <Kbd className="d-inline-flex align-items-center justify-content-center">
                 <EnterIcon sx={{ fontSize: 12 }} />
               </Kbd>
-              Select
+              {labels.select}
             </span>
             <span className="d-flex align-items-center">
               <Kbd className="d-inline-flex align-items-center justify-content-center">esc</Kbd>
-              Close
+              {labels.close}
             </span>
           </div>
         </StyledCommand>

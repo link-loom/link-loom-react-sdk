@@ -1,6 +1,14 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { itemKeyOf, itemLabelOf, itemValueOf, itemsOf, runCategorySearch } from '../omniSearch.helpers.js';
+import {
+  OMNISEARCH_LABELS,
+  itemKeyOf,
+  itemLabelOf,
+  itemValueOf,
+  itemsOf,
+  omniSearchLabels,
+  runCategorySearch,
+} from '../omniSearch.helpers.js';
 
 describe('omni search results', () => {
   it('reads the items of a bare list, an envelope or a page', () => {
@@ -71,5 +79,16 @@ describe('omni search results', () => {
     assert.equal(itemValueOf({ itemValue: (hit) => `app:${hit.id}` }, item), 'app:rec-1');
     assert.equal(itemLabelOf({ label: 'L' }), 'L');
     assert.equal(itemLabelOf({}), 'Unknown Item');
+  });
+});
+
+describe('omni search labels', () => {
+  it('takes the words a host gives and keeps English for the rest', () => {
+    const words = omniSearchLabels({ search: 'Buscar', create: 'Crear "{query}"' });
+
+    assert.equal(words.search, 'Buscar');
+    assert.equal(words.create, 'Crear "{query}"');
+    assert.equal(words.noResults, OMNISEARCH_LABELS.noResults);
+    assert.deepEqual(omniSearchLabels(undefined), OMNISEARCH_LABELS);
   });
 });

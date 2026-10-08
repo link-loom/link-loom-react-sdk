@@ -48,6 +48,7 @@ export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
 
 export { default as OmniSearch } from './components/omni-search/OmniSearch.component.jsx';
 export { default as OmniSearchTrigger } from './components/omni-search/OmniSearchTrigger.component.jsx';
+export { OMNISEARCH_LABELS } from './components/omni-search/omniSearch.helpers.js';
 export {
   useOmniSearchRegistry,
   OmniSearchRegistryProvider,

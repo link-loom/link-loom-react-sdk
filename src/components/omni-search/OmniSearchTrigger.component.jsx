@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Paper, IconButton, InputBase } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import { OMNISEARCH_LABELS } from './omniSearch.helpers';
 
 const SearchRoot = styled(Paper)(({ theme }) => ({
   display: 'flex',
@@ -48,7 +49,7 @@ const SearchInput = styled(InputBase)({
   },
 });
 
-function OmniSearchTrigger({ onClick }) {
+function OmniSearchTrigger({ onClick, labels = OMNISEARCH_LABELS }) {
   const [shortcutLabel, setShortcutLabel] = React.useState('Cmd+K');
 
   React.useEffect(() => {
@@ -60,10 +61,13 @@ function OmniSearchTrigger({ onClick }) {
 
   return (
     <SearchRoot component="div" onClick={onClick}>
-      <SearchIconButton type="button" aria-label="search">
+      <SearchIconButton type="button" aria-label={labels.search}>
         <SearchIcon />
       </SearchIconButton>
-      <SearchInput placeholder={`Search (${shortcutLabel})`} inputProps={{ 'aria-label': 'search', readOnly: true }} />
+      <SearchInput
+        placeholder={`${labels.search} (${shortcutLabel})`}
+        inputProps={{ 'aria-label': labels.search, readOnly: true }}
+      />
     </SearchRoot>
   );
 }

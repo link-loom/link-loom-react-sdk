@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OmniSearchTrigger from './OmniSearchTrigger.component';
 import OmniSearchOverlay from './OmniSearchOverlay.component';
+import { omniSearchLabels } from './omniSearch.helpers';
 
-function OmniSearch({ categories, staticCommands, slashCommands, open, onOpenChange }) {
+function OmniSearch({ categories, staticCommands, slashCommands, open, onOpenChange, labels }) {
+  const words = omniSearchLabels(labels);
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
@@ -44,7 +46,7 @@ function OmniSearch({ categories, staticCommands, slashCommands, open, onOpenCha
 
   return (
     <>
-      <OmniSearchTrigger onClick={toggle} />
+      <OmniSearchTrigger onClick={toggle} labels={words} />
       <OmniSearchOverlay
         open={open}
         onOpenChange={onOpenChange}
@@ -53,6 +55,7 @@ function OmniSearch({ categories, staticCommands, slashCommands, open, onOpenCha
         categories={enrichedCategories}
         staticCommands={allStaticCommands}
         slashCommands={slashCommands}
+        labels={words}
       />
     </>
   );
