@@ -1,14 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import createStoneOSTheme from './createStoneOSTheme.js';
-import tokensCss from '../tokens.css?raw';
-import injectStyleSheet from './injectStyleSheet.js';
-import { STOS_FONT_FACES_CSS } from './fontFaces.js';
+import injectStoneOSStyles from './injectStoneOSStyles.js';
 
-const TOKENS_ATTRIBUTE = 'data-stos-tokens';
 const DARK_QUERY = '(prefers-color-scheme: dark)';
-
-const injectTokens = () => injectStyleSheet(TOKENS_ATTRIBUTE, `${STOS_FONT_FACES_CSS}\n${tokensCss}`);
 
 const readSystemMode = () => {
   if (typeof window === 'undefined' || !window.matchMedia) {
@@ -33,7 +28,7 @@ function StoneOSThemeProvider({ mode = 'system', className, style, children }) {
   // -----------------------------------------------------
   // 3. Lifecycle
   // -----------------------------------------------------
-  injectTokens();
+  injectStoneOSStyles();
 
   useEffect(() => {
     if (mode !== 'system' || typeof window === 'undefined' || !window.matchMedia) {

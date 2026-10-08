@@ -73,6 +73,7 @@ export { default as NavbarBreadcrumb } from './components/page-meta/NavbarBreadc
 // StoneOS UI kit
 export { default as StoneOSThemeProvider } from './components/stoneos/theme/StoneOSThemeProvider.component.jsx';
 export { default as createStoneOSTheme } from './components/stoneos/theme/createStoneOSTheme.js';
+export { default as injectStoneOSStyles } from './components/stoneos/theme/injectStoneOSStyles.js';
 export {
   STOS_COLORS,
   STOS_DARK_COLORS,
@@ -193,3 +194,49 @@ export { looksLikeMarkdown } from './components/stoneos/editor/extensions/markdo
 export { exportDocx } from './components/stoneos/editor/io/exportDocx.js';
 export { resolveStorageImages, storageIdFromUrl } from './components/stoneos/editor/io/resolveStorageImages.js';
 export { importDocx } from './components/stoneos/editor/io/importDocx.js';
+
+// StoneOS record and list kit
+export { default as useEntityRoute } from './components/stoneos/record/useEntityRoute.hook.js';
+export { ENTITY_ROUTE_PARAMS } from './components/stoneos/record/entityRoute.helpers.js';
+export { default as useEntityRecord } from './components/stoneos/record/useEntityRecord.hook.js';
+export { default as useAsyncOptions } from './components/stoneos/record/useAsyncOptions.hook.js';
+export { default as EntityDialog } from './components/stoneos/record/EntityDialog.component.jsx';
+export { default as EntityRecordDialog } from './components/stoneos/record/EntityRecordDialog.component.jsx';
+export { default as PropertyField } from './components/stoneos/record/PropertyField.component.jsx';
+export { default as DirtyStateFooter } from './components/stoneos/record/DirtyStateFooter.component.jsx';
+export { default as ReadOnlyNotice } from './components/stoneos/record/ReadOnlyNotice.component.jsx';
+export { default as ReasonDialog } from './components/stoneos/record/ReasonDialog.component.jsx';
+export { MIN_REASON_LENGTH, MAX_REASON_LENGTH } from './components/stoneos/record/reasonDialog.helpers.js';
+export { default as FormDialog } from './components/stoneos/record/FormDialog.component.jsx';
+export { default as OptionsField } from './components/stoneos/record/OptionsField.component.jsx';
+export { default as RemoteOptionsField } from './components/stoneos/record/RemoteOptionsField.component.jsx';
+export { menuFilterChip } from './components/stoneos/record/filters.helpers.js';
+export {
+  ROW_ACTIONS,
+  ROW_ACTION_ICONS,
+  ROW_ACTION_LABELS,
+  rowActionItems,
+} from './components/stoneos/record/row-actions.js';
+export { RECORD_KIT_LABELS, resolveRecordLabels } from './components/stoneos/record/record.labels.js';
+export { default as ListSurface } from './components/stoneos/list/ListSurface.component.jsx';
+export { default as EntityTable } from './components/stoneos/list/EntityTable.component.jsx';
+export { default as ViewModeSwitch } from './components/stoneos/list/ViewModeSwitch.component.jsx';
+export {
+  NameCell,
+  TextCell,
+  PillsCell,
+  UpdatedCell,
+} from './components/stoneos/list/TableCells.component.jsx';
+export {
+  LIST_SURFACE_LABELS,
+  VIEW_MODES,
+  PAGE_SIZE_OPTIONS,
+  resolveListLabels,
+} from './components/stoneos/list/listSurface.labels.js';
+export { default as useListState } from './components/stoneos/list/useListState.hook.js';
+export { default as useListSearch } from './components/stoneos/list/useListSearch.hook.js';
+export { default as useViewMode } from './components/stoneos/list/useViewMode.hook.js';
+export { default as useDataQuery } from './components/stoneos/list/useDataQuery.hook.js';
+export { default as useLoadedList } from './components/stoneos/list/useLoadedList.hook.js';
+export { default as useDebouncedValue } from './components/stoneos/list/useDebouncedValue.hook.js';
+export { default as useElementWidth } from './components/stoneos/list/useElementWidth.hook.js';

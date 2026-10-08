@@ -149,6 +149,55 @@ the detail replaces the list with a way back. Nothing in Pulse edits.
 Helpers: `summarizePulseEntry(entry, labels, { locale })`, `pulseGlyphOf(entry)`, `resolveWorkspaceUi`,
 `workspaceNameOf`.
 
+### Record and list kit
+
+The standard pieces of a business app's lists and records (`record/`, `list/`), promoted from the
+`stoneos-references` App Engine app so every webapp and app stops re-inventing modals and lists. None of them
+depends on an app's `sdk`, locale context or dictionary: what came from there is a prop with a default, and
+copy comes from `labels` (English and Spanish defaults, picked by `locale`, any sentence overridable).
+
+```jsx
+<EntityRecordDialog
+  entityType="counterparty"
+  section="Counterparties"
+  loadRecord={(id) => api.get(id)}            // id → Promise<{ record }>
+  linkOf={(record) => `/counterparties?id=${record.id}`}
+  canWrite
+  onChanged={refresh}
+  renderRecord={(context) => <CounterpartyRecord {...context} />}
+/>
+```
+
+| Piece | Props |
+|---|---|
+| `useEntityRoute({ params })` | → `{ openId, creating, openValue, action, draft, openEntity(id, { replace, pathname, action }), startCreate(draft, { replace, pathname }), closeEntity(), clearAction(), clearOpen() }`. The URL carries the record (`?id=`), the create form (`?new=1`), a value to resolve (`?open=`) and an action (`?action=`); `params` renames any of them (`ENTITY_ROUTE_PARAMS`: `{ id: 'id', create: 'new', open: 'open', action: 'action' }`). Openings inside the app push a history entry and closing pops it |
+| `useEntityRecord(loadRecord, id)` | → `{ record, loading, error, reload }`; `loadRecord` answers `{ record }` |
+| `EntityRecordDialog` | `entityType`, `section`, `loadRecord`, `renderRecord`, `onChanged`, `onCreated`, `canWrite` (true), `canSubmitOutput` (false), `onSubmitReference(entityType, record)`, `linkOf(record)`, `idOf(record)` (`record.id`), `routeParams`, `containerName`, `errorMessage`, `labels`, `locale`. `?id=` opens, `?new=1` creates (`record = null`), closing with unsaved changes asks first. `renderRecord` receives `{ record, draft, canWrite, action, copyLinkPath, redirectedFrom, doneLabel, onDone, onCreated, onChanged, onClose, onOpen, onDirtyChange }` |
+| `EntityDialog` | The modal frame: `open`, `label`, `creating`, `record`, `loading`, `error`, `reload`, `dirtyRef`, `onClose`, `containerName`, `errorMessage`, `labels`, `locale`, `children({ requestClose })`. Loading, error with Retry, not found; the paper is a size container (`stos-record` by default) |
+| `PropertyField` | `label`, `required`, `error`, `helperText`, `wide`, `children`. A cell of `.stos-property-form` (group titles: `<Typography variant="overline" className="stos-property-form__section">`) around a quiet field |
+| `DirtyStateFooter` | `status` (`useDirtyState`), `error`, `onSave`, `onDiscard`, `onClose`, `closeLabel`, `errorMessage`, `labels`, `locale` |
+| `ReadOnlyNotice` | `message`, `action`, `actions[{id,label,onClick,disabled,variant,color}]`, `icon`, `tone` (`muted`·`warning`) |
+| `ReasonDialog` | `open`, `title`, `description`, `confirmLabel`, `danger`, `reasonLabel`, `required`, `onConfirm(reason)`, `onClose`, `errorMessage`, `labels`, `locale`. At least `MIN_REASON_LENGTH` (5) characters; closes only when `onConfirm` resolves |
+| `FormDialog` | `open`, `title`, `description`, `submitLabel`, `valid`, `danger`, `maxWidth`, `closeOnSubmit`, `cancelLabel`, `onSubmit`, `onClose`, `containerName`, `errorMessage`, `labels`, `locale`, `children` |
+| `OptionsField` | Autocomplete-based (never Select): `label`, `value`, `onChange`, `options`, `getOptionLabel`, `isOptionEqualToValue`, `renderOption`, `groupBy`, `multiple`, `freeSolo`, `loading`, `loadError`, `onRetry`, `quiet` (quiet field tokens, label for assistive technology only), `labels`, `locale`, … |
+| `RemoteOptionsField` | `OptionsField` over `loader(text)`, `searchable`, `debounceMs` (300). `useAsyncOptions(loader, { searchable, debounceMs })` is the hook behind it |
+| `menuFilterChip({ id, label, icon, options, value, multiple, locked, onChange, t, labels, locale })` | A `FilterBar` chip with its menu (first item clears, one item per `{ id, label }` option). `t` is optional: an app that has `list.filterAll`/`filterOne`/`filterMany` in its dictionary keeps passing it |
+| `rowActionItems({ actions, record, handlers, labels, locale })` | The `items` of `RowActionsMenu` from the catalog `ROW_ACTIONS` (`quickview`, `edit`, `open-page`, `open-new-tab`, `copy-id`, `copy-link`, `delete`). `handlers`: `{ quickview, edit, openPage, openNewTab, copyId, copyLink, remove }(record)`; an action without a handler is left out; `delete` is `danger` and set apart. `ROW_ACTION_ICONS` (Outlined), `ROW_ACTION_LABELS` `{ en, es }` |
+| `RECORD_KIT_LABELS` | `{ en, es }` with every default sentence; `rowActions` and `list` hold the labels of the catalog and of the list. `resolveRecordLabels(labels, locale)` merges overrides |
+| `ListSurface` | The frame of a list: `icon`, `title`, `description`, `primaryAction`, `secondaryActions`, `offlineReason`, `chips`, `search`, `viewMode`, `viewModes`, `onViewModeChange`, `query` (`{ items, totalItems, loading, error, fromCache, refresh }`, see `useDataQuery`), `pagination`, `columns`, `getActions`, `onOpen`, `card`, `body`, `filtersActive`, `onClearFilters`, `empty { title, description, illustration, filteredTitle }`, `untitledLabel`, `pageSizeOptions`, `errorMessage`, `labels` (`LIST_SURFACE_LABELS`), `locale`, `children`. Loading, error with Retry, empty and empty-by-filters |
+| `EntityTable` | Rows as a `DataTable` or `DocumentCard` tiles: `rows`, `columns` (one may carry `minContainerWidth`), `loading`, `viewMode`, `pagination { page (1-based), pageSize, totalItems, onChange }`, `getActions`, `onOpen`, `card(row)`, `untitledLabel`, `pageSizeOptions` (`PAGE_SIZE_OPTIONS`), `labels`, `locale` |
+| `ViewModeSwitch` | `value`, `onChange`, `modes` (`VIEW_MODES`: `list`, `grid`; `tree` also known), `labels`, `locale` |
+| `NameCell`, `TextCell`, `PillsCell`, `UpdatedCell` | Cells of the first column, of a quiet line, of pills and of "time since" (`value`, `locale`, `timeZone`) |
+| `useListState(definition, { defaultPage, defaultPageSize })` | Filters in the URL (`'text'`, `'list'`, `'flag'`) → `{ values, setValue, setValues, clear, active, pagination, setPagination, key }` |
+| `useListSearch(list, name, { debounceMs })` | The search box of a list, debounced into the URL filter |
+| `useViewMode({ modes, defaultMode, onDefaultChange })` | `?view=` with the persisted default passed by the caller; `onDefaultChange` persists a change |
+| `useDataQuery(loader, deps, { enabled, subscribe })`, `useLoadedList(loader, deps)`, `useDebouncedValue`, `useElementWidth` | Query with a stale-answer guard, a list loaded once for a form, a debounced value, a container width |
+
+Styles: the rules these pieces need (`stos-record-title` for a title typed in the header, `stos-property-form`, `stos-property-field`, `stos-dirty-footer`,
+`stos-readonly-notice`, `stos-record-dialog__state`, `stos-collection--grid`, `stos-cell`, `stos-saved-copy`,
+`stos-tab-state`) live in `tokens.css`, which `StoneOSThemeProvider` injects, so they are available in runtime
+hosts that do not load `dist/styles.css`.
+
 ### Ribbon
 
 ```jsx

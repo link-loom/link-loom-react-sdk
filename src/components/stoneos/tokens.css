@@ -436,6 +436,159 @@
   display: none;
 }
 
+/* ===== Record and list kit (record/, list/) ===== */
+/* Tints of the notices: a tertiary or warning wash over the surface, weightier on the dark one. */
+.stos-app,
+[data-stos-theme='light'] {
+  --stos-notice-mix: 14%;
+}
+.stos-app[data-theme='dark'],
+[data-stos-theme='dark'] {
+  --stos-notice-mix: 22%;
+}
+.stos-app,
+[data-stos-theme] {
+  --stos-muted-tint: color-mix(in srgb, var(--stos-text-tertiary) var(--stos-notice-mix, 14%), var(--stos-bg-surface));
+  --stos-warning-tint: color-mix(in srgb, var(--stos-warning) var(--stos-notice-mix, 14%), var(--stos-bg-surface));
+}
+
+/* The title of a record, typed in place in its header (an InputBase): a heading that turns into a field only
+   while it has the focus, as in Mi Retail. */
+.stos-record-title.MuiInputBase-root {
+  font-size: var(--stos-fs-18);
+  font-weight: 600;
+  line-height: 28px;
+  color: var(--stos-text-primary);
+}
+.stos-record-title .MuiInputBase-input {
+  min-height: 28px;
+  margin: 0 -4px;
+  padding: 0 4px;
+  border-radius: var(--stos-radius-sm);
+}
+.stos-record-title .MuiInputBase-input:focus {
+  background: var(--stos-bg-hover);
+}
+.stos-record-title.Mui-error .MuiInputBase-input {
+  box-shadow: inset 0 0 0 1px var(--stos-danger);
+}
+
+/* The fields of a record's tab: band cells in a grid that wraps with the width of the modal, grouped
+   under overline titles that take a whole row. */
+.stos-property-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 8px 16px;
+  align-items: start;
+}
+.stos-property-form .stos-property-form__section {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  color: var(--stos-text-tertiary);
+  line-height: 2;
+}
+.stos-property-form .stos-property-form__section:not(:first-child) {
+  margin-top: 12px;
+}
+.stos-property-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.stos-property-field--wide {
+  grid-column: 1 / -1;
+}
+
+.stos-readonly-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  color: var(--stos-text-primary);
+  background: var(--stos-muted-tint);
+  border-radius: var(--stos-radius-md);
+}
+.stos-readonly-notice--warning {
+  background: var(--stos-warning-tint);
+}
+
+/* Loading, not-found and error states hold the modal at the size of a record. */
+.stos-record-dialog__state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  padding: 24px;
+}
+
+.stos-dirty-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 16px 8px 24px;
+  background: var(--stos-bg-surface);
+  border-top: 1px solid var(--stos-border);
+}
+/* In a record dialog the footer (Save, Close, Create) stays at the bottom of the modal while a tall record
+   scrolls on a short screen, so the action and its refusal are always in view. */
+.MuiDialog-paper > .stos-dirty-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+@container stos-record (max-width: 480px) {
+  .stos-dirty-footer {
+    padding-left: 16px;
+  }
+}
+
+/* Lists: the grid of cards, the cells of a table and the states around them. */
+.stos-collection--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 12px;
+  min-width: 0;
+}
+.stos-cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+}
+.stos-cell--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+/* A line that does not fit is cut inside the cell (with its tooltip), never pushed out of it. */
+.stos-cell--stacked > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.stos-cell--pills {
+  gap: 4px;
+  overflow: hidden;
+}
+.stos-saved-copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: var(--stos-text-secondary);
+}
+.stos-tab-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
 /* ===== Motion ===== */
 @keyframes stos-fade-in {
   from {
