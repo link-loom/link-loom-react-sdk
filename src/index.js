@@ -35,6 +35,15 @@ export { default as MultiSelectChips } from './components/multi-select-chips/Mul
 export { default as useDebounce } from './hooks/useDebounce.js';
 export { default as useNavigate } from './hooks/useNavigate.js';
 export { default as RecentActivityService } from './services/recent-activity.service.js';
+export { default as BaseApi } from './services/base/api.service.js';
+export {
+  fetchEntityCollection,
+  fetchEntityRecord,
+  fetchMultipleEntities,
+  createEntityRecord,
+  updateEntityRecord,
+  deleteEntityRecord,
+} from './services/utils/entityServiceAdapter.js';
 export { default as Breadcrumb } from './components/Breadcrumb/Breadcrumb.jsx';
 
 export { default as OmniSearch } from './components/omni-search/OmniSearch.component.jsx';
