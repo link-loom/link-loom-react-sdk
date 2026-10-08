@@ -68,6 +68,7 @@ export {
   usePageMetaActions,
 } from './components/page-meta/PageMeta.context.jsx';
 export { default as usePageMeta } from './components/page-meta/usePageMeta.hook.js';
+export { resolveHeadMeta, applyHeadMeta } from './components/page-meta/head-meta.js';
 export { default as NavbarBreadcrumb } from './components/page-meta/NavbarBreadcrumb.component.jsx';
 
 // StoneOS UI kit
