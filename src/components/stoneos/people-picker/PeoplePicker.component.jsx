@@ -10,6 +10,9 @@ export const PEOPLE_PICKER_LABELS = {
   searching: 'Searching…',
   noResults: 'No matches',
   loadError: 'The directory is unavailable',
+  open: 'Open',
+  close: 'Close',
+  clear: 'Clear',
 };
 
 export const peopleOptionKey = (option) => `${option.kind}:${option.id}`;
@@ -154,6 +157,9 @@ export default function PeoplePicker({
       }}
       noOptionsText={noOptionsText}
       loadingText={resolvedLabels.searching}
+      openText={resolvedLabels.open}
+      closeText={resolvedLabels.close}
+      clearText={resolvedLabels.clear}
       renderOption={(props, option) => (
         <li {...props} key={peopleOptionKey(option)}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
