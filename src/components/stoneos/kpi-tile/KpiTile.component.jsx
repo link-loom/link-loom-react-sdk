@@ -32,7 +32,10 @@ function KpiTile({ label, value, tone = 'default', icon, delta, onClick, active 
         flexDirection: 'column',
         gap: 0.5,
         p: 2,
-        minWidth: 120,
+        minWidth: 0,
+        height: '100%',
+        boxSizing: 'border-box',
+        containerType: 'inline-size',
         backgroundColor: 'background.paper',
         border: 1,
         borderColor: active ? color : 'divider',
@@ -53,12 +56,23 @@ function KpiTile({ label, value, tone = 'default', icon, delta, onClick, active 
           {label}
         </Typography>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-        <Typography variant="h2" component="span" sx={{ color }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.25, minWidth: 0 }}>
+        <Typography
+          variant="h2"
+          component="span"
+          sx={{
+            color,
+            maxWidth: '100%',
+            fontSize: 'clamp(0.8125rem, 9cqw, 1.5rem)',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {value ?? '—'}
         </Typography>
         {delta && (
-          <Typography variant="caption" sx={{ color: 'text.tertiary' }}>
+          <Typography variant="caption" sx={{ color: 'text.tertiary', maxWidth: '100%', overflowWrap: 'anywhere' }}>
             {delta}
           </Typography>
         )}
