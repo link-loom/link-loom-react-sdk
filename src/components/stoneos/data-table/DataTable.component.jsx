@@ -10,6 +10,7 @@ import DataGrid from '../../datagrid/DataGrid.jsx';
 import GroupHeader from '../group-header/GroupHeader.component.jsx';
 import EmptyState from '../empty-state/EmptyState.component.jsx';
 import TableFooter from './TableFooter.component.jsx';
+import { resolveDataTableLabels } from './dataTable.labels.js';
 import { STOS_TABLE_PRESET, STOS_TABLE_STYLE } from '../theme/stoneos.constants.js';
 
 const UNGROUPED = '__ungrouped__';
@@ -17,19 +18,6 @@ const ADD_ROW_PREFIX = '__add-row__';
 const EMPTY_DRAFT = Object.freeze({ title: '' });
 const GROUP_PAGE_SIZE = 100;
 export const STOS_ROW_DRAG_MIME = 'application/x-stos-row';
-
-const DEFAULT_LABELS = {
-  addRow: 'Add task',
-  addChildPlaceholder: 'Subtask name',
-  ungrouped: 'No status',
-  empty: 'Nothing here',
-  emptyHint: 'When there are records, they show up in this list.',
-  expandGroup: 'Expand this group',
-  collapseGroup: 'Collapse this group',
-  collapseAll: 'Collapse all',
-  expandAll: 'Expand all',
-  editStages: 'Edit statuses',
-};
 
 const readPath = (row, path) =>
   String(path)
@@ -98,6 +86,7 @@ function DataTable({
   onRowDropInGroup,
   addLabel,
   labels = {},
+  locale = 'en',
   footerLabels = {},
   actions,
   enableActions = false,
@@ -126,7 +115,7 @@ function DataTable({
   sx = {},
   ...gridRest
 }) {
-  const copy = { ...DEFAULT_LABELS, ...labels };
+  const copy = resolveDataTableLabels(labels, locale);
   const addText = addLabel ?? copy.addRow;
   const [internalCollapsedGroups, setInternalCollapsedGroups] = useState([]);
   const [openGroupComposer, setOpenGroupComposer] = useState(null);
@@ -529,6 +518,7 @@ function DataTable({
             addLabel={addText}
             expandLabel={copy.expandGroup}
             collapseLabel={copy.collapseGroup}
+            optionsLabel={copy.groupOptions}
             menuItems={menuItems}
           />
           {!collapsed && gridRows.length > 0 && renderGrid(gridRows, { key: `grid-${group.key}` })}
