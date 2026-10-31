@@ -111,6 +111,7 @@ New:
 | `DocumentCard` | `title`, `meta`, `thumbnailUrl`, `icon`, `pinned`, `pinnedLabel`, `actions` (RowActionsMenu items, revealed on hover), `actionsLabel`, `selected`, `variant` (`row`·`tile`), `untitledLabel`, `onOpen`, `sx` |
 | `NotificationCard` | `title`, `body`, `time`, `avatarUrl`, `icon`, `severity` (`info`·`success`·`warning`·`error`), `actions[{id,label}]` (max 2), `onAction(action)`, `onClick`, `onClose`, `closeLabel`, `width`, `sx` |
 | `ShortcutKeys` | `combo` (`'mod+shift+k'` or array of combos), `sx`. `mod` = ⌘ on Apple platforms, Ctrl elsewhere. Helpers: `formatShortcut`, `isApplePlatform` |
+| `FloorPlanCanvas` | SVG floor plan on an integer grid. `items[{id,shape,x,y,width,height,rotation,label,sublabel,tone,locked}]` (cells, degrees; `shape` ∈ `FLOOR_PLAN_SHAPES`, `tone` ∈ `FLOOR_PLAN_TONES`), `mode` (`FLOOR_PLAN_MODES`), `columns`, `rows`, `cellSize`, `selectedId`, `highlightIds`, `overlay{[id]:{tone,badge,caption}}`, `showOverlay`, `placing` (item template: a tap on the plan adds it), `loading`, `interactive`, `showGrid`, `showLabels`, `showControls`, `fitKey`, `longPressMs`, `onSelect(id\|null)`, `onChange(nextItems,{type,ids})`, `onHistoryChange({canUndo,canRedo})`, `labels`, `locale`. Ref: `undo`, `redo`, `removeSelected`, `fit`, `zoomIn`, `zoomOut`. See below |
 | `useDirtyState(initialValues, { onSave })` | → `{ values, setField, setValues, isDirty, status, error, save, discard, reset }`; `onSave` may return the new baseline; follows new `initialValues` only while clean |
 
 ### Record patterns (promoted from Mi Retail Workspaces)
@@ -197,6 +198,38 @@ Styles: the rules these pieces need (`stos-record-title` for a title typed in th
 `stos-readonly-notice`, `stos-record-dialog__state`, `stos-collection--grid`, `stos-cell`, `stos-saved-copy`,
 `stos-tab-state`) live in `tokens.css`, which `StoneOSThemeProvider` injects, so they are available in runtime
 hosts that do not load `dist/styles.css`.
+
+### FloorPlanCanvas
+
+```jsx
+<FloorPlanCanvas
+  ref={canvasRef}
+  items={spaces.map(toPlanItem)}
+  mode={editing ? FLOOR_PLAN_MODES.EDIT : FLOOR_PLAN_MODES.READ}
+  fitKey={areaId}
+  selectedId={selectedId}
+  overlay={{ [spaceId]: { tone: FLOOR_PLAN_TONES.WARNING, badge: '2', caption: '$ 83.400' } }}
+  placing={tool}
+  onSelect={setSelectedId}
+  onChange={(nextItems, { type, ids }) => save(nextItems, type, ids)}
+  onHistoryChange={setHistory}
+/>
+```
+
+- The size comes from its container (give the parent a height). It draws a grid, fits the content on first view
+  and whenever `fitKey` changes.
+- Controlled: a released gesture (move, resize, rotate, place, remove, undo, redo) calls `onChange` once; the host
+  stores the result and passes it back as `items`. A host that passes anything other than what it was last given
+  starts a new undo history, so a save that echoes the same geometry keeps the session's undo.
+- Gestures: wheel or two fingers zoom, dragging the background pans. In edit mode a mouse drags an item at once;
+  touch and pen need a half-second press (`longPressMs`) and otherwise pan, so scrolling never moves a shape. The
+  corner handles resize on the grid (a round item stays a circle), the handle above rotates in 15 degree steps.
+  Keyboard: arrows move, Delete removes, Ctrl or Cmd+Z undoes, plus Shift redoes, +/- zoom, Esc deselects.
+- Refusing a change (an occupied space cannot be removed) is the host's call: it does not store the result.
+- `overlay` is the live layer a host such as a point of sale draws over the plan (ring in the tone, corner badge,
+  caption under the item). It is shown in read mode and hidden while editing unless `showOverlay` says otherwise.
+- `interactive={false}` with `showGrid={false}` and `showLabels={false}` gives a thumbnail.
+- Colours come from the theme by tone; the host maps its catalog colours to `FLOOR_PLAN_TONES`.
 
 ### Ribbon
 

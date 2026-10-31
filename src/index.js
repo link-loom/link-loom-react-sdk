@@ -109,6 +109,16 @@ export { default as PageHeader } from './components/stoneos/page-header/PageHead
 export { default as Section } from './components/stoneos/section/Section.component.jsx';
 export { default as AppTopBar } from './components/stoneos/app-top-bar/AppTopBar.component.jsx';
 export { default as KpiTile } from './components/stoneos/kpi-tile/KpiTile.component.jsx';
+export {
+  default as FloorPlanCanvas,
+} from './components/stoneos/floor-plan-canvas/FloorPlanCanvas.component.jsx';
+export {
+  FLOOR_PLAN_CHANGE_TYPES,
+  FLOOR_PLAN_MODES,
+  FLOOR_PLAN_SHAPES,
+  FLOOR_PLAN_TONES,
+} from './components/stoneos/floor-plan-canvas/floorPlan.constants.js';
+export { FLOOR_PLAN_CANVAS_LABELS } from './components/stoneos/floor-plan-canvas/floorPlan.labels.js';
 export { default as FilterBar } from './components/stoneos/filter-bar/FilterBar.component.jsx';
 export { default as ViewTabs } from './components/stoneos/view-tabs/ViewTabs.component.jsx';
 export { default as ViewModeToggle } from './components/stoneos/view-mode-toggle/ViewModeToggle.component.jsx';
