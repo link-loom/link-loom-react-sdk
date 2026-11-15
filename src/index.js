@@ -26,6 +26,14 @@ export { default as NationalIdentificationSelector } from './components/national
 export { default as CountrySelector } from './components/country-selector/CountrySelector.jsx';
 export { default as Container } from './components/container/Container.jsx';
 export { default as AsyncAutocomplete } from './components/async-autocomplete/AsyncAutocomplete.jsx';
+export { default as CredentialPicker } from './components/credential-picker/CredentialPicker.component.jsx';
+export { default as ConnectionPickerField } from './components/credential-picker/ConnectionPickerField.component.jsx';
+export {
+  CONNECTION_PICKER_WIDGET,
+  filterCredentials,
+  isConnectionPickerSchema,
+  pickerPropsOfSchema,
+} from './components/credential-picker/credentialPicker.helpers.js';
 export { default as QuickLinkCard } from './components/quick-link-card/QuickLinkCard.component.jsx';
 export { default as VirtualList } from './components/virtual-list/VirtualList.jsx';
 export { default as RecentActivityList } from './components/RecentActivityList/RecentActivityList.jsx';
